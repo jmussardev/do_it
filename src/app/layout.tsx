@@ -18,7 +18,7 @@ export default function RootLayout({
           <Header />
 
           <main className="flex  h-full border border-purple-500 -- sm:center sm:m-auto sm:w-3/4  sm:py-8 ">
-            <main className=" w-full h-full rounded bg-white border border-green-300 -- sm:h-[95%] sm:w-[70%] sm:min-w-[70%] sm:m-auto ">
+            <main className="overflow-hidden w-full h-full rounded bg-white border border-green-300 -- sm:h-[95%] sm:w-[70%] sm:min-w-[70%] sm:m-auto ">
               {children}
             </main>
           </main>

@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function NavBar() {
   return (
-    <div className=" w-full font-bold text-lg text-center bg-green-400 -- sm:static sm:text-left ">
+    <div className=" w-full font-bold text-lg text-center  -- sm:static sm:text-left ">
       <ul className=" sm:border-black border-t-[3px] mb-10 pt-4">
         <li>
           <Link href={"/"}>Today</Link>
