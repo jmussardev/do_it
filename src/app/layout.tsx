@@ -13,12 +13,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bgpattern ">
-        <main className="flex flex-col  h-screen w-screen border border-gray-500 -- sm:flex-row sm:h-[50rem] sm:m-auto sm:mt-20 sm:max-w-5xl ">
+      <body className="bgpattern h-screen">
+        <main
+          className=" flex flex-col  h-screen w-screen border border-gray-500 -- sm:flex-row sm:h-[50rem] sm:m-auto 
+         sm:max-w-5xl "
+        >
           <Header />
 
           <main className="flex  h-full border border-purple-500 -- sm:center sm:m-auto sm:w-3/4  sm:py-8 ">
-            <main className="overflow-hidden w-full h-full rounded bg-white border border-green-300 -- sm:h-[95%] sm:w-[70%] sm:min-w-[70%] sm:m-auto ">
+            <main className=" m-auto w-full h-full xsm:w-full xsm:h-full bg-white border border-green-300 -- sm:h-[95%] sm:w-[70%] sm:min-w-[70%] sm:m-auto sm:rounded">
               {children}
             </main>
           </main>

@@ -7,6 +7,16 @@ module.exports = {
     "./src/app/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    zIndex: {
+      0: 0,
+      10: 10,
+      20: 20,
+      30: 30,
+      40: 40,
+      50: 50,
+      60: 60,
+      70: 70,
+    },
     fontFamily: { body: ['"Open Sans"'] },
     extend: {
       backgroundImage: {
@@ -18,6 +28,7 @@ module.exports = {
     },
     screens: {
       sm: "858px",
+      xsm: "375px",
     },
   },
   plugins: [],

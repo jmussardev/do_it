@@ -30,7 +30,7 @@ export default function TaskCard() {
   console.log(p1);
 
   return (
-    <div className="relative flex p-2 w-full h-[6rem] mb-2 border-2 border-black rounded-lg">
+    <div className="relative flex p-2 w-full h-[6rem] mb-2 border-2 border-black rounded-lg bg-white">
       {/* //overlay// */}
       <div
         className="opacity-0 hover:opacity-100 transition-all ease-in "
@@ -58,7 +58,7 @@ export default function TaskCard() {
       </div>
       {/* //overlay// */}
       {/* //description// */}
-      <div className="flex items-center w-4/5 p-2">
+      <div className="flex items-center w-4/5 p-2 bg-white">
         <input
           className="w-full h-full border-transparent focus:outline-none "
           readOnly={edit ? false : true}
