@@ -1,7 +1,8 @@
 "use client";
-import Image from "next/image";
-import { useState } from "react";
+import Image, { StaticImageData } from "next/image";
+import { ChangeEvent, useEffect, useState } from "react";
 
+import { PRIORITY } from "@prisma/client";
 import delIcon from "./../../../public/icons/delete.png";
 import pencil from "./../../../public/icons/pencil.png";
 import check from "./../../../public/icons/check.png";
@@ -10,24 +11,70 @@ import play from "./../../../public/icons/play.png";
 import p1 from "./../../../public/icons/p1.png";
 import p2 from "./../../..//public/icons/p2.png";
 import p3 from "./../../../public/icons/p3.png";
+import { TaskType } from "../page";
+import TaskCardInput from "./TaskCardInput";
 
-export default function TaskCard() {
-  const [priority, setPriority] = useState(p1);
+export default function TaskCard({ task }: { task: TaskType }) {
+  const [inputs, setInputs] = useState({
+    description: "",
+    priority: "",
+    timer: "",
+    iscompleted: false,
+  });
+  const [priorityIcon, setPriorityIcon] = useState(p1);
+
+  const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputs({
+      ...inputs,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   const [edit, setEdit] = useState(false);
-  function switchPriotity() {
-    switch (priority) {
-      case p1:
-        return setPriority(p2);
-      case p2:
-        return setPriority(p3);
-      case p3:
-        return setPriority(p1);
+  function switchPriorityInput() {
+    switch (inputs.priority) {
+      case PRIORITY.ONE:
+        return (
+          setInputs({
+            ...inputs,
+            priority: PRIORITY.TWO,
+          }),
+          setPriorityIcon(p2)
+        );
+      case PRIORITY.TWO:
+        return (
+          setInputs({
+            ...inputs,
+            priority: PRIORITY.THREE,
+          }),
+          setPriorityIcon(p3)
+        );
+      case PRIORITY.THREE:
+        return (
+          setInputs({
+            ...inputs,
+            priority: PRIORITY.ONE,
+          }),
+          setPriorityIcon(p1)
+        );
 
       default:
         break;
     }
   }
-  console.log(p1);
+  const setCurrentTask = () => {
+    setInputs({
+      description: task.description,
+      priority: task.priority.toString(),
+      timer: task.timer.toString(),
+      iscompleted: task.iscompleted,
+    });
+  };
+
+  useEffect(() => {
+    setCurrentTask();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="relative flex p-2 w-full h-[6rem] mb-2 border-2 border-black rounded-lg bg-white">
@@ -58,12 +105,17 @@ export default function TaskCard() {
       </div>
       {/* //overlay// */}
       {/* //description// */}
-      <div className="flex items-center w-4/5 p-2 bg-white">
+      <div className="flex items-center w-4/5 p-2 ">
         <input
           className="w-full h-full border-transparent focus:outline-none "
           readOnly={edit ? false : true}
           type="text"
+          value={inputs.description}
           placeholder="Describe your task.."
+          name="description"
+          onChange={(e) => {
+            handleChangeInput(e);
+          }}
           onBlur={() => {
             setEdit(false);
           }}
@@ -76,10 +128,10 @@ export default function TaskCard() {
           <button
             className="w-5 h-5 hover:scale-125"
             onClick={() => {
-              switchPriotity();
+              switchPriorityInput();
             }}
           >
-            <Image src={priority} alt="priority" />
+            <Image src={priorityIcon} alt="priority" />
           </button>
         </div>
         <div className="flex justify-end">
