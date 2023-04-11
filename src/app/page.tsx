@@ -3,6 +3,10 @@ const dayjs = require("dayjs");
 
 import { prisma } from "./../../utilities/db";
 import { PRIORITY } from "@prisma/client";
+import useTimer from "../../hooks/useTimer";
+import { ChronoContext } from "./context/ChronoContext";
+import { useContext } from "react";
+import TodayHeader from "./components/TodayHeader";
 export interface TaskType {
   id: number;
   description: string;
@@ -35,23 +39,16 @@ const fetchDayTasks = async (today: string): Promise<TaskType[]> => {
 };
 
 export default async function Home() {
-  const dateSpt = today.split("-");
-  const dateNum = `${dateSpt[2]}/${dateSpt[3]}`;
-  console.log(today);
   const tasks = await fetchDayTasks(today);
   return (
     <div className=" h-full cardpattern sm:bg-white">
       {/* //header// */}
-      <div className="w-full  h-fit  pb-5 flex justify-center border-black border-b-2">
-        <div className="w-[8rem] h-[5rem] rounded-b-md bg-black -- text-white font-bold flex flex-col justify-center items-center">
-          <p>{dateSpt[0]}</p>
-          <p>{dateNum}</p>
-        </div>
-      </div>
+      <TodayHeader />
       {/* //header// */}
 
       {/* //tasks// */}
       <div className=" h-5/6 overflow-auto  ">
+        <div>{}</div>
         <Tasks tasks={tasks} />
       </div>
       {/* //tasks// */}

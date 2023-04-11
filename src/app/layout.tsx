@@ -1,4 +1,5 @@
 import Header from "./components/Header";
+import TimerContext from "./context/ChronoContext";
 import "./globals.css";
 
 export const metadata = {
@@ -18,13 +19,14 @@ export default function RootLayout({
           className=" flex flex-col  h-screen w-screen border border-gray-500 -- sm:flex-row sm:h-[50rem] sm:m-auto 
          sm:max-w-5xl "
         >
-          <Header />
-
-          <main className="flex  h-full border border-purple-500 -- sm:center sm:m-auto sm:w-3/4  sm:py-8 ">
-            <main className=" m-auto w-full h-full xsm:w-full xsm:h-full bg-white border border-green-300 -- sm:h-[95%] sm:w-[70%] sm:min-w-[70%] sm:m-auto sm:rounded">
-              {children}
+          <TimerContext>
+            <Header />
+            <main className="flex  h-full border border-purple-500 -- sm:center sm:m-auto sm:w-3/4  sm:py-8 ">
+              <main className=" m-auto w-full h-full xsm:w-full xsm:h-full bg-white border border-green-300 -- sm:h-[95%] sm:w-[70%] sm:min-w-[70%] sm:m-auto sm:rounded">
+                {children}
+              </main>
             </main>
-          </main>
+          </TimerContext>
         </main>
       </body>
     </html>

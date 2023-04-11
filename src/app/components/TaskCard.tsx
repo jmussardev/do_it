@@ -1,5 +1,5 @@
 "use client";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 
 import p1 from "./../../../public/icons/p1.png";
 //TYPES
@@ -10,6 +10,7 @@ import Image, { StaticImageData } from "next/image";
 import Chrono from "./Chrono";
 import OverlayMenu from "./OverlayMenu";
 import OptionPriority from "./OptionPriority";
+import { ChronoContext } from "../context/ChronoContext";
 
 export default function TaskCard({ task }: { task: TaskType }) {
   const [inputs, setInputs] = useState({
@@ -20,6 +21,7 @@ export default function TaskCard({ task }: { task: TaskType }) {
   });
   const [priorityIcon, setPriorityIcon] = useState<StaticImageData>(p1);
   const [isChronoOpen, setIsChronoOpen] = useState(false);
+  const { setTimerState, start, end, value } = useContext(ChronoContext);
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setInputs({
@@ -29,7 +31,6 @@ export default function TaskCard({ task }: { task: TaskType }) {
   };
 
   const [edit, setEdit] = useState(false);
-  console.log(typeof inputs.priority);
 
   const setCurrentTask = () => {
     setInputs({
@@ -59,7 +60,14 @@ export default function TaskCard({ task }: { task: TaskType }) {
             setIsChronoOpen={setIsChronoOpen}
           />
         ) : (
-          <OverlayMenu setEdit={setEdit} setIsChronoOpen={setIsChronoOpen} />
+          <OverlayMenu
+            inputs={inputs}
+            setEdit={setEdit}
+            setIsChronoOpen={setIsChronoOpen}
+            start={start}
+            end={end}
+            setTimerState={setTimerState}
+          />
         )}
       </div>
       {/* //overlay// */}
