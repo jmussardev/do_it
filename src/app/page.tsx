@@ -2,10 +2,11 @@ import Tasks from "./components/Tasks";
 const dayjs = require("dayjs");
 
 import { prisma } from "./../../utilities/db";
+import { PRIORITY } from "@prisma/client";
 export interface TaskType {
   id: number;
   description: string;
-  priority: string;
+  priority: PRIORITY;
   week: number;
   user_id: number;
   timer: number;
