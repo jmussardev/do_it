@@ -5,7 +5,7 @@ interface State {
   value: number;
   start: boolean;
   end: boolean | null;
-  current: string;
+  isPaused: boolean;
 }
 
 interface TimerState extends State {
@@ -16,7 +16,7 @@ export const ChronoContext = createContext<TimerState>({
   value: 0,
   start: false,
   end: null,
-  current: "",
+  isPaused: false,
   setTimerState: () => {},
 });
 
@@ -29,7 +29,7 @@ export default function TimerContext({
     value: 0,
     start: false,
     end: null,
-    current: "",
+    isPaused: false,
   });
 
   return (

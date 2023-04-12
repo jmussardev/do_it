@@ -21,7 +21,8 @@ export default function TaskCard({ task }: { task: TaskType }) {
   });
   const [priorityIcon, setPriorityIcon] = useState<StaticImageData>(p1);
   const [isChronoOpen, setIsChronoOpen] = useState(false);
-  const { setTimerState, start, end, value } = useContext(ChronoContext);
+  const { setTimerState, start, end, value, isPaused } =
+    useContext(ChronoContext);
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setInputs({
@@ -67,6 +68,8 @@ export default function TaskCard({ task }: { task: TaskType }) {
             start={start}
             end={end}
             setTimerState={setTimerState}
+            isPaused={isPaused}
+            value={value}
           />
         )}
       </div>

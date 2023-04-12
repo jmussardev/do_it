@@ -3,7 +3,6 @@ const dayjs = require("dayjs");
 
 import { prisma } from "./../../utilities/db";
 import { PRIORITY } from "@prisma/client";
-import useTimer from "../../hooks/useTimer";
 import { ChronoContext } from "./context/ChronoContext";
 import { useContext } from "react";
 import TodayHeader from "./components/TodayHeader";
