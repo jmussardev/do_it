@@ -1,4 +1,4 @@
-import WeekNavBar from "../components/WeekNavBar";
+import WeekNavBar from "../../components/WeekNavBar";
 
 export const metadata = {
   title: "My week",

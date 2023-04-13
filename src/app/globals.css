@@ -22,7 +22,6 @@
 }
 @tailwind components;
 @tailwind utilities;
-
 :root {
   --primary: rgba(243, 243, 243, 0.4);
   --secondary: rgba(0, 0, 0, 0.546);

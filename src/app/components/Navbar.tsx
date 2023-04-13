@@ -1,17 +1,18 @@
 import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";
+import getDate from "../../../utilities/date";
 
 export default function NavBar({
   setOpen,
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
+  const { dayNum } = getDate();
   return (
     <div className=" w-full font-bold text-lg text-center bg-white border-b-2 border-black  -- sm:static sm:text-left ">
       <ul className=" sm:border-black border-t-[3px] mb-10 pt-4">
         <li>
           <Link href={"/"}>
-            {" "}
             <button
               onClick={() => {
                 setOpen(false);
@@ -22,8 +23,7 @@ export default function NavBar({
           </Link>
         </li>
         <li>
-          <Link href={"/my-week"}>
-            {" "}
+          <Link href={`/my-week/${dayNum()}`}>
             <button
               onClick={() => {
                 setOpen(false);

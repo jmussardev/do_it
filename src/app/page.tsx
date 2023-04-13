@@ -1,11 +1,9 @@
 import Tasks from "./components/Tasks";
-const dayjs = require("dayjs");
-
 import { prisma } from "./../../utilities/db";
 import { PRIORITY } from "@prisma/client";
-import { ChronoContext } from "./context/ChronoContext";
-import { useContext } from "react";
 import TodayHeader from "./components/TodayHeader";
+import getDate from "../../utilities/date";
+
 export interface TaskType {
   id: number;
   description: string;
@@ -14,14 +12,16 @@ export interface TaskType {
   user_id: number;
   timer: number;
   iscompleted: boolean;
+  date: string;
 }
+const { today } = getDate();
 
-const today = dayjs().format("dddd-YYYY-MM-DD");
+const date = today();
 
-const fetchDayTasks = async (today: string): Promise<TaskType[]> => {
+const fetchDayTasks = async (date: string): Promise<TaskType[]> => {
   const tasks = await prisma.task.findMany({
     where: {
-      date: today,
+      date: date,
     },
     select: {
       id: true,
@@ -31,6 +31,7 @@ const fetchDayTasks = async (today: string): Promise<TaskType[]> => {
       user_id: true,
       timer: true,
       iscompleted: true,
+      date: true,
     },
   });
 
@@ -38,7 +39,7 @@ const fetchDayTasks = async (today: string): Promise<TaskType[]> => {
 };
 
 export default async function Home() {
-  const tasks = await fetchDayTasks(today);
+  const tasks = await fetchDayTasks(date);
   return (
     <div className=" h-full cardpattern sm:bg-white">
       {/* //header// */}

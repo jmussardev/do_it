@@ -1,5 +1,13 @@
 "use client";
-import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  KeyboardEvent,
+  MutableRefObject,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import p1 from "./../../../public/icons/p1.png";
 //TYPES
@@ -11,8 +19,15 @@ import Chrono from "./Chrono";
 import OverlayMenu from "./OverlayMenu";
 import OptionPriority from "./OptionPriority";
 import { ChronoContext } from "../context/ChronoContext";
+import getDate from "../../../utilities/date";
 
-export default function TaskCard({ task }: { task: TaskType }) {
+interface TaskProps {
+  task: TaskType;
+  date: string;
+  onWeek?: boolean;
+}
+
+export default function TaskCard({ task, date, onWeek }: TaskProps) {
   const [inputs, setInputs] = useState({
     id: 0,
     description: "",
@@ -35,6 +50,19 @@ export default function TaskCard({ task }: { task: TaskType }) {
   const [edit, setEdit] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const taskRef = useRef(false);
+  const { taskDay, compareDate } = getDate();
+  const taskDate = taskDay(date);
+  const isOldTask = () => {
+    console.log(">>>>>>" + taskDate + "<<<<<<");
+    console.log(">>>>>>" + compareDate(taskDate) + "<<<<<<");
+    if (compareDate(taskDate) < 0) {
+      console.log(">>>>>>" + true + "<<<<<<");
+
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   const setCurrentTask = () => {
     setInputs({
@@ -46,8 +74,14 @@ export default function TaskCard({ task }: { task: TaskType }) {
     });
   };
 
+  const handleKeyPress = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Escape" || event.key === "Enter") {
+      setEdit(false);
+    }
+  };
+
   useEffect(() => {
-    if (!start || end) {
+    if (start === false || end) {
       setIsActive(false);
       // taskRef.current = false;
     }
@@ -60,46 +94,46 @@ export default function TaskCard({ task }: { task: TaskType }) {
 
   return (
     <div
-      className="relative flex p-2 w-full h-[6rem] mb-2 border-2 border-black rounded-lg bg-white"
-      onClick={() => {
-        console.log("focus");
-        setIsActive(true);
-        // taskRef.current = true;
-      }}
-      onBlur={() => {
-        setIsActive(false);
-        // taskRef.current = false;
-        setEdit(false);
+      className={`relative flex p-2 w-full h-[6rem] mb-2 ${
+        inputs.id === task_id ? "border-dashed" : ""
+      } border-2 border-black rounded-lg bg-white`}
+      onKeyDown={(e) => {
+        handleKeyPress(e);
       }}
     >
       {/* //overlay// */}
-      <div
-        className="opacity-0 hover:opacity-100 transition-all ease-in "
-        hidden={edit ? true : false}
-      >
-        {isChronoOpen ? (
-          <Chrono
-            inputs={inputs}
-            setInputs={setInputs}
-            setIsChronoOpen={setIsChronoOpen}
-          />
-        ) : (
-          <OverlayMenu
-            inputs={inputs}
-            setEdit={setEdit}
-            setIsChronoOpen={setIsChronoOpen}
-            task_id={task_id}
-            start={start}
-            end={end}
-            setTimerState={setTimerState}
-            isPaused={isPaused}
-            value={value}
-            setIsActive={setIsActive}
-            isActive={isActive}
-            taskRef={taskRef}
-          />
-        )}
-      </div>
+      {isOldTask() ? (
+        ""
+      ) : (
+        <>
+          <div
+            className="opacity-0 hover:opacity-100 transition-all ease-in "
+            hidden={edit ? true : false}
+          >
+            {isChronoOpen ? (
+              <Chrono
+                inputs={inputs}
+                setInputs={setInputs}
+                setIsChronoOpen={setIsChronoOpen}
+              />
+            ) : (
+              <OverlayMenu
+                inputs={inputs}
+                setEdit={setEdit}
+                setIsChronoOpen={setIsChronoOpen}
+                task_id={task_id}
+                start={start}
+                end={end}
+                setTimerState={setTimerState}
+                isPaused={isPaused}
+                value={value}
+                onWeek={onWeek ? true : false}
+              />
+            )}
+          </div>
+        </>
+      )}
+
       {/* //overlay// */}
       {/* //description// */}
       <div className="flex items-center w-4/5 p-2 ">
@@ -113,9 +147,9 @@ export default function TaskCard({ task }: { task: TaskType }) {
           onChange={(e) => {
             handleChangeInput(e);
           }}
-          // onBlur={() => {
-          //   setEdit(false);
-          // }}
+          onBlur={() => {
+            setEdit(false);
+          }}
         />
       </div>
       {/* //description// */}
