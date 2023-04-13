@@ -16,7 +16,7 @@ export default function Week({ tasks, day }: { tasks: Tasks[]; day: string }) {
     <div className="relative h-full w-full ">
       <WeekNavBar />
 
-      <div className="bg-blue-400   w-full  overflow-auto ">
+      <div className="  w-full  overflow-auto ">
         <Tasks tasks={dayTasks} onWeek={onWeek} />
       </div>
     </div>

@@ -10,6 +10,9 @@ import {
 } from "react";
 
 import p1 from "./../../../public/icons/p1.png";
+import p2 from "./../../..//public/icons/p2.png";
+import p3 from "./../../../public/icons/p3.png";
+
 //TYPES
 import { TaskType } from "../page";
 import { PRIORITY } from "@prisma/client";
@@ -35,7 +38,7 @@ export default function TaskCard({ task, date, onWeek }: TaskProps) {
     timer: 0,
     iscompleted: false,
   });
-  const [priorityIcon, setPriorityIcon] = useState<StaticImageData>(p1);
+  const [priorityIcon, setPriorityIcon] = useState<StaticImageData>();
   const [isChronoOpen, setIsChronoOpen] = useState(false);
   const { setTimerState, start, end, value, isPaused, task_id } =
     useContext(ChronoContext);
@@ -49,15 +52,10 @@ export default function TaskCard({ task, date, onWeek }: TaskProps) {
 
   const [edit, setEdit] = useState(false);
   const [isActive, setIsActive] = useState(false);
-  const taskRef = useRef(false);
   const { taskDay, compareDate } = getDate();
   const taskDate = taskDay(date);
   const isOldTask = () => {
-    console.log(">>>>>>" + taskDate + "<<<<<<");
-    console.log(">>>>>>" + compareDate(taskDate) + "<<<<<<");
     if (compareDate(taskDate) < 0) {
-      console.log(">>>>>>" + true + "<<<<<<");
-
       return true;
     } else {
       return false;
@@ -89,6 +87,7 @@ export default function TaskCard({ task, date, onWeek }: TaskProps) {
 
   useEffect(() => {
     setCurrentTask();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

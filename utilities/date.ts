@@ -9,10 +9,7 @@ dayjs.extend(isoWeek);
 const today = dayjs().format("dddd-YYYY-MM-DD");
 const dateSplit = today.split("-");
 const dateNum = `${dateSplit[2]}/${dateSplit[3]}`;
-// console.log(dayjs().format("dddd-YYYY-MM-DD"));
-// console.log(dayjs("2023-04-10").week());
-// console.log(dayjs("2023-04-11").isoWeek());
-// console.log(dayjs("2023-04-11").isoWeek());
+
 export default function getDate() {
   const today = (): string => {
     return dayjs().format("dddd-YYYY-MM-DD");
@@ -37,8 +34,6 @@ export default function getDate() {
 
   const compareDate = (date: string) => {
     const today = dayjs().format("YYYY-MM-DD");
-    console.log(dayjs(date).valueOf());
-    console.log(dayjs(today).valueOf());
     return dayjs(date).valueOf() - dayjs(today).valueOf();
   };
 
