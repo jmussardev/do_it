@@ -7,6 +7,7 @@ import { Dispatch, SetStateAction } from "react";
 import { PRIORITY } from "@prisma/client";
 
 interface Inputs {
+  id: number;
   description: string;
   priority: string;
   timer: number;

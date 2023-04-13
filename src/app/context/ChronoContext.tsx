@@ -2,6 +2,7 @@
 import { useState, createContext, Dispatch, SetStateAction } from "react";
 
 interface State {
+  task_id: number | null;
   value: number;
   start: boolean;
   end: boolean | null;
@@ -13,6 +14,7 @@ interface TimerState extends State {
 }
 
 export const ChronoContext = createContext<TimerState>({
+  task_id: 0,
   value: 0,
   start: false,
   end: null,
@@ -26,6 +28,7 @@ export default function TimerContext({
   children: React.ReactNode;
 }) {
   const [timerState, setTimerState] = useState<State>({
+    task_id: 0,
     value: 0,
     start: false,
     end: null,

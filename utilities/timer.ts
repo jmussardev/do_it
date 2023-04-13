@@ -22,7 +22,7 @@ export default function timer(
       secondes = parseInt(secondes, 10) < 10 ? "0" + secondes : secondes;
       time = `${minutes} : ${secondes}`;
       count--;
-      console.log("count>>>>" + count);
+      // console.log("count>>>>" + count);
       displayCount();
     }
   };

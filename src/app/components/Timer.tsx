@@ -19,7 +19,7 @@ const useTimer = (callback: (...args: any) => void) => {
 };
 
 export default function Timer() {
-  const { setTimerState, start, value, end, isPaused } =
+  const { setTimerState, start, value, end, isPaused, task_id } =
     useContext(ChronoContext);
   const [displayTime, setDisplayTime] = useState("");
   const [remainingTime, setRemainingTime] = useState(0);
@@ -33,12 +33,12 @@ export default function Timer() {
   );
   let timerRef = useRef<any>();
   const onTimer = useTimer(subTime);
-  console.log(value);
 
   useEffect(() => {
     if (stopTimer) {
       console.log("timer stopped");
       setTimerState({
+        task_id: null,
         value: 0,
         start: false,
         end: true,
@@ -51,6 +51,7 @@ export default function Timer() {
     if (isPaused === true) {
       const newValue = remainingTime;
       setTimerState({
+        task_id: task_id,
         value: newValue,
         end: false,
         start: false,
@@ -66,6 +67,8 @@ export default function Timer() {
       clearInterval(timerRef.current);
     }
     if (start && value !== 0) {
+      clearInterval(timerRef.current);
+
       const timerId = onTimer();
       timerRef.current = timerId;
       console.log(timerRef.current);

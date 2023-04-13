@@ -1,5 +1,5 @@
 "use client";
-import { ChangeEvent, useContext, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 
 import p1 from "./../../../public/icons/p1.png";
 //TYPES
@@ -14,6 +14,7 @@ import { ChronoContext } from "../context/ChronoContext";
 
 export default function TaskCard({ task }: { task: TaskType }) {
   const [inputs, setInputs] = useState({
+    id: 0,
     description: "",
     priority: "",
     timer: 0,
@@ -21,7 +22,7 @@ export default function TaskCard({ task }: { task: TaskType }) {
   });
   const [priorityIcon, setPriorityIcon] = useState<StaticImageData>(p1);
   const [isChronoOpen, setIsChronoOpen] = useState(false);
-  const { setTimerState, start, end, value, isPaused } =
+  const { setTimerState, start, end, value, isPaused, task_id } =
     useContext(ChronoContext);
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -32,9 +33,12 @@ export default function TaskCard({ task }: { task: TaskType }) {
   };
 
   const [edit, setEdit] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+  const taskRef = useRef(false);
 
   const setCurrentTask = () => {
     setInputs({
+      id: task.id,
       description: task.description,
       priority: task.priority,
       timer: task.timer,
@@ -43,12 +47,31 @@ export default function TaskCard({ task }: { task: TaskType }) {
   };
 
   useEffect(() => {
+    if (!start || end) {
+      setIsActive(false);
+      // taskRef.current = false;
+    }
+  }, [start, end, setIsActive]);
+
+  useEffect(() => {
     setCurrentTask();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div className="relative flex p-2 w-full h-[6rem] mb-2 border-2 border-black rounded-lg bg-white">
+    <div
+      className="relative flex p-2 w-full h-[6rem] mb-2 border-2 border-black rounded-lg bg-white"
+      onClick={() => {
+        console.log("focus");
+        setIsActive(true);
+        // taskRef.current = true;
+      }}
+      onBlur={() => {
+        setIsActive(false);
+        // taskRef.current = false;
+        setEdit(false);
+      }}
+    >
       {/* //overlay// */}
       <div
         className="opacity-0 hover:opacity-100 transition-all ease-in "
@@ -65,11 +88,15 @@ export default function TaskCard({ task }: { task: TaskType }) {
             inputs={inputs}
             setEdit={setEdit}
             setIsChronoOpen={setIsChronoOpen}
+            task_id={task_id}
             start={start}
             end={end}
             setTimerState={setTimerState}
             isPaused={isPaused}
             value={value}
+            setIsActive={setIsActive}
+            isActive={isActive}
+            taskRef={taskRef}
           />
         )}
       </div>
@@ -86,9 +113,9 @@ export default function TaskCard({ task }: { task: TaskType }) {
           onChange={(e) => {
             handleChangeInput(e);
           }}
-          onBlur={() => {
-            setEdit(false);
-          }}
+          // onBlur={() => {
+          //   setEdit(false);
+          // }}
         />
       </div>
       {/* //description// */}
