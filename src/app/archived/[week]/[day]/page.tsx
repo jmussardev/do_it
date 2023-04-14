@@ -1,11 +1,10 @@
 import ArchivedWeek from "@/app/components/ArchivedWeek";
-import getDate from "../../../../utilities/date";
-import { prisma } from "../../../../utilities/db";
-import { TaskType } from "../../page";
+import getDate from "../../../../../utilities/date";
+import { prisma } from "../../../../../utilities/db";
+import { TaskType } from "../../../page";
 
 const { today, day, getWeek, dayNum } = getDate();
 const currentWeek = parseInt(getWeek());
-console.log(currentWeek);
 
 interface Tasks extends TaskType {
   date: string;
@@ -33,6 +32,7 @@ const fetchWeekTasks = async (): Promise<Tasks[]> => {
 
 export default async function Archived() {
   const oldTasks = await fetchWeekTasks();
+  console.log(oldTasks);
 
   let oldWeeks: number[] = [];
   oldTasks.forEach((task) => {

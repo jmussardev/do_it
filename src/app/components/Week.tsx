@@ -10,7 +10,7 @@ const { getDay, compareDate } = getDate();
 export default function Week({ tasks, day }: { tasks: Tasks[]; day?: string }) {
   const onWeek = true;
   const dayTasks = tasks.filter((task) => getDay(task.date) == day);
-  console.log(dayTasks);
+
   return (
     <div className="relative h-full w-full ">
       <WeekNavBar />

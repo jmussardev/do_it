@@ -30,7 +30,6 @@ const fetchWeekTasks = async (): Promise<Tasks[]> => {
 };
 
 export default async function MyWeek({ params }: { params: { day: string } }) {
-  console.log(params);
   const tasks = await fetchWeekTasks();
 
   return (

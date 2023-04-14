@@ -9,7 +9,9 @@ interface Tasks extends TaskType {
 }
 export default function ArchivedWeek({ oldTasks }: { oldTasks: Tasks[] }) {
   const url = usePathname();
-  const weekPage = parseInt(url.split("/")[url.split("/").length - 1]);
+  const weekPage = parseInt(url.split("/")[url.split("/").length - 2]);
   const oldtasksWeek = oldTasks.filter((t) => t.week === weekPage);
-  return <Week tasks={oldtasksWeek} />;
+  const day = url.split("/")[url.split("/").length - 1];
+
+  return <Week tasks={oldtasksWeek} day={day} />;
 }

@@ -41,14 +41,15 @@ export default async function Archived() {
   });
   const uniqSet = new Set(oldWeeks);
   const uniq = [...uniqSet];
+  console.log(uniq);
 
   return (
     <div className="flex flex-col h-full w-full p-10 items-center  ">
       <ul className="w-full text-center font-bold text-lg">
-        {oldWeeks.map((week, i) => (
+        {uniq.map((week, i) => (
           <li key={i} className="w-full mb-3">
             <div className="flex items-center justify-center w-full h-[5rem]  rounded-lg border-2 border-black bg-white hover:bg-black hover:text-white">
-              <Link href={`/archived/${week}`}>archived week</Link>
+              <Link href={`/archived/${week}/1`}>archived week</Link>
             </div>
           </li>
         ))}
