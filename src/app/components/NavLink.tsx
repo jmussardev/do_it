@@ -1,10 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import getDate from "../../../utilities/date";
-
-export { NavLink };
 
 export interface NavLinkType {
   href: string;
@@ -12,7 +10,7 @@ export interface NavLinkType {
   children: React.ReactNode;
 }
 
-function NavLink({
+export function NavLink({
   href,
   exact = false,
   children = null,
@@ -21,30 +19,18 @@ function NavLink({
 }: NavLinkType) {
   const { getDay, today } = getDate();
   const tDayNum = parseInt(getDay(today()));
-  //url => url dans le navigateur //
-  //href=> url du lien cliqué
-  let url = usePathname();
   const dayPage = parseInt(href.split("/")[href.split("/").length - 1]);
-
-  //pour etre consider comme is old le lien le numero du jour de la semaine contenu dan href doit etre < au # du jour d'aujourdhui
   const isOldTask = () => {
     if (dayPage < tDayNum) {
       return true;
     } else return false;
   };
-  console.log("tDayNum>>> " + tDayNum);
-  console.log("dayPage>>> " + dayPage);
-  console.log("href>>> " + href);
-  console.log("href>>> " + href);
 
-  //pour etre active le url doit correspondre au href
+  let url = usePathname();
+
   const isActive = exact ? url === href : false;
-  console.log(">>>>>>>>>>>" + isOldTask());
-  console.log(">>>>>>>>>>>" + isActive);
 
-  //   bg-black text-white
   return (
-    //on veut  dans href passer le lien a cliqué
     <Link href={href}>
       <div
         className={` 

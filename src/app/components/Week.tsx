@@ -7,9 +7,8 @@ interface Tasks extends TaskType {
 }
 const { getDay, compareDate } = getDate();
 
-export default function Week({ tasks, day }: { tasks: Tasks[]; day: string }) {
+export default function Week({ tasks, day }: { tasks: Tasks[]; day?: string }) {
   const onWeek = true;
-  console.log(compareDate("2023-04-12"));
   const dayTasks = tasks.filter((task) => getDay(task.date) == day);
   console.log(dayTasks);
   return (
