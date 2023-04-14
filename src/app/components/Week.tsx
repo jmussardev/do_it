@@ -7,7 +7,15 @@ interface Tasks extends TaskType {
 }
 const { getDay, compareDate } = getDate();
 
-export default function Week({ tasks, day }: { tasks: Tasks[]; day?: string }) {
+export default function Week({
+  tasks,
+  day,
+  isArchived,
+}: {
+  tasks: Tasks[];
+  day?: string;
+  isArchived?: boolean;
+}) {
   const onWeek = true;
   const dayTasks = tasks.filter((task) => getDay(task.date) == day);
 
@@ -16,7 +24,11 @@ export default function Week({ tasks, day }: { tasks: Tasks[]; day?: string }) {
       <WeekNavBar />
 
       <div className="  w-full  overflow-auto ">
-        <Tasks tasks={dayTasks} onWeek={onWeek} />
+        <Tasks
+          tasks={dayTasks}
+          onWeek={onWeek}
+          isArchived={isArchived ? true : false}
+        />
       </div>
     </div>
   );

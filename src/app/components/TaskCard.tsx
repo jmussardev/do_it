@@ -28,9 +28,17 @@ interface TaskProps {
   task: TaskType;
   date: string;
   onWeek?: boolean;
+  isOld?: boolean;
+  isArchived?: boolean;
 }
 
-export default function TaskCard({ task, date, onWeek }: TaskProps) {
+export default function TaskCard({
+  task,
+  date,
+  onWeek,
+  isOld,
+  isArchived,
+}: TaskProps) {
   const [inputs, setInputs] = useState({
     id: 0,
     description: "",
@@ -160,6 +168,8 @@ export default function TaskCard({ task, date, onWeek }: TaskProps) {
         priorityIcon={priorityIcon}
         setPriorityIcon={setPriorityIcon}
         edit={edit}
+        isOld={isOld}
+        isArchived={isArchived}
       />
 
       {/* //options// */}

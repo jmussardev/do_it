@@ -9,8 +9,9 @@ interface Tasks extends TaskType {
 interface TaskProps {
   tasks: Tasks[];
   onWeek?: boolean;
+  isArchived?: boolean;
 }
-export default function Tasks({ tasks, onWeek }: TaskProps) {
+export default function Tasks({ tasks, onWeek, isArchived }: TaskProps) {
   const { getDay, today } = getDate();
   const tDayNum = getDay(today());
   const url = usePathname();
@@ -28,9 +29,11 @@ export default function Tasks({ tasks, onWeek }: TaskProps) {
             task={task}
             onWeek={onWeek}
             date={task.date}
+            isOld={isOldTask()}
+            isArchived={isArchived}
           />
         ))}
-        {isOldTask() ? (
+        {isOldTask() || isArchived ? (
           ""
         ) : (
           <button className="h-10 hover:text-white hover:bg-black w-full font-bold border-2 border-black rounded-lg">

@@ -21,12 +21,16 @@ export default function OptionPriority({
   edit,
   inputs,
   setInputs,
+  isOld,
+  isArchived,
 }: {
   priorityIcon: StaticImageData | undefined;
   setPriorityIcon: Dispatch<SetStateAction<StaticImageData | undefined>>;
   edit: Boolean;
   inputs: Inputs;
   setInputs: Dispatch<SetStateAction<Inputs>>;
+  isOld?: boolean;
+  isArchived?: boolean;
 }) {
   function switchPriorityInput() {
     switch (inputs.priority) {
@@ -76,7 +80,8 @@ export default function OptionPriority({
     <div className="w-1/5 flex flex-col justify-between ">
       <div className="flex justify-end ">
         <button
-          className="w-5 h-5 hover:scale-125"
+          disabled={isOld || isArchived ? true : false}
+          className={`w-5 h-5 ${isOld || isArchived ? "" : "hover:scale-125"} `}
           onClick={() => {
             switchPriorityInput();
           }}
