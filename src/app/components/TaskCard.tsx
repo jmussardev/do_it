@@ -9,13 +9,8 @@ import {
   useState,
 } from "react";
 
-import p1 from "./../../../public/icons/p1.png";
-import p2 from "./../../..//public/icons/p2.png";
-import p3 from "./../../../public/icons/p3.png";
-
 //TYPES
 import { TaskType } from "../page";
-import { PRIORITY } from "@prisma/client";
 //COMPONENTS
 import Image, { StaticImageData } from "next/image";
 import Chrono from "./Chrono";
@@ -23,6 +18,7 @@ import OverlayMenu from "./OverlayMenu";
 import OptionPriority from "./OptionPriority";
 import { ChronoContext } from "../context/ChronoContext";
 import getDate from "../../../utilities/date";
+import { useTask } from "../../../hooks/useTask";
 
 interface TaskProps {
   task: TaskType;
@@ -50,18 +46,17 @@ export default function TaskCard({
   const [isChronoOpen, setIsChronoOpen] = useState(false);
   const { setTimerState, start, end, value, isPaused, task_id } =
     useContext(ChronoContext);
-
+  const [edit, setEdit] = useState(false);
+  const { taskDay, compareDate } = getDate();
+  const taskDate = taskDay(date);
+  const { createTask, updateTask, deleteTask } = useTask();
+  const [isChanged, setIsChanged] = useState(false);
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setInputs({
       ...inputs,
       [e.target.name]: e.target.value,
     });
   };
-
-  const [edit, setEdit] = useState(false);
-  const [isActive, setIsActive] = useState(false);
-  const { taskDay, compareDate } = getDate();
-  const taskDate = taskDay(date);
   const isOldTask = () => {
     if (compareDate(taskDate) < 0) {
       return true;
@@ -80,18 +75,56 @@ export default function TaskCard({
     });
   };
 
-  const handleKeyPress = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === "Escape" || event.key === "Enter") {
-      setEdit(false);
+  const handleUpdate = () => {
+    if (isChanged) {
+      setIsChanged(false);
+      updateTask({
+        taskId: inputs.id,
+        description: inputs.description,
+        priority: inputs.priority,
+        timer: inputs.timer,
+        iscompleted: inputs.iscompleted,
+      });
     }
   };
 
-  useEffect(() => {
-    if (start === false || end) {
-      setIsActive(false);
-      // taskRef.current = false;
+  const handleKeyPress = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Escape" || event.key === "Enter") {
+      setEdit(false);
+      handleUpdate();
     }
-  }, [start, end, setIsActive]);
+  };
+  const setTaskDone = () => {
+    setInputs({
+      id: inputs.id,
+      description: inputs.description,
+      priority: inputs.priority,
+      timer: inputs.timer,
+      iscompleted: !inputs.iscompleted,
+    });
+  };
+
+  const setTaskNotActivated = () => {
+    return setTimerState({
+      task_id: null,
+      value: inputs.timer,
+      start: false,
+      end: false,
+      isPaused: false,
+    });
+  };
+  useEffect(() => {
+    setIsChanged(true);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputs]);
+
+  useEffect(() => {
+    if (end) {
+      setTaskNotActivated();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [end]);
 
   useEffect(() => {
     setCurrentTask();
@@ -106,6 +139,9 @@ export default function TaskCard({
       } border-2 border-black rounded-lg bg-white`}
       onKeyDown={(e) => {
         handleKeyPress(e);
+      }}
+      onBlur={() => {
+        handleUpdate();
       }}
     >
       {/* //overlay// */}
@@ -125,6 +161,7 @@ export default function TaskCard({
               />
             ) : (
               <OverlayMenu
+                setTaskDone={setTaskDone}
                 inputs={inputs}
                 setEdit={setEdit}
                 setIsChronoOpen={setIsChronoOpen}
@@ -156,6 +193,7 @@ export default function TaskCard({
           }}
           onBlur={() => {
             setEdit(false);
+            // handleUpdate();
           }}
         />
       </div>

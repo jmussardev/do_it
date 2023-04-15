@@ -1,38 +1,92 @@
 import { NextResponse } from "next/server";
-import { PrismaClient, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import validator from "validator";
-const dayjs = require("dayjs");
-const isoWeek = require("dayjs/plugin/isoWeek");
-dayjs.extend(isoWeek);
-const today = dayjs().format("dddd-YYYY-MM-DD");
-const t = dayjs().format("YYYY-MM-DD");
-const week = dayjs(t).isoWeek();
+import { prisma } from "../../../../utilities/db";
+import getDate from "../../../../utilities/date";
 
-const prisma = new PrismaClient();
+const { today, getWeek } = getDate();
+const week = parseInt(getWeek());
 
 export async function POST(req: Request) {
-  const { description, priority, timer, iscompleted } = await req.json();
-  let includePosts: boolean = false;
+  const { description, priority, timer } = await req.json();
+  const userId = 1;
   let task: Prisma.TaskCreateInput;
   let user: Prisma.UserUncheckedCreateInput;
 
-  user = {
-    id: 1,
-    first_name: "Jeffrey",
-    last_name: "Mussard",
-    email: "z2pik666@gmail.com",
-    password: "Otome69666!",
-    tasks: {
-      create: {
+  try {
+    const createUser = await prisma.task.create({
+      data: {
+        user_id: userId,
         description: description,
-        priority,
-        timer,
-        iscompleted,
+        priority: priority,
+        timer: timer,
+        date: today(),
+        week: week,
+        iscompleted: false,
+      },
+    });
+    return NextResponse.json(
+      {
+        user_id: userId,
+        description: description,
+        priority: priority,
+        timer: timer,
         date: today,
         week: week,
+        iscompleted: false,
       },
-    },
-  };
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-  const createUser = await prisma.user.create({ data: user });
+export async function PUT(req: Request) {
+  const { description, priority, timer, iscompleted, taskId } =
+    await req.json();
+  const userId = 1;
+
+  try {
+    const createUser = await prisma.task.update({
+      where: { id: taskId },
+      data: {
+        description: description,
+        priority: priority,
+        timer: timer,
+        iscompleted: iscompleted,
+      },
+    });
+    return NextResponse.json(
+      {
+        user_id: userId,
+        description: description,
+        priority: priority,
+        timer: timer,
+        iscompleted: iscompleted,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function DELETE(req: Request) {
+  const { taskId } = await req.json();
+
+  try {
+    const createUser = await prisma.task.delete({
+      where: { id: taskId },
+    });
+    return NextResponse.json(
+      {
+        taskId: taskId,
+        message: "task deleted",
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log(error);
+  }
 }

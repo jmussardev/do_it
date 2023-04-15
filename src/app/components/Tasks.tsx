@@ -17,8 +17,9 @@ export default function Tasks({ tasks, onWeek, isArchived }: TaskProps) {
   const url = usePathname();
   const dayPage = url.split("/")[url.split("/").length - 1];
   const isOldTask = () => {
-    if (dayPage < tDayNum) return true;
-    else return false;
+    if (dayPage) {
+      if (dayPage < tDayNum) return true;
+    } else return false;
   };
   return (
     <>

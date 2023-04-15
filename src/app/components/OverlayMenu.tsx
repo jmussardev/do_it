@@ -30,6 +30,7 @@ export default function OverlayMenu({
   isPaused,
   task_id,
   onWeek,
+  setTaskDone,
 }: {
   setEdit: Dispatch<SetStateAction<boolean>>;
   setIsChronoOpen: Dispatch<SetStateAction<boolean>>;
@@ -41,11 +42,17 @@ export default function OverlayMenu({
   isPaused: boolean;
   task_id: number | null;
   onWeek: boolean;
+  setTaskDone: () => void;
 }) {
   return (
     <div className="absolute  flex justify-evenly items-center rounded-lg w-full h-full top-0 left-0 bg-gray-100 bg-opacity-60">
       {/* //btns// */}
-      <button className=" h-7 w-7 hover:scale-125">
+      <button
+        className=" h-7 w-7 hover:scale-125"
+        onClick={() => {
+          setTaskDone();
+        }}
+      >
         <Image src={check} alt="" />
       </button>
       <button
