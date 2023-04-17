@@ -77,29 +77,20 @@ export default function OptionPriority({
   };
 
   return (
-    <div className="w-1/5 flex flex-col justify-between ">
-      <div className="flex justify-end ">
-        <button
-          disabled={isOld || isArchived ? true : false}
-          className={`w-5 h-5 ${isOld || isArchived ? "" : "hover:scale-125"} `}
-          onClick={() => {
-            switchPriorityInput();
-          }}
-        >
-          <Image
-            src={priorityIcon ? priorityIcon : setInitialIcon(inputs.priority)}
-            alt="priority"
-          />
-        </button>
-      </div>
-      <div className="flex justify-end">
-        <button
-          className="mr-[4px] h-5 hover:scale-125 "
-          hidden={edit ? false : true}
-        >
-          <Image src={delIcon} alt="" />
-        </button>
-      </div>
+    <div className="w-7 pr-1 flex items-center border-r-2  ">
+      <button
+        title="priority"
+        disabled={isOld || isArchived ? true : false}
+        className={`w-5 h-5 ${isOld || isArchived ? "" : "hover:scale-125"} `}
+        onClick={() => {
+          switchPriorityInput();
+        }}
+      >
+        <Image
+          src={priorityIcon ? priorityIcon : setInitialIcon(inputs.priority)}
+          alt="priority"
+        />
+      </button>
     </div>
   );
 }

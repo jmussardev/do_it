@@ -7,7 +7,8 @@ export default function NavBar({
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  const { dayNum } = getDate();
+  const { getDay, today } = getDate();
+  const tdayNum = getDay(today());
   return (
     <div className=" w-full font-bold text-lg text-center bg-white border-b-2 border-black  -- sm:static sm:text-left ">
       <ul className=" sm:border-black border-t-[3px] mb-10 pt-4">
@@ -23,7 +24,7 @@ export default function NavBar({
           </Link>
         </li>
         <li>
-          <Link href={`/my-week/${dayNum()}`}>
+          <Link href={`/my-week/${tdayNum}`}>
             <button
               onClick={() => {
                 setOpen(false);

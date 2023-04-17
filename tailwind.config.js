@@ -24,6 +24,7 @@ module.exports = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
         "topo-pattern": "url('./img/topography.svg')",
+        done: "url('./img/done.png')",
       },
     },
     screens: {

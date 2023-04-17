@@ -56,7 +56,7 @@ export const useTask = () => {
         method: "delete",
         url: "http://localhost:3000/api/task",
         data: {
-          taskId: "taskId",
+          taskId: taskId,
         },
       });
     } catch (e: any) {

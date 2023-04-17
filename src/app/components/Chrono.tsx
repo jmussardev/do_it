@@ -1,5 +1,5 @@
 import Image from "next/image";
-import check from "./../../../public/icons/check.png";
+import checkBlack from "./../../../public/icons/checkBlack.png";
 import cross_rounded from "./../../../public/icons/cross_rounded.png";
 import dash from "./../../../public/icons/dash.png";
 import { counter, displayCount } from "./../../../utilities/counter";
@@ -18,14 +18,25 @@ export default function Chrono({
   inputs,
   setInputs,
   setIsChronoOpen,
+  handleUpdate,
 }: {
   inputs: Inputs;
   setInputs: Dispatch<SetStateAction<Inputs>>;
   setIsChronoOpen: Dispatch<SetStateAction<boolean>>;
+  handleUpdate: () => void;
 }) {
   return (
     <div className="absolute z-10 flex  items-center rounded-lg w-full h-full top-0 left-0 bg-gray-100 bg-opacity-60">
-      <div className=" w-1/4 h-full p-4 flex flex-col justify-between items-center ">
+      <form
+        onSubmit={(e) => {
+          () => {
+            e.preventDefault();
+            handleUpdate();
+            setIsChronoOpen(false);
+          };
+        }}
+        className=" w-1/4 h-full p-4 flex flex-col justify-between items-center "
+      >
         <button
           className="w-6 h-6 hover:scale-125 "
           onClick={() => {
@@ -37,15 +48,10 @@ export default function Chrono({
         >
           <Image src={cross_rounded} alt="" />
         </button>
-        <button
-          className="w-4 h-4 hover:scale-125"
-          onClick={() => {
-            setIsChronoOpen(false);
-          }}
-        >
-          <Image src={check} alt="" />
+        <button className="w-6 h-6 hover:scale-125" type="submit">
+          <Image src={checkBlack} alt="" />
         </button>
-      </div>
+      </form>
       <div className="flex-2 font-bold text-3xl text-center  w-2/4">
         {displayCount(inputs.timer)}
       </div>
