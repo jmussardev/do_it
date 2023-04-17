@@ -103,7 +103,7 @@ export default function TaskCard({
         iscompleted: inputs.iscompleted,
       });
       setIsChanged(false);
-      router.refresh();
+      // router.refresh();
     }
   };
 
@@ -171,13 +171,13 @@ export default function TaskCard({
     <motion.div
       initial={{ height: 20, x: 0 }}
       animate={{ height: onDelete ? 0 : 100, x: onDelete ? 500 : 0 }}
-      exit={{ opacity: 0 }}
+      // exit={{ opacity: 0 }}
       transition={{ delay: 0, type: "spring" }}
     >
       <div
         className={`relative font-bold flex p-2 w-full h-[6rem] mb-2 ${
-          inputs.id === task_id ? "border-dashed" : ""
-        } border-2 border-black rounded-lg bg-white `}
+          inputs.id === task_id ? "bg-[#FFE1DB]" : ""
+        } drop-shadow-[0_5px_3px_rgba(0,0,0,0.3)]  rounded-lg bg-white  `}
         onKeyDown={(e) => {
           handleKeyPress(e);
         }}
@@ -188,7 +188,7 @@ export default function TaskCard({
       >
         {/* //overlay// */}
         {inputs.iscompleted ? (
-          <div className="absolute flex justify-end items-center rounded-lg w-full h-full top-0 left-0 bg-gray-100 bg-opacity-60">
+          <div className="absolute flex justify-end items-center rounded-lg w-full h-full top-0 left-0 bg-[#DEFFBC] bg-opacity-60">
             <div className="h-[6rem] w-[6rem] pr-2 opacity-30">
               <Image src={bigCheck} alt="" />
             </div>
@@ -247,7 +247,9 @@ export default function TaskCard({
         {/* //description// */}
         <div className={`flex items-center w-4/5 p-2  `}>
           <input
-            className="w-full h-full border-transparent bg-transparent focus:outline-none "
+            className={`w-full h-full border-transparent bg-transparent placeholder:text-gray-200  ${
+              inputs.id === task_id ? "placeholder:text-transparent " : ""
+            } focus:outline-none `}
             readOnly={edit ? false : true}
             type="text"
             value={inputs.description}

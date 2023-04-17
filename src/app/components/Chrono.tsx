@@ -27,16 +27,7 @@ export default function Chrono({
 }) {
   return (
     <div className="absolute z-10 flex  items-center rounded-lg w-full h-full top-0 left-0 bg-gray-100 bg-opacity-60">
-      <form
-        onSubmit={(e) => {
-          () => {
-            e.preventDefault();
-            handleUpdate();
-            setIsChronoOpen(false);
-          };
-        }}
-        className=" w-1/4 h-full p-4 flex flex-col justify-between items-center "
-      >
+      <div className=" w-1/4 h-full p-4 flex flex-col justify-between items-center ">
         <button
           className="w-6 h-6 hover:scale-125 "
           onClick={() => {
@@ -48,10 +39,16 @@ export default function Chrono({
         >
           <Image src={cross_rounded} alt="" />
         </button>
-        <button className="w-6 h-6 hover:scale-125" type="submit">
+        <button
+          className="w-6 h-6 hover:scale-125"
+          onClick={() => {
+            handleUpdate();
+            setIsChronoOpen(false);
+          }}
+        >
           <Image src={checkBlack} alt="" />
         </button>
-      </form>
+      </div>
       <div className="flex-2 font-bold text-3xl text-center  w-2/4">
         {displayCount(inputs.timer)}
       </div>

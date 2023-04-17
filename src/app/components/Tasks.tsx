@@ -69,7 +69,7 @@ export default function Tasks({ tasks, onWeek, isArchived }: TaskProps) {
 
   return (
     <>
-      <ul className="relative px-[1rem]  xsm:px-[4rem] py-[2rem] h-full   ">
+      <ul className="relative px-[1rem]  xsm:px-[4rem] py-[3rem] h-full   ">
         {tasksList.map((task, i) => (
           <TaskCard
             key={task.id}
@@ -86,13 +86,12 @@ export default function Tasks({ tasks, onWeek, isArchived }: TaskProps) {
           ""
         ) : (
           <button
-            className="absolute top-5 right-3 ## h-10 w-10 ## font-bold border-2 border-black rounded-lg  ##   "
+            className="absolute top-1 right-3 sm:top-5 sm:right-3 ## flex items-center justify-center ## h-10 w-10 bg-white drop-shadow-lg active:drop-shadow-md rounded-lg  ##   "
             onClick={() => {
               handleCreate();
             }}
           >
-            {" "}
-            <div className="rotate-45">
+            <div className="  rotate-45 h-6 w-6">
               <Image src={cross_rounded} alt="" />
             </div>
           </button>

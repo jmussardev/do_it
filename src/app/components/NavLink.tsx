@@ -46,7 +46,7 @@ export function NavLink({
             : ""
         }  
         ${isOldTask() && isActive ? "-translate-y-[5px] text-black " : ""} 
-         border-l-2 border-b-2 border-r-2 border-black rounded-b-md  font-bold ## 
+         border-l-2 border-b-2 border-r-2 drop-shadow-md rounded-b-md  font-bold ## 
         ${
           isActive
             ? ""
@@ -67,7 +67,7 @@ export function NavLink({
             : ""
         }  
         ${isOldTask() && isActive ? "-translate-y-[5px] text-black " : ""} 
-         border-l-2 border-b-2 border-r-2 border-black rounded-b-md  font-bold ## 
+         border-l-2 border-b-2 border-r-2 drop-shadow-md rounded-b-md  font-bold ## 
         ${
           isActive
             ? ""

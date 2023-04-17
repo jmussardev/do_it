@@ -40,8 +40,9 @@ const fetchDayTasks = async (date: string): Promise<TaskType[]> => {
 
 export default async function Home() {
   const tasks = await fetchDayTasks(date);
+
   return (
-    <div className=" h-full cardpattern sm:bg-white">
+    <div className=" h-full cardpattern  shadow-inner   ">
       {/* //header// */}
       <TodayHeader />
       {/* //header// */}
