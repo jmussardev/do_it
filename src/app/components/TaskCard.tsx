@@ -1,14 +1,23 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   ChangeEvent,
   Dispatch,
   KeyboardEvent,
-  MutableRefObject,
   SetStateAction,
   useContext,
   useEffect,
-  useRef,
   useState,
 } from "react";
+import { useRouter } from "next/navigation";
+import { useTask } from "../../../hooks/useTask";
+import getDate from "../../../utilities/date";
+import { ChronoContext } from "../context/ChronoContext";
+import {
+  motion,
+  useAnimate,
+  usePresence,
+  AnimatePresence,
+} from "framer-motion";
 
 //TYPES
 import { TaskType } from "../page";
@@ -17,13 +26,9 @@ import Image, { StaticImageData } from "next/image";
 import Chrono from "./Chrono";
 import OverlayMenu from "./OverlayMenu";
 import OptionPriority from "./OptionPriority";
-import { ChronoContext } from "../context/ChronoContext";
-import getDate from "../../../utilities/date";
-import { useTask } from "../../../hooks/useTask";
 import bigCheck from "./../../../public/icons/bigCheck.png";
 import done from "./../../../public/icons/done.png";
 import delIcon from "./../../../public/icons/delete.png";
-import { useRouter } from "next/navigation";
 
 interface TaskProps {
   task: TaskType;
@@ -31,6 +36,8 @@ interface TaskProps {
   onWeek?: boolean;
   isOld?: boolean;
   isArchived?: boolean;
+  onCreate: boolean;
+  setOnCreate: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function TaskCard({
@@ -39,6 +46,8 @@ export default function TaskCard({
   onWeek,
   isOld,
   isArchived,
+  onCreate,
+  setOnCreate,
 }: TaskProps) {
   const [inputs, setInputs] = useState({
     id: 0,
@@ -56,6 +65,9 @@ export default function TaskCard({
   const taskDate = taskDay(date);
   const { createTask, updateTask, deleteTask } = useTask();
   const [isChanged, setIsChanged] = useState(false);
+  const [onDelete, setOnDelete] = useState(false);
+  const [scope, animate] = useAnimate();
+  const [isPresent, safeToRemove] = usePresence();
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setInputs({
       ...inputs,
@@ -97,6 +109,7 @@ export default function TaskCard({
 
   const handleDelete = async () => {
     await deleteTask({ taskId: inputs.id });
+    setOnDelete(true);
     router.refresh();
   };
 
@@ -148,131 +161,144 @@ export default function TaskCard({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  // useEffect(() => {
+  //   animate(scope.current, { opacity: 1 }, { duration: 1 });
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [onDelete]);
 
   return (
-    <div
-      className={`relative font-bold flex p-2 w-full h-[6rem] mb-2 ${
-        inputs.id === task_id ? "border-dashed" : ""
-      } border-2 border-black rounded-lg bg-white `}
-      onKeyDown={(e) => {
-        handleKeyPress(e);
-      }}
-      onBlur={() => {
-        handleUpdate();
-      }}
-      onTransitionEnd={() => {}}
+    // <AnimatePresence>
+    <motion.div
+      initial={{ height: 20, x: 0 }}
+      animate={{ height: onDelete ? 0 : 100, x: onDelete ? 500 : 0 }}
+      exit={{ opacity: 0 }}
+      transition={{ delay: 0, type: "spring" }}
     >
-      {/* //overlay// */}
-      {inputs.iscompleted ? (
-        <div className="absolute flex justify-end items-center rounded-lg w-full h-full top-0 left-0 bg-gray-100 bg-opacity-60">
-          <div className="h-[6rem] w-[6rem] pr-2 opacity-30">
-            <Image src={bigCheck} alt="" />
+      <div
+        className={`relative font-bold flex p-2 w-full h-[6rem] mb-2 ${
+          inputs.id === task_id ? "border-dashed" : ""
+        } border-2 border-black rounded-lg bg-white `}
+        onKeyDown={(e) => {
+          handleKeyPress(e);
+        }}
+        onBlur={() => {
+          handleUpdate();
+        }}
+        onTransitionEnd={() => {}}
+      >
+        {/* //overlay// */}
+        {inputs.iscompleted ? (
+          <div className="absolute flex justify-end items-center rounded-lg w-full h-full top-0 left-0 bg-gray-100 bg-opacity-60">
+            <div className="h-[6rem] w-[6rem] pr-2 opacity-30">
+              <Image src={bigCheck} alt="" />
+            </div>
           </div>
-        </div>
-      ) : (
-        ""
-      )}
+        ) : (
+          ""
+        )}
 
-      {isOldTask() ? (
-        ""
-      ) : (
-        <>
-          <div
-            className="opacity-0 hover:opacity-100 transition-all ease-in "
-            hidden={edit ? true : false}
-          >
-            {isChronoOpen ? (
-              <Chrono
-                inputs={inputs}
-                setInputs={setInputs}
-                setIsChronoOpen={setIsChronoOpen}
-                handleUpdate={handleUpdate}
-              />
-            ) : (
-              <OverlayMenu
-                setTaskDone={setTaskDone}
-                inputs={inputs}
-                setEdit={setEdit}
-                setIsChronoOpen={setIsChronoOpen}
-                task_id={task_id}
-                start={start}
-                end={end}
-                setTimerState={setTimerState}
-                isPaused={isPaused}
-                value={value}
-                onWeek={onWeek ? true : false}
-              />
-            )}
-          </div>
-        </>
-      )}
+        {isOldTask() ? (
+          ""
+        ) : (
+          <>
+            <div
+              className="opacity-0 hover:opacity-100 transition-all ease-in "
+              hidden={edit ? true : false}
+            >
+              {isChronoOpen ? (
+                <Chrono
+                  inputs={inputs}
+                  setInputs={setInputs}
+                  setIsChronoOpen={setIsChronoOpen}
+                  handleUpdate={handleUpdate}
+                />
+              ) : (
+                <OverlayMenu
+                  setTaskDone={setTaskDone}
+                  inputs={inputs}
+                  setEdit={setEdit}
+                  setIsChronoOpen={setIsChronoOpen}
+                  task_id={task_id}
+                  start={start}
+                  end={end}
+                  setTimerState={setTimerState}
+                  isPaused={isPaused}
+                  value={value}
+                  onWeek={onWeek ? true : false}
+                />
+              )}
+            </div>
+          </>
+        )}
 
-      {/* //overlay// */}
-      {/* //options// */}
+        {/* //overlay// */}
+        {/* //options// */}
 
-      <OptionPriority
-        inputs={inputs}
-        setInputs={setInputs}
-        priorityIcon={priorityIcon}
-        setPriorityIcon={setPriorityIcon}
-        edit={edit}
-        isOld={isOld}
-        isArchived={isArchived}
-      />
-      {/* //options// */}
-      {/* //description// */}
-      <div className={`flex items-center w-4/5 p-2  `}>
-        <input
-          className="w-full h-full border-transparent bg-transparent focus:outline-none "
-          readOnly={edit ? false : true}
-          type="text"
-          value={inputs.description}
-          placeholder="Describe your task.."
-          name="description"
-          onChange={(e) => {
-            handleChangeInput(e);
-          }}
-          onBlur={() => {
-            setEdit(false);
-            // handleUpdate();
-          }}
+        <OptionPriority
+          inputs={inputs}
+          setInputs={setInputs}
+          priorityIcon={priorityIcon}
+          setPriorityIcon={setPriorityIcon}
+          edit={edit}
+          isOld={isOld}
+          isArchived={isArchived}
         />
-      </div>
-      {/* //description// */}
-
-      {edit ? (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleDelete();
-          }}
-          className="absolute top-0 right-0 border-r-lg ml-3 flex flex-col h-full w-14 "
-        >
-          <button
-            type="submit"
-            title="delete"
-            className="flex  justify-center items-center border-b-2 w-full h-1/3"
-          >
-            <div>
-              <Image src={delIcon} alt="" />
-            </div>
-          </button>
-
-          <button
-            title="confirm"
-            className="flex justify-center items-center w-full h-2/3"
-            onClick={() => {
-              setEdit(false);
+        {/* //options// */}
+        {/* //description// */}
+        <div className={`flex items-center w-4/5 p-2  `}>
+          <input
+            className="w-full h-full border-transparent bg-transparent focus:outline-none "
+            readOnly={edit ? false : true}
+            type="text"
+            value={inputs.description}
+            placeholder="Describe your task.."
+            name="description"
+            onChange={(e) => {
+              handleChangeInput(e);
             }}
+            onBlur={() => {
+              setEdit(false);
+              // handleUpdate();
+            }}
+          />
+        </div>
+        {/* //description// */}
+
+        {edit ? (
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleDelete();
+            }}
+            className="absolute top-0 right-0 border-r-lg ml-3 flex flex-col h-full w-14 "
           >
-            <div className=" h-4 w-4 ">
-              <Image src={done} alt="" />
-            </div>
-          </button>
-        </form>
-      ) : (
-        ""
-      )}
-    </div>
+            <button
+              type="submit"
+              title="delete"
+              className="flex  justify-center items-center border-b-2 w-full h-1/3"
+            >
+              <div>
+                <Image src={delIcon} alt="" />
+              </div>
+            </button>
+
+            <button
+              title="confirm"
+              className="flex justify-center items-center w-full h-2/3"
+              onClick={() => {
+                setEdit(false);
+              }}
+            >
+              <div className=" h-4 w-4 ">
+                <Image src={done} alt="" />
+              </div>
+            </button>
+          </form>
+        ) : (
+          ""
+        )}
+      </div>
+    </motion.div>
+    // </AnimatePresence>
   );
 }

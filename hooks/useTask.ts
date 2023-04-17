@@ -8,11 +8,13 @@ export const useTask = () => {
     description,
     priority,
     timer,
+    date,
   }: {
     user_id: number;
     description: string;
     priority: string;
     timer: number;
+    date: string;
   }) => {
     try {
       const response = await axios.post("http://localhost:3000/api/task", {
@@ -20,6 +22,7 @@ export const useTask = () => {
         description,
         priority,
         timer,
+        date,
       });
     } catch (e: any) {
       console.log(e);

@@ -8,7 +8,7 @@ const { today, getWeek } = getDate();
 const week = parseInt(getWeek());
 
 export async function POST(req: Request) {
-  const { description, priority, timer } = await req.json();
+  const { description, priority, timer, date } = await req.json();
   const userId = 1;
   let task: Prisma.TaskCreateInput;
   let user: Prisma.UserUncheckedCreateInput;
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
         description: description,
         priority: priority,
         timer: timer,
-        date: today(),
+        date: date,
         week: week,
         iscompleted: false,
       },

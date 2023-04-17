@@ -43,6 +43,11 @@ export default function getDate() {
       `${dateSplit[1]}-${dateSplit[2]}-${dateSplit[3]}`
     ).isoWeekday();
   };
+
+  const dayOfWeek = (day: string) => {
+    const week = getWeek();
+    return dayjs().isoWeek(week).isoWeekday(day).format("dddd-YYYY-MM-DD");
+  };
   return {
     dayNum,
     today,
@@ -52,5 +57,6 @@ export default function getDate() {
     getDay,
     compareDate,
     taskDay,
+    dayOfWeek,
   };
 }
