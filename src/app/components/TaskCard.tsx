@@ -169,22 +169,30 @@ export default function TaskCard({
   return (
     // <AnimatePresence>
     <motion.div
+      className={` ${
+        inputs.id === task_id && isPaused === false
+          ? "isActive"
+          : inputs.id === task_id && isPaused
+          ? "isPaused"
+          : ""
+      } relative  overflow-hidden rounded-lg p-[3px] w-full h-[6rem] drop-shadow-[0_5px_3px_rgba(0,0,0,0.3)]  `}
       initial={{ height: 20, x: 0 }}
       animate={{ height: onDelete ? 0 : 100, x: onDelete ? 500 : 0 }}
       // exit={{ opacity: 0 }}
       transition={{ delay: 0, type: "spring" }}
     >
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
       <div
-        className={`relative font-bold flex p-2 w-full h-[6rem] mb-2 ${
-          inputs.id === task_id ? "bg-[#FFE1DB]" : ""
-        } drop-shadow-[0_5px_3px_rgba(0,0,0,0.3)]  rounded-lg bg-white  `}
+        className={`  overflow-hidden  relative font-bold flex p-2 w-full h-full mb-2   rounded-lg bg-white  `}
         onKeyDown={(e) => {
           handleKeyPress(e);
         }}
         onBlur={() => {
           handleUpdate();
         }}
-        onTransitionEnd={() => {}}
       >
         {/* //overlay// */}
         {inputs.iscompleted ? (

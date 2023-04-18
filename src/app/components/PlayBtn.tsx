@@ -38,7 +38,7 @@ export default function PlayBtn({
       {start === false && task_id !== inputs.id && (
         <button
           disabled={inputs.timer === 0 ? true : false}
-          className=" h-5 w-5 hover:scale-125"
+          className="origin-center h-5 w-5 hover:scale-125"
           onClick={() => {
             // console.log("overlay play");
             setTimerState({
@@ -57,7 +57,7 @@ export default function PlayBtn({
       {start === false && isPaused === true && task_id === inputs.id && (
         <button
           disabled={inputs.timer === 0 ? true : false}
-          className=" h-5 w-5 hover:scale-125"
+          className="z-10 origin-center h-5 w-5 hover:scale-125"
           onClick={() => {
             setTimerState({
               task_id: inputs.id,
@@ -74,7 +74,7 @@ export default function PlayBtn({
 
       {start && task_id === inputs.id && (
         <button
-          className="pt-1 h-8 w-8 hover:scale-125"
+          className="z-10 origin-center pt-[2px] h-9 w-9 hover:scale-125"
           onClick={() => {
             // console.log("overlay pause");
             setTimerState({

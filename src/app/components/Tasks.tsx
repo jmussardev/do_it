@@ -56,7 +56,6 @@ export default function Tasks({ tasks, onWeek, isArchived }: TaskProps) {
     }
   };
 
-  //=> delete element task from DOM
   let tasksList = tasks;
 
   tasksList = tasksList.sort((t1, t2) =>
@@ -86,6 +85,7 @@ export default function Tasks({ tasks, onWeek, isArchived }: TaskProps) {
           ""
         ) : (
           <button
+            title="add a task"
             className="absolute top-1 right-3 sm:top-5 sm:right-3 ## flex items-center justify-center ## h-10 w-10 bg-white drop-shadow-lg active:drop-shadow-md rounded-lg  ##   "
             onClick={() => {
               handleCreate();
