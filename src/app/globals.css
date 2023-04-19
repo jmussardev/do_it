@@ -47,13 +47,22 @@ body {
     )
     rgb(var(--background-start-rgb));
 } */
+.btnCenter {
+  transform: translate(50%, -50%);
+}
+
+.shadow-inner {
+  --tw-shadow: inset 0 2px 4px 2px rgba(0, 0, 0, 0.26);
+  --tw-shadow-colored: inset 0 2px 4px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
 
 .isPaused::after {
   content: "";
   position: absolute;
   top: 50%;
   left: 0;
-  transform: translate(50%, -50%);
 
   width: 100%;
   height: 100%;
@@ -227,17 +236,16 @@ body {
 }
 
 .lds-ellipsis {
-  display: inline-block;
+  display: block;
   position: relative;
-  transform: translate(50%, -50%);
+  /* transform: translate(50%, -50%); */
 
-  width: 200px;
-  height: 200px;
-  padding: 5rem;
+  width: 5rem;
+  height: 3rem;
+  padding: 1rem;
 }
 .lds-ellipsis div {
   position: absolute;
-  top: 50%;
   width: 15px;
   height: 15px;
   border-radius: 50%;

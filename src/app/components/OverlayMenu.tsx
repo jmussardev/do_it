@@ -1,6 +1,6 @@
 import Image from "next/image";
 import pencil from "./../../../public/icons/pencil.png";
-import check from "./../../../public/icons/check.png";
+import done from "./../../../public/icons/done.png";
 import chrono from "./../../../public/icons/chrono.png";
 import stop from "./../../../public/icons/stop.png";
 import { Dispatch, SetStateAction } from "react";
@@ -49,17 +49,17 @@ export default function OverlayMenu({
   const router = useRouter();
   return (
     <div
-      className={`absolute z-30 bg-gray-100 bg-opacity-90 flex justify-evenly items-center rounded-lg w-full h-full top-0 left-0 `}
+      className={`absolute z-30 bg-gray-100 bg-opacity-90 flex justify-evenly  items-center rounded-lg w-full h-full top-0 left-0 `}
     >
       {/* //btns// */}
       <button
-        className="z-10 origin-center h-7 w-7 hover:scale-125"
+        className="z-10 origin-center h-6 w-6 hover:scale-125"
         onClick={() => {
           setTaskDone();
           router.refresh();
         }}
       >
-        <Image src={check} alt="" />
+        <Image src={done} alt="" />
       </button>
       {inputs.iscompleted ? (
         ""
@@ -79,7 +79,7 @@ export default function OverlayMenu({
           </button>
           {task_id === inputs.id ? (
             <button
-              className="z-10 pt-[2px] origin-center h-5 w-5 hover:scale-125"
+              className="z-10  origin-center h-5 w-5 hover:scale-125"
               onClick={() => {
                 setTimerState({
                   task_id: null,

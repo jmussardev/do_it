@@ -44,9 +44,12 @@ export default function getDate() {
     ).isoWeekday();
   };
 
-  const dayOfWeek = (day: string) => {
+  const dayOfWeekFull = (day: string) => {
     const week = getWeek();
     return dayjs().isoWeek(week).isoWeekday(day).format("dddd-YYYY-MM-DD");
+  };
+  const dayOfWeek = (day: string, week: string) => {
+    return dayjs().isoWeek(week).isoWeekday(day).format("MM-DD");
   };
   return {
     dayNum,
@@ -57,6 +60,7 @@ export default function getDate() {
     getDay,
     compareDate,
     taskDay,
+    dayOfWeekFull,
     dayOfWeek,
   };
 }

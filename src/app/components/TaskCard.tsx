@@ -95,14 +95,23 @@ export default function TaskCard({
   const handleUpdate = async () => {
     if (isChanged === true) {
       console.log(inputs);
-      await updateTask({
-        taskId: inputs.id,
-        description: inputs.description,
-        priority: inputs.priority,
-        timer: inputs.timer,
-        iscompleted: inputs.iscompleted,
-      });
+      try {
+        await updateTask({
+          taskId: inputs.id,
+          description: inputs.description,
+          priority: inputs.priority,
+          timer: inputs.timer,
+          iscompleted: inputs.iscompleted,
+        });
+      } catch (error) {
+      } finally {
+        console.log("################");
+        console.log("in finally");
+        console.log("################");
+        router.refresh();
+      }
       setIsChanged(false);
+
       // router.refresh();
     }
   };
@@ -130,7 +139,15 @@ export default function TaskCard({
       timer: inputs.timer,
       iscompleted: !inputs.iscompleted,
     });
-    // router.push("/");
+    if (start || isPaused) {
+      setTimerState({
+        task_id: null,
+        value: value,
+        start: false,
+        end: false,
+        isPaused: false,
+      });
+    }
   };
 
   const setTaskNotActivated = () => {
@@ -143,8 +160,6 @@ export default function TaskCard({
     });
   };
   useEffect(() => {
-    console.log("in use effect");
-    console.log(inputs.iscompleted);
     setIsChanged(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputs]);

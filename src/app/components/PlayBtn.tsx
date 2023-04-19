@@ -74,7 +74,7 @@ export default function PlayBtn({
 
       {start && task_id === inputs.id && (
         <button
-          className="z-10 origin-center pt-[2px] h-9 w-9 hover:scale-125"
+          className="z-10 origin-center  h-5 w-5 hover:scale-125"
           onClick={() => {
             // console.log("overlay pause");
             setTimerState({

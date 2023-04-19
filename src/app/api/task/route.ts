@@ -1,6 +1,4 @@
 import { NextResponse } from "next/server";
-import { Prisma } from "@prisma/client";
-import validator from "validator";
 import { prisma } from "../../../../utilities/db";
 import getDate from "../../../../utilities/date";
 
@@ -10,11 +8,9 @@ const week = parseInt(getWeek());
 export async function POST(req: Request) {
   const { description, priority, timer, date } = await req.json();
   const userId = 1;
-  let task: Prisma.TaskCreateInput;
-  let user: Prisma.UserUncheckedCreateInput;
 
   try {
-    const createUser = await prisma.task.create({
+    const createTask = await prisma.task.create({
       data: {
         user_id: userId,
         description: description,

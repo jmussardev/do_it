@@ -2,6 +2,7 @@ import getDate from "../../utilities/date";
 import { prisma } from "../../utilities/db";
 import Header from "./components/Header";
 import TimerContext from "./context/ChronoContext";
+import AuthContext from "./context/AuthContext";
 import "./globals.css";
 
 export const metadata = {
@@ -43,20 +44,25 @@ export default async function RootLayout({
     <html lang="en">
       <body className="bgpattern h-screen">
         <main
-          className=" flex flex-col  h-screen w-screen border -- sm:flex-row sm:h-[50rem] sm:m-auto 
+          className="relative flex flex-col  h-screen w-screen  -- sm:flex-row sm:h-[50rem] sm:m-auto 
          sm:max-w-5xl "
         >
-          <TimerContext>
-            <Header
-              numTasks={numTasks._count}
-              numTasksDone={numTasksDone._count}
-            />
-            <main className="flex  h-full border  -- sm:center sm:m-auto sm:w-3/4  sm:py-8 ">
-              <main className=" m-auto w-full h-full xsm:w-full xsm:h-full bg-white border shadow-inner   -- sm:h-[95%] sm:w-[70%] sm:min-w-[70%] sm:m-auto sm:rounded">
-                {children}
+          <AuthContext>
+            <TimerContext>
+              <Header
+                numTasks={numTasks._count}
+                numTasksDone={numTasksDone._count}
+              />
+              <main className="flex  h-full   -- sm:center sm:m-auto sm:w-3/4  sm:py-8 ">
+                <main className=" m-auto w-full h-full xsm:w-full xsm:h-full bg-white  shadow-inner   -- sm:h-[95%] sm:w-[70%] sm:min-w-[70%] sm:m-auto sm:rounded">
+                  {children}
+                </main>
+                <div className="absolute bottom-0  left-[50%]  text-center">
+                  CRUD PROJECT BY MUSSARD JEFFREY
+                </div>
               </main>
-            </main>
-          </TimerContext>
+            </TimerContext>
+          </AuthContext>
         </main>
       </body>
     </html>
