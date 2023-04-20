@@ -32,9 +32,6 @@ export function NavLink({
   let url = usePathname();
 
   const isActive = exact ? url === href : false;
-  console.log(isActive);
-  console.log(url);
-  console.log(href);
 
   return (
     <Link href={href}>

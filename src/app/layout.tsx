@@ -3,7 +3,6 @@ import TimerContext from "./context/ChronoContext";
 import AuthContext from "./context/AuthContext";
 import "./globals.css";
 import { getPayload } from "../../utilities/payload";
-import { notFound } from "next/navigation";
 import { getTasks } from "../../utilities/getTasks";
 
 export const metadata = {

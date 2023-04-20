@@ -3,7 +3,7 @@ import getDate from "../../../utilities/date";
 import Tasks from "./Tasks";
 import WeekNavBar from "./WeekNavBar";
 
-const { getDay, compareDate } = getDate();
+const { getDay } = getDate();
 
 export default function Week({
   tasks,

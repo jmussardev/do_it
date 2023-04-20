@@ -4,7 +4,6 @@ import cross_rounded from "./../../../public/icons/cross_rounded.png";
 import dash from "./../../../public/icons/dash.png";
 import { counter, displayCount } from "./../../../utilities/counter";
 import { Dispatch, SetStateAction } from "react";
-import { PRIORITY } from "@prisma/client";
 
 interface Inputs {
   id: number;

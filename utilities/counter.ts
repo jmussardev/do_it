@@ -25,7 +25,6 @@ export const counter = (seconds: number, action: string) => {
 export const displayCount = (seconds: number): string => {
   const str = seconds.toString();
   const s = parseInt(str.replace("0", ""));
-  console.log(str);
 
   if (seconds === 0) {
     return `00:00`;

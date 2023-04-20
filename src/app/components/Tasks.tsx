@@ -91,14 +91,9 @@ export default function Tasks({
             </div>
             <motion.div
               animate={{
-                // scale: [1, 1, 0.9, 1, 1, 1, 1, 1, 1, 0],
                 rotate: [0, 0, 100, 180, 0, 0],
                 boxShadow: "0 0px 20px 0 rgba(0, 0, 0, 0.2)",
                 borderRadius: "50%",
-
-                // transitionEnd: {
-                //   display: "none",
-                // },
               }}
               transition={{
                 duration: 2,
@@ -124,7 +119,7 @@ export default function Tasks({
         )
       ) : (
         <ul className="relative px-[1rem]  xsm:px-[4rem] py-[3rem] h-full   ">
-          {tasksList.map((task, i) => (
+          {tasksList.map((task) => (
             <TaskCard
               key={task.id}
               task={task}
@@ -132,8 +127,6 @@ export default function Tasks({
               date={task.date}
               isOld={isOldTask()}
               isArchived={isArchived}
-              onCreate={onCreate}
-              setOnCreate={setOnCreate}
             />
           ))}
           {isOldTask() || isArchived ? (

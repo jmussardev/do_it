@@ -1,5 +1,4 @@
 import Image, { StaticImageData } from "next/image";
-import delIcon from "./../../../public/icons/delete.png";
 import p1 from "./../../../public/icons/p1.png";
 import p2 from "./../../..//public/icons/p2.png";
 import p3 from "./../../../public/icons/p3.png";
@@ -18,7 +17,6 @@ interface Inputs {
 export default function OptionPriority({
   priorityIcon,
   setPriorityIcon,
-  edit,
   inputs,
   setInputs,
   isOld,
@@ -26,7 +24,6 @@ export default function OptionPriority({
 }: {
   priorityIcon: StaticImageData | undefined;
   setPriorityIcon: Dispatch<SetStateAction<StaticImageData | undefined>>;
-  edit: Boolean;
   inputs: Inputs;
   setInputs: Dispatch<SetStateAction<Inputs>>;
   isOld?: boolean;

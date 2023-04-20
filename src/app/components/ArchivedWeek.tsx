@@ -17,5 +17,12 @@ export default function ArchivedWeek({
   const day = url.split("/")[url.split("/").length - 1];
   const isArchived = true;
 
-  return <Week tasks={oldtasksWeek} day={day} isArchived={isArchived} />;
+  return (
+    <Week
+      tasks={oldtasksWeek}
+      day={day}
+      isArchived={isArchived}
+      payload={payload}
+    />
+  );
 }

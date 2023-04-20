@@ -1,9 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   ChangeEvent,
-  Dispatch,
   KeyboardEvent,
-  SetStateAction,
   useContext,
   useEffect,
   useState,
@@ -12,15 +10,10 @@ import { useRouter } from "next/navigation";
 import { useTask } from "../../../hooks/useTask";
 import getDate from "../../../utilities/date";
 import { ChronoContext } from "../context/ChronoContext";
-import {
-  motion,
-  useAnimate,
-  usePresence,
-  AnimatePresence,
-} from "framer-motion";
+import { motion } from "framer-motion";
 
 //TYPES
-import { TaskType } from "../page";
+import { Task } from "./../../../config/types";
 //COMPONENTS
 import Image, { StaticImageData } from "next/image";
 import Chrono from "./Chrono";
@@ -31,13 +24,11 @@ import done from "./../../../public/icons/done.png";
 import delIcon from "./../../../public/icons/delete.png";
 
 interface TaskProps {
-  task: TaskType;
+  task: Task;
   date: string;
   onWeek?: boolean;
   isOld?: boolean;
   isArchived?: boolean;
-  onCreate: boolean;
-  setOnCreate: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function TaskCard({
@@ -46,8 +37,6 @@ export default function TaskCard({
   onWeek,
   isOld,
   isArchived,
-  onCreate,
-  setOnCreate,
 }: TaskProps) {
   const [inputs, setInputs] = useState({
     id: 0,
@@ -63,11 +52,9 @@ export default function TaskCard({
   const [edit, setEdit] = useState(false);
   const { taskDay, compareDate } = getDate();
   const taskDate = taskDay(date);
-  const { createTask, updateTask, deleteTask } = useTask();
+  const { updateTask, deleteTask } = useTask();
   const [isChanged, setIsChanged] = useState(false);
   const [onDelete, setOnDelete] = useState(false);
-  const [scope, animate] = useAnimate();
-  const [isPresent, safeToRemove] = usePresence();
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setInputs({
       ...inputs,
@@ -94,7 +81,6 @@ export default function TaskCard({
 
   const handleUpdate = async () => {
     if (isChanged === true) {
-      console.log(inputs);
       try {
         await updateTask({
           taskId: inputs.id,
@@ -105,14 +91,9 @@ export default function TaskCard({
         });
       } catch (error) {
       } finally {
-        console.log("################");
-        console.log("in finally");
-        console.log("################");
         router.refresh();
       }
       setIsChanged(false);
-
-      // router.refresh();
     }
   };
 
@@ -176,10 +157,6 @@ export default function TaskCard({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // useEffect(() => {
-  //   animate(scope.current, { opacity: 1 }, { duration: 1 });
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [onDelete]);
 
   return (
     // <AnimatePresence>
@@ -193,7 +170,6 @@ export default function TaskCard({
       } relative  overflow-hidden rounded-lg p-[3px] w-full h-[6rem] drop-shadow-[0_5px_3px_rgba(0,0,0,0.3)]  `}
       initial={{ height: 20, x: 0 }}
       animate={{ height: onDelete ? 0 : 100, x: onDelete ? 500 : 0 }}
-      // exit={{ opacity: 0 }}
       transition={{ delay: 0, type: "spring" }}
     >
       <span></span>
@@ -262,7 +238,6 @@ export default function TaskCard({
           setInputs={setInputs}
           priorityIcon={priorityIcon}
           setPriorityIcon={setPriorityIcon}
-          edit={edit}
           isOld={isOld}
           isArchived={isArchived}
         />
@@ -283,7 +258,6 @@ export default function TaskCard({
             }}
             onBlur={() => {
               setEdit(false);
-              // handleUpdate();
             }}
           />
         </div>
@@ -324,6 +298,5 @@ export default function TaskCard({
         )}
       </div>
     </motion.div>
-    // </AnimatePresence>
   );
 }

@@ -45,9 +45,6 @@ export default function AuthContext({
       loading: true,
     });
     try {
-      console.log("######################");
-      console.log("#######context######");
-      console.log("######################");
       const jwt = getCookie("jwt");
       if (!jwt) {
         return setAuthState({

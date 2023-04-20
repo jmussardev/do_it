@@ -36,7 +36,6 @@ export default function Timer() {
 
   useEffect(() => {
     if (stopTimer) {
-      console.log("timer stopped");
       setTimerState({
         task_id: null,
         value: 0,
@@ -63,7 +62,6 @@ export default function Timer() {
 
   useEffect(() => {
     if (start == false) {
-      console.log(timerRef.current);
       clearInterval(timerRef.current);
     }
     if (start && value !== 0) {
@@ -71,8 +69,6 @@ export default function Timer() {
 
       const timerId = onTimer();
       timerRef.current = timerId;
-      console.log(timerRef.current);
-      //   clearInterval(timerRef.current);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

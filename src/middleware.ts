@@ -1,4 +1,3 @@
-import { withLogging } from "./../middlewares/withLogging";
 import { NextResponse } from "next/server";
 import { withAuthorization } from "../middlewares/withAuthorization";
 

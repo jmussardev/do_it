@@ -4,7 +4,6 @@ import getDate from "../../../../utilities/date";
 import { getTasks } from "../../../../utilities/getTasks";
 import { getPayload } from "../../../../utilities/payload";
 import ArchivedLink from "../../components/ArchivedLink";
-import { link } from "fs";
 const { dayOfWeek } = getDate();
 const { getOldWeeks } = getTasks();
 
@@ -21,7 +20,6 @@ export default async function Archived() {
   });
   const uniqSet = new Set(oldWeeks);
   const uniq = [...uniqSet];
-  console.log(oldTasks.length);
 
   return (
     <div className="flex flex-col h-full w-full p-10 items-center justify-center overflow-y-auto  ">

@@ -40,7 +40,6 @@ export default function PlayBtn({
           disabled={inputs.timer === 0 ? true : false}
           className="origin-center h-5 w-5 hover:scale-125"
           onClick={() => {
-            // console.log("overlay play");
             setTimerState({
               task_id: inputs.id,
               value: inputs.timer,
@@ -76,7 +75,6 @@ export default function PlayBtn({
         <button
           className="z-10 origin-center  h-5 w-5 hover:scale-125"
           onClick={() => {
-            // console.log("overlay pause");
             setTimerState({
               task_id: inputs.id,
               value: value,

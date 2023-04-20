@@ -13,10 +13,6 @@ import { jwtVerify, type JWTPayload } from "jose";
 export const withAuthorization: MiddlewareFactory = (next: NextMiddleware) => {
   return async (request: NextRequest, _next: NextFetchEvent) => {
     const bearerToken = request.headers.get("authorization");
-    console.log("###############");
-    console.log("TOOOSTYY!!");
-    console.log(bearerToken);
-    console.log("###############");
 
     const res = await next(request, _next);
     if (res) {
