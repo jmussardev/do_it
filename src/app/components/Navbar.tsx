@@ -3,6 +3,8 @@ import { Dispatch, SetStateAction } from "react";
 import getDate from "../../../utilities/date";
 import Image from "next/image";
 import check from "./../../../public/icons/checkWhite.png";
+import useAuth from "../../../hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 export default function NavBar({
   setOpen,
@@ -10,16 +12,19 @@ export default function NavBar({
   numTasksDone,
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>;
-  numTasks: number;
-  numTasksDone: number;
+  numTasks: number | undefined;
+  numTasksDone: number | undefined;
 }) {
   const { getDay, today } = getDate();
   const tdayNum = getDay(today());
+  const { signout } = useAuth();
+  const router = useRouter();
+
   return (
     <div className=" w-full font-bold text-lg text-center bg-white border-b-2 border-black sm:border-none  -- sm:static sm:text-left ">
       <ul className=" sm:border-black border-t-[3px] mb-10 pt-4 text-center sm:text-left">
         <li>
-          <Link href={"/"}>
+          <Link href={"/user/today"}>
             <div className="inline-block">
               <div className="  flex  w-full ">
                 <button
@@ -45,7 +50,7 @@ export default function NavBar({
           </Link>
         </li>
         <li>
-          <Link href={`/my-week/${tdayNum}`}>
+          <Link href={`/user/my-week/${tdayNum}`}>
             <button
               onClick={() => {
                 setOpen(false);
@@ -56,7 +61,7 @@ export default function NavBar({
           </Link>
         </li>
         <li>
-          <Link href={"/archived"}>
+          <Link href={"/user/archived"}>
             {" "}
             <button
               onClick={() => {
@@ -74,7 +79,14 @@ export default function NavBar({
             <button>Dark mode</button>
           </li>
           <li>
-            <button>Logout</button>
+            <button
+              onClick={() => {
+                signout(router);
+                // router.push("/");
+              }}
+            >
+              Logout
+            </button>
           </li>
         </ul>
       </div>

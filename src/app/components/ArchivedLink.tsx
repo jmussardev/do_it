@@ -24,7 +24,7 @@ export default function ArchivedLink({
       <div className="block h-5 w-5 mr-3 ">
         <Image src={archive} alt="" />
       </div>{" "}
-      <Link href={`/archived/${week}/1`}>
+      <Link href={`user/archived/${week}/1`}>
         Archived tasks from <span className="text-gray-500">{date1}</span> to{" "}
         <span className="text-gray-500">{date2}</span>
       </Link>

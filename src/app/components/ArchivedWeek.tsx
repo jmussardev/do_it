@@ -1,13 +1,10 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { TaskType } from "../page";
 import Week from "./Week";
+import { Task } from "../../../config/types";
 
-interface Tasks extends TaskType {
-  date: string;
-}
-export default function ArchivedWeek({ oldTasks }: { oldTasks: Tasks[] }) {
+export default function ArchivedWeek({ oldTasks }: { oldTasks: Task[] }) {
   const url = usePathname();
   const weekPage = parseInt(url.split("/")[url.split("/").length - 2]);
   const oldtasksWeek = oldTasks.filter((t) => t.week === weekPage);

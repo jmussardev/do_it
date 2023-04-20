@@ -45,6 +45,9 @@ export default function AuthContext({
       loading: true,
     });
     try {
+      console.log("######################");
+      console.log("#######context######");
+      console.log("######################");
       const jwt = getCookie("jwt");
       if (!jwt) {
         return setAuthState({
@@ -54,13 +57,14 @@ export default function AuthContext({
         });
       }
 
-      const response = await axios.get("http://localhost:3000/api/auth/me", {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
-
       axios.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
+      const response = await axios.get("http://localhost:3000/api/auth/me");
+
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${jwt}`,
+      //     },
+      // };
 
       setAuthState({
         data: response.data,

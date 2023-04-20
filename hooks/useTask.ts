@@ -1,8 +1,31 @@
 "use client";
 import { PRIORITY } from "@prisma/client";
 import axios from "axios";
+import { getCookie } from "cookies-next";
 
 export const useTask = () => {
+  const getDayTasks = async (user: string) => {
+    const jwt = getCookie("jwt");
+    const config = {
+      headers: {
+        authorization: jwt,
+      },
+    };
+    try {
+      const response = await axios.get("http://localhost:3000/api/auth/me", {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+      console.log(response);
+
+      // const tasks = await axios.get(`http://localhost:3000/api/task/${user}`);
+      // return tasks;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const createTask = async ({
     user_id,
     description,

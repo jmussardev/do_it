@@ -1,3 +1,6 @@
+import { jwtSecret } from "./../config/secret.ts";
+import { getCookie } from "cookies-next";
+
 import {
   NextFetchEvent,
   NextMiddleware,
@@ -5,19 +8,24 @@ import {
   NextResponse,
 } from "next/server";
 import { MiddlewareFactory } from "./types";
-import * as jose from "jose";
+import { jwtVerify, type JWTPayload } from "jose";
 
 export const withAuthorization: MiddlewareFactory = (next: NextMiddleware) => {
   return async (request: NextRequest, _next: NextFetchEvent) => {
     const bearerToken = request.headers.get("authorization");
+    console.log("###############");
+    console.log("TOOOSTYY!!");
+    console.log(bearerToken);
+    console.log("###############");
 
     const res = await next(request, _next);
     if (res) {
       if (!bearerToken) {
-        return NextResponse.json(
+        NextResponse.json(
           { errorMessage: "Unauthorized request aa" },
           { status: 401 }
         );
+        return res;
       }
       const token = bearerToken.split(" ")[1];
       if (!token) {
@@ -26,10 +34,9 @@ export const withAuthorization: MiddlewareFactory = (next: NextMiddleware) => {
           { status: 401 }
         );
       }
-      const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
       try {
-        await jose.jwtVerify(token, secret);
+        await jwtVerify(token, jwtSecret);
       } catch (error) {
         return NextResponse.json(
           { errorMessage: "Unauthorized request cc" },

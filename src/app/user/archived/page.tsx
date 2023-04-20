@@ -1,29 +1,20 @@
-import getDate from "../../../utilities/date";
-import { prisma } from "../../../utilities/db";
-import Link from "next/link";
-import archive from "./../../../public/icons/archive.png";
-import Image from "next/image";
-import { motion } from "framer-motion";
-import ArchivedLink from "../components/ArchivedLink";
-
-const { getWeek, dayOfWeek } = getDate();
-const currentWeek = parseInt(getWeek());
-
-// fetch all tasks before this week
-const fetchWeekTasks = async () => {
-  const tasks = await prisma.task.findMany({
-    where: {
-      week: { lt: currentWeek },
-    },
-    select: {
-      week: true,
-    },
-  });
-  return tasks;
-};
+import { notFound } from "next/navigation";
+import getDate from "../../../../utilities/date";
+import { getTasks } from "../../../../utilities/getTasks";
+import { getPayload } from "../../../../utilities/payload";
+import ArchivedLink from "../../components/ArchivedLink";
+const { dayOfWeek } = getDate();
+const { getOldWeeks } = getTasks();
 
 export default async function Archived() {
-  const oldTasks = await fetchWeekTasks();
+  const payload = getPayload();
+  if (!payload) {
+    notFound();
+  }
+  const oldTasks = await getOldWeeks(payload);
+  if (!oldTasks) {
+    notFound();
+  }
 
   let oldWeeks: number[] = [];
   oldTasks.forEach((task) => {

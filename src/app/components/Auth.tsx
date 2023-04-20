@@ -6,6 +6,7 @@ import { ChangeEvent, useContext, useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import { AuthenticationContext } from "../context/AuthContext";
 import DotLoading from "./DotLoading";
+import { useRouter } from "next/navigation";
 
 export default function Auth() {
   const { data, error, loading } = useContext(AuthenticationContext);
@@ -21,6 +22,7 @@ export default function Auth() {
   });
 
   const [disabled, setDisabled] = useState(true);
+  const router = useRouter();
 
   const handleSignUp = () => {
     const { firstName, lastName, email, password } = inputs;
@@ -29,11 +31,13 @@ export default function Auth() {
       lastName,
       email,
       password,
+      router,
     });
   };
   const handleSignIn = () => {
     const { email, password } = inputs;
-    signin({ email, password });
+
+    signin({ email, password, router });
   };
 
   useEffect(() => {
@@ -54,13 +58,8 @@ export default function Auth() {
         inputs.email &&
         inputs.password
       ) {
-        console.log("#############");
-        console.log("#############");
         setDisabled(false);
       } else {
-        console.log("#############");
-        console.log("#############");
-        console.log("#############");
         setDisabled(true);
       }
     }
@@ -116,14 +115,13 @@ export default function Auth() {
           <p className="text-xl  uppercase font-bold border-b-2 border-black mb-10">
             welcome back
           </p>
-          <p>{data ? data.lastName : ""}</p>
+
           {loading ? (
             <div className="h-full w-full ">
               <DotLoading />
             </div>
           ) : (
             <>
-              {" "}
               <input
                 className="bg-gray-100 shadow-inner w-full h-9 mb-4 rounded-md pl-2"
                 value={inputs.email}

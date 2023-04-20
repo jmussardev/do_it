@@ -1,10 +1,8 @@
+import { Task } from "../../../config/types";
 import getDate from "../../../utilities/date";
-import { TaskType } from "../page";
 import Tasks from "./Tasks";
 import WeekNavBar from "./WeekNavBar";
-interface Tasks extends TaskType {
-  date: string;
-}
+
 const { getDay, compareDate } = getDate();
 
 export default function Week({
@@ -12,12 +10,19 @@ export default function Week({
   day,
   isArchived,
 }: {
-  tasks: Tasks[];
+  tasks: Task[];
   day?: string;
   isArchived?: boolean;
 }) {
   const onWeek = true;
   const dayTasks = tasks.filter((task) => getDay(task.date) == day);
+
+  // console.log("###########");
+  // console.log(day);
+  // console.log("###########");
+  // console.log("###########");
+  // console.log(dayTasks);
+  // console.log("###########");
 
   return (
     <div className="relative h-full w-full ">

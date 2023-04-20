@@ -3,15 +3,18 @@ import { useContext } from "react";
 import { AuthenticationContext } from "./../src/app/context/AuthContext";
 import axios from "axios";
 import { removeCookies } from "cookies-next";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 
 const useAuth = () => {
   const { setAuthState } = useContext(AuthenticationContext);
   const signin = async ({
     email,
     password,
+    router,
   }: {
     email: string;
     password: string;
+    router: AppRouterInstance;
   }) => {
     setAuthState({ data: null, error: null, loading: true });
     try {
@@ -23,6 +26,8 @@ const useAuth = () => {
         }
       );
       setAuthState({ data: response.data, error: null, loading: false });
+
+      router.push("/user/today");
     } catch (e: any) {
       setAuthState({
         data: null,
@@ -37,11 +42,13 @@ const useAuth = () => {
     lastName,
     email,
     password,
+    router,
   }: {
     firstName: string;
     lastName: string;
     email: string;
     password: string;
+    router: AppRouterInstance;
   }) => {
     setAuthState({ data: null, error: null, loading: true });
 
@@ -56,6 +63,7 @@ const useAuth = () => {
         }
       );
       setAuthState({ data: null, error: null, loading: false });
+      router.push("/user/today");
     } catch (e: any) {
       setAuthState({
         data: null,
@@ -65,8 +73,10 @@ const useAuth = () => {
     }
   };
 
-  const signout = () => {
+  const signout = (router: AppRouterInstance) => {
+    router.push("/");
     removeCookies("jwt");
+    router.refresh();
     setAuthState({
       data: null,
       error: null,

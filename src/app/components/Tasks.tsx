@@ -2,7 +2,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { usePathname, useRouter } from "next/navigation";
-import { TaskType } from "../page";
 import TaskCard from "./TaskCard";
 import getDate from "../../../utilities/date";
 import { useTask } from "../../../hooks/useTask";
@@ -10,12 +9,11 @@ import Image from "next/image";
 import cross_rounded from "./../../../public/icons/cross_rounded.png";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { PRIORITY } from "@prisma/client";
+import { Task } from "../../../config/types";
 
-interface Tasks extends TaskType {
-  date: string;
-}
 interface TaskProps {
-  tasks: Tasks[];
+  tasks: Task[];
   onWeek?: boolean;
   isArchived?: boolean;
 }

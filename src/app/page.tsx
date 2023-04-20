@@ -1,58 +1,19 @@
-import Tasks from "./components/Tasks";
-import { prisma } from "./../../utilities/db";
-import { PRIORITY } from "@prisma/client";
-import TodayHeader from "./components/TodayHeader";
-import getDate from "../../utilities/date";
+import Image from "next/image";
+import Auth from "./components/Auth";
 
-export interface TaskType {
-  id: number;
-  description: string;
-  priority: PRIORITY;
-  week: number;
-  user_id: number;
-  timer: number;
-  iscompleted: boolean;
-  date: string;
-}
-const { today } = getDate();
-
-const date = today();
-
-const fetchDayTasks = async (date: string): Promise<TaskType[]> => {
-  const tasks = await prisma.task.findMany({
-    where: {
-      date: date,
-    },
-    select: {
-      id: true,
-      description: true,
-      priority: true,
-      week: true,
-      user_id: true,
-      timer: true,
-      iscompleted: true,
-      date: true,
-    },
-  });
-
-  return tasks;
-};
-
-export default async function Home() {
-  const tasks = await fetchDayTasks(date);
-
+export default function Home() {
   return (
-    <div className=" h-full cardpattern  shadow-inner   ">
-      {/* //header// */}
-      <TodayHeader />
-      {/* //header// */}
-
-      {/* //tasks// */}
-      <div className=" h-5/6 overflow-auto  ">
-        <div>{}</div>
-        <Tasks tasks={tasks} />
+    <div className="layoutSlide flex overflow-hidden flex-col   items-center  h-full w-full">
+      <div className="w-full h-2/6 flex justify-center items-end  ">
+        <div className="  text-right w-[70px] h-fit bg-black text-white font-bold text-3xl">
+          <span className="block">DO</span>
+          <span className="block pr-[3px] ">.IT</span>
+        </div>
       </div>
-      {/* //tasks// */}
+
+      <div className="flex justify-center   w-full  h-4/6">
+        <Auth />
+      </div>
     </div>
   );
 }
