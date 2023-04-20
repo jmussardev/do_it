@@ -90,7 +90,6 @@ export default function Tasks({
               Ok let's get started !{" "}
             </div>
             <motion.div
-              className=" "
               animate={{
                 // scale: [1, 1, 0.9, 1, 1, 1, 1, 1, 1, 0],
                 rotate: [0, 0, 100, 180, 0, 0],

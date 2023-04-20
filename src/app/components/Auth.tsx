@@ -7,6 +7,8 @@ import useAuth from "../../../hooks/useAuth";
 import { AuthenticationContext } from "../context/AuthContext";
 import DotLoading from "./DotLoading";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import cross from "./../../../public/icons/cross_rounded.png";
 
 export default function Auth() {
   const { data, error, loading } = useContext(AuthenticationContext);
@@ -93,15 +95,18 @@ export default function Auth() {
       {/* //-MODAL-SIGNIN-// */}
       <div
         hidden={isOpSignIn ? false : true}
-        className="absolute h-[95%] w-[95%] bg-white"
+        className="absolute h-[95%] w-[95%] mt-4 rounded-md  drop-shadow-[0_0_3px_rgba(0,0,0,0.3)]  bg-white"
       >
         <div className="flex justify-end">
           <button
+            className="mt-2 mr-2"
             onClick={() => {
               setIsOpSignIn(false);
             }}
           >
-            X
+            <div className="h-5 w-5">
+              <Image src={cross} alt="" />
+            </div>
           </button>
         </div>
 
@@ -110,7 +115,7 @@ export default function Auth() {
             e.preventDefault();
             handleSignIn();
           }}
-          className=" h-full w-full px-28 flex flex-col items-center"
+          className=" h-full w-full px-6 pt-4 xsm:px-12 sm:px-28  flex flex-col items-center"
         >
           <p className="text-xl  uppercase font-bold border-b-2 border-black mb-10">
             welcome back
@@ -176,15 +181,18 @@ export default function Auth() {
       {/* //-MODAL-SIGNUP-// */}
       <div
         hidden={isOpSignUp ? false : true}
-        className="absolute h-[95%] w-[95%] bg-white"
+        className="absolute h-[95%] w-[95%] mt-4 rounded-md  drop-shadow-[0_0_3px_rgba(0,0,0,0.3)] bg-white"
       >
         <div className="flex justify-end">
           <button
+            className="mt-2 mr-2"
             onClick={() => {
               setIsOpSignUp(false);
             }}
           >
-            X
+            <div className="h-5 w-5">
+              <Image src={cross} alt="" />
+            </div>
           </button>
         </div>
 
@@ -193,7 +201,7 @@ export default function Auth() {
             e.preventDefault();
             handleSignUp();
           }}
-          className=" px-28 flex flex-col items-center"
+          className=" px-6 xsm:px-24 sm:px-28 flex flex-col items-center"
         >
           <p className="text-xl  uppercase font-bold border-b-2 border-black mb-10">
             Create your account
@@ -203,7 +211,7 @@ export default function Auth() {
           ) : (
             <>
               {" "}
-              <div className="flex justify-between">
+              <div className="flex w-full justify-between">
                 <input
                   className="  bg-gray-100 shadow-inner w-[49%] h-9 mb-4 rounded-md pl-2"
                   value={inputs.firstName}

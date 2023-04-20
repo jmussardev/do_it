@@ -40,10 +40,10 @@ export default async function RootLayout({
                 <Header numTasks={numTasks} numTasksDone={numTasksDone} />
               )}
 
-              <main className="flex  h-full   -- sm:center sm:m-auto sm:w-3/4  sm:py-8 ">
-                <main className="relative   m-auto w-full h-full xsm:w-full xsm:h-full bg-white  shadow-inner   -- sm:h-[95%] sm:w-[70%] sm:min-w-[70%] sm:m-auto sm:rounded">
+              <main className="flex  h-full    -- sm:center sm:m-auto sm:w-3/4  sm:py-8 ">
+                <main className="relative  m-auto w-full h-full xsm:w-full xsm:h-full bg-white  shadow-inner   -- sm:h-[95%] sm:w-[70%] sm:min-w-[70%] sm:m-auto sm:rounded">
                   {children}
-                  <div className="absolute -bottom-12  left-[25%]  text-center">
+                  <div className="absolute origin-center bottom-12 left-[20%] text-xs xsm:text-sm xsm:bottom-12 xsm:left-[30%] sm:-bottom-12  sm:left-[25%]  text-center">
                     CRUD PROJECT BY MUSSARD JEFFREY
                   </div>
                 </main>
