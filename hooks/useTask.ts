@@ -16,11 +16,11 @@ export const useTask = () => {
     email: string;
   }) => {
     try {
-      const result = await axios.get(`http://localhost:3000/api/task/${email}`);
+      const result = await axios.get(`/api/task/${email}`);
       const userId = result.data.id;
 
       try {
-        const response = await axios.post("http://localhost:3000/api/task", {
+        const response = await axios.post("/api/task", {
           userId,
           description,
           priority,
@@ -48,7 +48,7 @@ export const useTask = () => {
     iscompleted: boolean;
   }) => {
     try {
-      const response = await axios.put("http://localhost:3000/api/task", {
+      const response = await axios.put("/api/task", {
         taskId,
         description,
         priority,
@@ -63,7 +63,7 @@ export const useTask = () => {
     try {
       const response = await axios({
         method: "delete",
-        url: "http://localhost:3000/api/task",
+        url: "/api/task",
         data: {
           taskId: taskId,
         },

@@ -18,13 +18,10 @@ const useAuth = () => {
   }) => {
     setAuthState({ data: null, error: null, loading: true });
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/signin",
-        {
-          email,
-          password,
-        }
-      );
+      const response = await axios.post("/api/auth/signin", {
+        email,
+        password,
+      });
       setAuthState({ data: response.data, error: null, loading: false });
 
       router.push("/user/today");
@@ -53,15 +50,12 @@ const useAuth = () => {
     setAuthState({ data: null, error: null, loading: true });
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/signup",
-        {
-          firstName,
-          lastName,
-          email,
-          password,
-        }
-      );
+      const response = await axios.post("/api/auth/signup", {
+        firstName,
+        lastName,
+        email,
+        password,
+      });
       setAuthState({ data: null, error: null, loading: false });
       router.push("/user/today");
     } catch (e: any) {
