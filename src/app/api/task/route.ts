@@ -6,11 +6,10 @@ const { today, getWeek } = getDate();
 const week = parseInt(getWeek());
 
 export async function POST(req: Request) {
-  const { description, priority, timer, date } = await req.json();
-  const userId = 1;
+  const { description, priority, timer, date, userId } = await req.json();
 
   try {
-    const createTask = await prisma.task.create({
+    await prisma.task.create({
       data: {
         user_id: userId,
         description: description,

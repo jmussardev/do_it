@@ -15,5 +15,5 @@ export default async function Archived() {
     notFound();
   }
 
-  return <ArchivedWeek oldTasks={oldTasks} />;
+  return <ArchivedWeek oldTasks={oldTasks} payload={payload} />;
 }

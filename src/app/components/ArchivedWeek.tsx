@@ -4,7 +4,13 @@ import { usePathname } from "next/navigation";
 import Week from "./Week";
 import { Task } from "../../../config/types";
 
-export default function ArchivedWeek({ oldTasks }: { oldTasks: Task[] }) {
+export default function ArchivedWeek({
+  oldTasks,
+  payload,
+}: {
+  oldTasks: Task[];
+  payload?: string;
+}) {
   const url = usePathname();
   const weekPage = parseInt(url.split("/")[url.split("/").length - 2]);
   const oldtasksWeek = oldTasks.filter((t) => t.week === weekPage);

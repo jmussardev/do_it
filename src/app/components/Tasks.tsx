@@ -9,47 +9,58 @@ import Image from "next/image";
 import cross_rounded from "./../../../public/icons/cross_rounded.png";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { PRIORITY } from "@prisma/client";
 import { Task } from "../../../config/types";
 
 interface TaskProps {
   tasks: Task[];
   onWeek?: boolean;
   isArchived?: boolean;
+  payload?: string;
 }
 
-export default function Tasks({ tasks, onWeek, isArchived }: TaskProps) {
+export default function Tasks({
+  tasks,
+  onWeek,
+  isArchived,
+  payload,
+}: TaskProps) {
   const { createTask } = useTask();
   const { getDay, today, dayOfWeekFull } = getDate();
   const router = useRouter();
   const tDayNum = getDay(today());
   const url = usePathname();
   const dayPage = url.split("/")[url.split("/").length - 1];
+  const [onCreate, setOnCreate] = useState(false);
   const isOldTask = () => {
     if (dayPage) {
       if (dayPage < tDayNum) return true;
     } else return false;
   };
-  const [onCreate, setOnCreate] = useState(false);
 
   const handleCreate = async () => {
+    let email = "";
+    if (payload) {
+      email = payload;
+    }
     if (onWeek) {
       await createTask({
         date: dayOfWeekFull(dayPage),
-        user_id: 1,
+
         description: "",
         timer: 0,
         priority: "ONE",
+        email: email,
       });
       setOnCreate(true);
       router.refresh();
     } else {
       await createTask({
         date: today(),
-        user_id: 1,
+
         description: "",
         timer: 0,
         priority: "ONE",
+        email: email,
       });
       // setOnCreate(true);
       router.refresh();

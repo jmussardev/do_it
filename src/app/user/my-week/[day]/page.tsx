@@ -16,7 +16,7 @@ export default async function MyWeek({ params }: { params: { day: string } }) {
 
   return (
     <>
-      <Week tasks={tasks} day={params.day} />
+      <Week tasks={tasks} day={params.day} payload={payload} />
     </>
   );
 }

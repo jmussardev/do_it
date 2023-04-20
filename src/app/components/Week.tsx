@@ -9,20 +9,15 @@ export default function Week({
   tasks,
   day,
   isArchived,
+  payload,
 }: {
   tasks: Task[];
   day?: string;
   isArchived?: boolean;
+  payload?: string;
 }) {
   const onWeek = true;
   const dayTasks = tasks.filter((task) => getDay(task.date) == day);
-
-  // console.log("###########");
-  // console.log(day);
-  // console.log("###########");
-  // console.log("###########");
-  // console.log(dayTasks);
-  // console.log("###########");
 
   return (
     <div className="relative h-full w-full ">
@@ -33,6 +28,7 @@ export default function Week({
           tasks={dayTasks}
           onWeek={onWeek}
           isArchived={isArchived ? true : false}
+          payload={payload}
         />
       </div>
     </div>
