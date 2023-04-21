@@ -165,9 +165,10 @@ export default function TaskCard({
   useEffect(() => {
     setOverlayRef(0);
   }, [start, isChronoOpen, task_id, edit, inputs]);
-
+  let isMobile = window.matchMedia("(pointer:coarse)").matches;
   const controls = useDragControls();
   const ref = useRef<HTMLDivElement>(null);
+  console.log(isMobile);
   return (
     <motion.div
       drag="x"
@@ -175,21 +176,44 @@ export default function TaskCard({
       dragSnapToOrigin={true}
       dragElastic={0.2}
       onDrag={(event, info) => {
-        if (info.point.x > 930) {
-          isOldTask() || task_id === inputs.id
-            ? ""
-            : ref.current === null
-            ? ""
-            : (ref.current.style.background = "#D84242");
+        console.log(info.point.x);
+
+        if (isMobile) {
+          if (info.point.x > 300) {
+            isOldTask() || task_id === inputs.id
+              ? ""
+              : ref.current === null
+              ? ""
+              : (ref.current.style.background = "#D84242");
+          } else {
+            ref.current === null
+              ? ""
+              : (ref.current.style.background = "transparent");
+          }
         } else {
-          ref.current === null
-            ? ""
-            : (ref.current.style.background = "transparent");
+          if (info.point.x > 930) {
+            isOldTask() || task_id === inputs.id
+              ? ""
+              : ref.current === null
+              ? ""
+              : (ref.current.style.background = "#D84242");
+          } else {
+            ref.current === null
+              ? ""
+              : (ref.current.style.background = "transparent");
+          }
         }
       }}
       onDragEnd={(event, info) => {
-        if (info.point.x > 900) {
-          isOldTask() || task_id === inputs.id ? "" : handleDelete();
+        console.log(info.point.x);
+        if (isMobile) {
+          if (info.point.x > 300) {
+            isOldTask() || task_id === inputs.id ? "" : handleDelete();
+          }
+        } else {
+          if (info.point.x > 900) {
+            isOldTask() || task_id === inputs.id ? "" : handleDelete();
+          }
         }
       }}
       dragControls={controls}
