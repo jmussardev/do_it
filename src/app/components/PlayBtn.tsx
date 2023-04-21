@@ -25,6 +25,8 @@ export default function PlayBtn({
   setTimerState,
   isPaused,
   value,
+  isOverlayOpen,
+  setIsOverlayOpen,
 }: {
   setTimerState: Dispatch<SetStateAction<State>>;
   start: boolean | null;
@@ -32,12 +34,16 @@ export default function PlayBtn({
   inputs: Inputs;
   isPaused: boolean;
   task_id: number | null;
+  isOverlayOpen: boolean;
+  setIsOverlayOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   return (
     <>
       {start === false && task_id !== inputs.id && (
         <button
-          disabled={inputs.timer === 0 ? true : false}
+          disabled={
+            inputs.timer === 0 || isOverlayOpen === false ? true : false
+          }
           className="origin-center h-5 w-5 hover:scale-125"
           onClick={() => {
             setTimerState({
@@ -47,6 +53,7 @@ export default function PlayBtn({
               end: false,
               isPaused: false,
             });
+            setIsOverlayOpen(false);
           }}
         >
           <Image src={play} alt="" />
@@ -55,7 +62,9 @@ export default function PlayBtn({
 
       {start === false && isPaused === true && task_id === inputs.id && (
         <button
-          disabled={inputs.timer === 0 ? true : false}
+          disabled={
+            inputs.timer === 0 || isOverlayOpen === false ? true : false
+          }
           className="z-10 origin-center h-5 w-5 hover:scale-125"
           onClick={() => {
             setTimerState({
@@ -65,6 +74,7 @@ export default function PlayBtn({
               end: false,
               isPaused: false,
             });
+            setIsOverlayOpen(false);
           }}
         >
           <Image src={play} alt="" />
@@ -82,7 +92,9 @@ export default function PlayBtn({
               end: false,
               isPaused: true,
             });
+            setIsOverlayOpen(false);
           }}
+          disabled={isOverlayOpen ? false : true}
         >
           <Image src={pause} alt="" />
         </button>

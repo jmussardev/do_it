@@ -3,7 +3,7 @@ import pencil from "./../../../public/icons/pencil.png";
 import done from "./../../../public/icons/done.png";
 import chrono from "./../../../public/icons/chrono.png";
 import stop from "./../../../public/icons/stop.png";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, MutableRefObject, SetStateAction } from "react";
 import PlayBtn from "./PlayBtn";
 import { useRouter } from "next/navigation";
 
@@ -33,6 +33,9 @@ export default function OverlayMenu({
   task_id,
   onWeek,
   setTaskDone,
+  isOverlayOpen,
+  setIsOverlayOpen,
+  overlayRef,
 }: {
   setEdit: Dispatch<SetStateAction<boolean>>;
   setIsChronoOpen: Dispatch<SetStateAction<boolean>>;
@@ -44,6 +47,9 @@ export default function OverlayMenu({
   isPaused: boolean;
   task_id: number | null;
   onWeek: boolean;
+  isOverlayOpen: boolean;
+  setIsOverlayOpen: Dispatch<SetStateAction<boolean>>;
+  overlayRef: number;
   setTaskDone: () => void;
 }) {
   const router = useRouter();
@@ -56,8 +62,10 @@ export default function OverlayMenu({
         className="z-10 origin-center h-6 w-6 hover:scale-125"
         onClick={() => {
           setTaskDone();
-          router.refresh();
+          // setIsOverlayOpen(false);
+          // router.refresh();
         }}
+        disabled={isOverlayOpen ? false : true}
       >
         <Image src={done} alt="" />
       </button>
@@ -74,6 +82,7 @@ export default function OverlayMenu({
                 setEdit(false);
               }, 15000);
             }}
+            disabled={isOverlayOpen ? false : true}
           >
             <Image src={pencil} alt="" />
           </button>
@@ -88,7 +97,9 @@ export default function OverlayMenu({
                   end: false,
                   isPaused: false,
                 });
+                setIsOverlayOpen(false);
               }}
+              disabled={isOverlayOpen ? false : true}
             >
               <Image src={stop} alt="" />
             </button>
@@ -98,6 +109,7 @@ export default function OverlayMenu({
               onClick={() => {
                 setIsChronoOpen(true);
               }}
+              disabled={isOverlayOpen ? false : true}
             >
               <Image src={chrono} alt="" />
             </button>
@@ -112,6 +124,8 @@ export default function OverlayMenu({
               setTimerState={setTimerState}
               isPaused={isPaused}
               value={value}
+              isOverlayOpen={isOverlayOpen}
+              setIsOverlayOpen={setIsOverlayOpen}
             />
           )}
         </>

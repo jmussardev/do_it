@@ -4,13 +4,14 @@ import {
   KeyboardEvent,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { useRouter } from "next/navigation";
 import { useTask } from "../../../hooks/useTask";
 import getDate from "../../../utilities/date";
 import { ChronoContext } from "../context/ChronoContext";
-import { motion } from "framer-motion";
+import { motion, useDragControls } from "framer-motion";
 
 //TYPES
 import { Task } from "./../../../config/types";
@@ -55,6 +56,8 @@ export default function TaskCard({
   const { updateTask, deleteTask } = useTask();
   const [isChanged, setIsChanged] = useState(false);
   const [onDelete, setOnDelete] = useState(false);
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+  const [overlayRef, setOverlayRef] = useState(0);
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setInputs({
       ...inputs,
@@ -129,6 +132,11 @@ export default function TaskCard({
         isPaused: false,
       });
     }
+    setIsOverlayOpen(false);
+  };
+  const handleOverlay = (overlay: number) => {
+    overlay === 0 ? setIsOverlayOpen(true) : "";
+    setOverlayRef(1);
   };
 
   const setTaskNotActivated = () => {
@@ -140,163 +148,204 @@ export default function TaskCard({
       isPaused: false,
     });
   };
+
   useEffect(() => {
     setIsChanged(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputs]);
 
   useEffect(() => {
     if (end) {
       setTaskNotActivated();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [end]);
-
+  //save task infos in state
   useEffect(() => {
     setCurrentTask();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    setOverlayRef(0);
+  }, [start, isChronoOpen, task_id, edit, inputs]);
 
+  const controls = useDragControls();
+  const ref = useRef<HTMLDivElement>(null);
   return (
-    // <AnimatePresence>
     <motion.div
-      className={` ${
-        inputs.id === task_id && isPaused === false
-          ? "isActive"
-          : inputs.id === task_id && isPaused
-          ? "isPaused"
-          : ""
-      } relative  overflow-hidden rounded-lg p-[3px] w-full h-[6rem] drop-shadow-[0_5px_3px_rgba(0,0,0,0.3)]  `}
-      initial={{ height: 20, x: 0 }}
-      animate={{ height: onDelete ? 0 : 100, x: onDelete ? 500 : 0 }}
-      transition={{ delay: 0, type: "spring" }}
+      drag="x"
+      dragConstraints={{ left: 0, right: 200 }}
+      dragSnapToOrigin={true}
+      dragElastic={0.2}
+      onDrag={(event, info) => {
+        if (info.point.x > 930) {
+          isOldTask() || task_id === inputs.id
+            ? ""
+            : ref.current === null
+            ? ""
+            : (ref.current.style.background = "#D84242");
+        } else {
+          ref.current === null
+            ? ""
+            : (ref.current.style.background = "transparent");
+        }
+      }}
+      onDragEnd={(event, info) => {
+        if (info.point.x > 900) {
+          isOldTask() || task_id === inputs.id ? "" : handleDelete();
+        }
+      }}
+      dragControls={controls}
     >
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <div
-        className={`  overflow-hidden  relative font-bold flex p-2 w-full h-full mb-2   rounded-lg bg-white  `}
-        onKeyDown={(e) => {
-          handleKeyPress(e);
-        }}
-        onBlur={() => {
-          handleUpdate();
-        }}
+      <motion.div
+        ref={ref}
+        className={` ${
+          inputs.id === task_id && isPaused === false
+            ? "isActive"
+            : inputs.id === task_id && isPaused
+            ? "isPaused"
+            : ""
+        } relative  overflow-hidden rounded-lg p-[3px] w-full h-[6rem] drop-shadow-[0_5px_3px_rgba(0,0,0,0.3)]  `}
+        initial={{ height: 20, x: 0 }}
+        animate={{ height: onDelete ? 0 : 100, x: onDelete ? 500 : 0 }}
+        transition={{ delay: 0, type: "spring" }}
       >
-        {/* //overlay// */}
-        {inputs.iscompleted ? (
-          <div className="absolute flex justify-end items-center rounded-lg w-full h-full top-0 left-0 bg-[#DEFFBC] bg-opacity-60">
-            <div className="h-[6rem] w-[6rem] pr-2 opacity-30">
-              <Image src={bigCheck} alt="" />
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <div
+          className={`  overflow-hidden  relative font-bold flex p-2 w-full h-full mb-2   rounded-lg bg-white  `}
+          onKeyDown={(e) => {
+            handleKeyPress(e);
+          }}
+          onBlur={() => {
+            handleUpdate();
+          }}
+        >
+          {/* //overlay// */}
+          {inputs.iscompleted ? (
+            <div className="absolute flex justify-end items-center rounded-lg w-full h-full top-0 left-0 bg-[#DEFFBC] bg-opacity-60">
+              <div className="h-[6rem] w-[6rem] pr-2 opacity-30">
+                <Image src={bigCheck} alt="" />
+              </div>
             </div>
-          </div>
-        ) : (
-          ""
-        )}
+          ) : (
+            ""
+          )}
 
-        {isOldTask() ? (
-          ""
-        ) : (
-          <>
-            <div
-              className="opacity-0 hover:opacity-100 transition-all ease-in "
-              hidden={edit ? true : false}
-            >
-              {isChronoOpen ? (
-                <Chrono
-                  inputs={inputs}
-                  setInputs={setInputs}
-                  setIsChronoOpen={setIsChronoOpen}
-                  handleUpdate={handleUpdate}
-                />
-              ) : (
-                <OverlayMenu
-                  setTaskDone={setTaskDone}
-                  inputs={inputs}
-                  setEdit={setEdit}
-                  setIsChronoOpen={setIsChronoOpen}
-                  task_id={task_id}
-                  start={start}
-                  end={end}
-                  setTimerState={setTimerState}
-                  isPaused={isPaused}
-                  value={value}
-                  onWeek={onWeek ? true : false}
-                />
-              )}
+          {isOldTask() ? (
+            ""
+          ) : (
+            <div hidden={edit ? true : false}>
+              <div
+                className={`opacity-0 ${
+                  isOverlayOpen ? "opacity-100" : ""
+                } transition-all ease-in `}
+              >
+                {isChronoOpen ? (
+                  <Chrono
+                    inputs={inputs}
+                    setInputs={setInputs}
+                    setIsChronoOpen={setIsChronoOpen}
+                    setIsOverlayOpen={setIsOverlayOpen}
+                    handleUpdate={handleUpdate}
+                  />
+                ) : (
+                  <div
+                    onClick={() => {
+                      handleOverlay(overlayRef);
+                    }}
+                  >
+                    <OverlayMenu
+                      overlayRef={overlayRef}
+                      isOverlayOpen={isOverlayOpen}
+                      setIsOverlayOpen={setIsOverlayOpen}
+                      setTaskDone={setTaskDone}
+                      inputs={inputs}
+                      setEdit={setEdit}
+                      setIsChronoOpen={setIsChronoOpen}
+                      task_id={task_id}
+                      start={start}
+                      end={end}
+                      setTimerState={setTimerState}
+                      isPaused={isPaused}
+                      value={value}
+                      onWeek={onWeek ? true : false}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
-          </>
-        )}
+          )}
 
-        {/* //overlay// */}
-        {/* //options// */}
+          {/* //overlay// */}
+          {/* //options// */}
 
-        <OptionPriority
-          inputs={inputs}
-          setInputs={setInputs}
-          priorityIcon={priorityIcon}
-          setPriorityIcon={setPriorityIcon}
-          isOld={isOld}
-          isArchived={isArchived}
-        />
-        {/* //options// */}
-        {/* //description// */}
-        <div className={`flex items-center w-4/5 p-2  `}>
-          <input
-            className={`w-full h-full border-transparent bg-transparent placeholder:text-gray-200  ${
-              inputs.id === task_id ? "placeholder:text-transparent " : ""
-            } focus:outline-none `}
-            readOnly={edit ? false : true}
-            type="text"
-            value={inputs.description}
-            placeholder="Describe your task.."
-            name="description"
-            onChange={(e) => {
-              handleChangeInput(e);
-            }}
-            onBlur={() => {
-              setEdit(false);
-            }}
+          <OptionPriority
+            inputs={inputs}
+            setInputs={setInputs}
+            priorityIcon={priorityIcon}
+            setPriorityIcon={setPriorityIcon}
+            isOld={isOld}
+            isArchived={isArchived}
           />
-        </div>
-        {/* //description// */}
-
-        {edit ? (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleDelete();
-            }}
-            className="absolute top-0 right-0 border-r-lg ml-3 flex flex-col h-full w-14 "
-          >
-            <button
-              type="submit"
-              title="delete"
-              className="flex  justify-center items-center border-b-2 w-full h-1/3"
-            >
-              <div>
-                <Image src={delIcon} alt="" />
-              </div>
-            </button>
-
-            <button
-              title="confirm"
-              className="flex justify-center items-center w-full h-2/3"
-              onClick={() => {
-                setEdit(false);
+          {/* //options// */}
+          {/* //description// */}
+          <div className={`flex items-center w-4/5 p-2  `}>
+            <input
+              className={`w-full h-full border-transparent bg-transparent placeholder:text-gray-200  ${
+                inputs.id === task_id ? "placeholder:text-transparent " : ""
+              } focus:outline-none `}
+              readOnly={edit ? false : true}
+              type="text"
+              value={inputs.description}
+              placeholder="Describe your task.."
+              name="description"
+              onChange={(e) => {
+                handleChangeInput(e);
               }}
+              onBlur={() => {
+                setEdit(false);
+                setIsOverlayOpen(false);
+              }}
+            />
+          </div>
+          {/* //description// */}
+
+          {edit ? (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleDelete();
+              }}
+              className="absolute top-0 right-0 border-r-lg ml-3 flex flex-col h-full w-14 "
             >
-              <div className=" h-4 w-4 ">
-                <Image src={done} alt="" />
-              </div>
-            </button>
-          </form>
-        ) : (
-          ""
-        )}
-      </div>
+              <button
+                type="submit"
+                title="delete"
+                className="flex  justify-center items-center border-b-2 w-full h-1/3"
+              >
+                <div>
+                  <Image src={delIcon} alt="" />
+                </div>
+              </button>
+
+              <button
+                title="confirm"
+                className="flex justify-center items-center w-full h-2/3"
+                onClick={() => {
+                  setEdit(false);
+                  setIsOverlayOpen(false);
+                }}
+              >
+                <div className=" h-4 w-4 ">
+                  <Image src={done} alt="" />
+                </div>
+              </button>
+            </form>
+          ) : (
+            ""
+          )}
+        </div>
+      </motion.div>
     </motion.div>
   );
 }

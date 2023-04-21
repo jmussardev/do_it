@@ -18,10 +18,12 @@ export default function Chrono({
   setInputs,
   setIsChronoOpen,
   handleUpdate,
+  setIsOverlayOpen,
 }: {
   inputs: Inputs;
   setInputs: Dispatch<SetStateAction<Inputs>>;
   setIsChronoOpen: Dispatch<SetStateAction<boolean>>;
+  setIsOverlayOpen: Dispatch<SetStateAction<boolean>>;
   handleUpdate: () => void;
 }) {
   return (
@@ -43,6 +45,7 @@ export default function Chrono({
           onClick={() => {
             handleUpdate();
             setIsChronoOpen(false);
+            setIsOverlayOpen(false);
           }}
         >
           <Image src={checkBlack} alt="" />
