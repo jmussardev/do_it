@@ -21,7 +21,7 @@ export default function ArchivedLink({
       transition={{ delay: 1, type: "spring" }}
       className="flex items-center justify-center w-full h-[3rem] text-[1rem] text-gray-700 rounded-lg drop-shadow-[0_3px_3px_rgba(0,0,0,0.3)] isOld active:drop-shadow-md  hover:bg-gray-400 "
     >
-      <div className="block h-5 w-5 mr-3 ">
+      <div className="block h-fit w-5 mr-3 ">
         <Image src={archive} alt="" />
       </div>{" "}
       <Link href={`user/archived/${week}/1`}>

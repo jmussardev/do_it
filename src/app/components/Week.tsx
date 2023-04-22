@@ -1,8 +1,12 @@
+"use client";
+import axios from "axios";
 import { Task } from "../../../config/types";
 import getDate from "../../../utilities/date";
 import Tasks from "./Tasks";
 import WeekNavBar from "./WeekNavBar";
+import useSWR from "swr";
 
+const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 const { getDay } = getDate();
 
 export default function Week({
@@ -16,8 +20,22 @@ export default function Week({
   isArchived?: boolean;
   payload?: string;
 }) {
+  let tasksList: Task[] | undefined = isArchived ? tasks : [];
   const onWeek = true;
-  const dayTasks = tasks.filter((task) => getDay(task.date) == day);
+  const { data, error, isLoading } = useSWR(
+    !isArchived ? `/api/task/${payload}/week` : null,
+    fetcher
+  );
+  if (!isLoading) {
+    if (data) {
+      tasksList = data;
+    }
+  }
+
+  const dayTasks = tasksList?.filter((task) => getDay(task.date) == day);
+  console.log("@#@#@#@#@#@#@#@#@#@#@#");
+  console.log(dayTasks);
+  console.log("@#@#@#@#@#@#@#@#@#@#@#");
 
   return (
     <div className="relative h-full w-full ">

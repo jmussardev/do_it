@@ -4,8 +4,7 @@ import getDate from "../../../../../utilities/date";
 const { today, getWeek } = getDate();
 
 export async function GET(req: Request, context: { params: any }) {
-  const { user } = context.params;
-  const email = user;
+  const { email } = context.params;
 
   try {
     const result = await prisma.user.findUnique({
@@ -30,8 +29,12 @@ export async function GET(req: Request, context: { params: any }) {
         },
       },
     });
+
     if (result) {
-      return NextResponse.json(result.tasks, { status: 200 });
+      console.log("@#@#@#@#@#@#@");
+      console.log(result);
+      console.log("@#@#@#@#@#@#@");
+      return NextResponse.json(result, { status: 200 });
     }
   } catch (error) {
     return NextResponse.json("User Not Found", { status: 401 });

@@ -165,55 +165,35 @@ export default function TaskCard({
   useEffect(() => {
     setOverlayRef(0);
   }, [start, isChronoOpen, task_id, edit, inputs]);
-  let isMobile = window.matchMedia("(pointer:coarse)").matches;
+  // let isMobile = window.matchMedia("(pointer:coarse)").matches;
   const controls = useDragControls();
   const ref = useRef<HTMLDivElement>(null);
-  console.log(isMobile);
   return (
     <motion.div
       drag="x"
-      dragConstraints={{ left: 0, right: 200 }}
+      dragConstraints={{ left: 0, right: 100 }}
       dragSnapToOrigin={true}
-      dragElastic={0.2}
+      dragElastic={0.1}
       onDrag={(event, info) => {
-        console.log(info.point.x);
-
-        if (isMobile) {
-          if (info.point.x > 300) {
-            isOldTask() || task_id === inputs.id
-              ? ""
-              : ref.current === null
-              ? ""
-              : (ref.current.style.background = "#D84242");
-          } else {
-            ref.current === null
-              ? ""
-              : (ref.current.style.background = "transparent");
-          }
+        if (info.offset.x > 200) {
+          isOldTask() || task_id === inputs.id
+            ? ""
+            : ref.current === null
+            ? ""
+            : (ref.current.style.background = "#D84242");
         } else {
-          if (info.point.x > 930) {
-            isOldTask() || task_id === inputs.id
-              ? ""
-              : ref.current === null
-              ? ""
-              : (ref.current.style.background = "#D84242");
-          } else {
-            ref.current === null
-              ? ""
-              : (ref.current.style.background = "transparent");
-          }
+          ref.current === null
+            ? ""
+            : (ref.current.style.background = "transparent");
         }
       }}
       onDragEnd={(event, info) => {
-        console.log(info.point.x);
-        if (isMobile) {
-          if (info.point.x > 300) {
-            isOldTask() || task_id === inputs.id ? "" : handleDelete();
-          }
+        if (info.offset.x > 200) {
+          isOldTask() || task_id === inputs.id ? "" : handleDelete();
         } else {
-          if (info.point.x > 900) {
-            isOldTask() || task_id === inputs.id ? "" : handleDelete();
-          }
+          ref.current === null
+            ? ""
+            : (ref.current.style.background = "transparent");
         }
       }}
       dragControls={controls}
@@ -227,9 +207,9 @@ export default function TaskCard({
             ? "isPaused"
             : ""
         } relative  overflow-hidden rounded-lg p-[3px] w-full h-[6rem] drop-shadow-[0_5px_3px_rgba(0,0,0,0.3)]  `}
-        initial={{ height: 20, x: 0 }}
+        initial={{ height: 100, x: 0 }}
         animate={{ height: onDelete ? 0 : 100, x: onDelete ? 500 : 0 }}
-        transition={{ delay: 0, type: "spring" }}
+        transition={{ delay: 0, ease: "linear" }}
       >
         <span></span>
         <span></span>

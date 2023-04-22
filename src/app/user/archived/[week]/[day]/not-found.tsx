@@ -13,9 +13,7 @@ export default function NotFound() {
   return (
     <>
       <div className="flex flex-col justify-center items-center h-full w-full px-9 py-14 ">
-        <div className="w-28 h-28 mb-4">
-          <Image src={barrier} alt="error" className="w-56 mb-8" />
-        </div>
+        <Image src={barrier} alt="error" className="w-56 mb-8" />
         <div className="block text-center text-xl font-bold">
           Error Code: 404
         </div>

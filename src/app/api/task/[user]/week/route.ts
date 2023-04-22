@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import { prisma } from "../../../../../utilities/db";
-import getDate from "../../../../../utilities/date";
-const { today, getWeek } = getDate();
+import { prisma } from "../../../../../../utilities/db";
+import getDate from "../../../../../../utilities/date";
+const { getWeek } = getDate();
+const currentWeek = parseInt(getWeek());
 
 export async function GET(req: Request, context: { params: any }) {
   const { user } = context.params;
@@ -15,7 +16,7 @@ export async function GET(req: Request, context: { params: any }) {
       include: {
         tasks: {
           where: {
-            date: today(),
+            week: currentWeek,
           },
           select: {
             id: true,

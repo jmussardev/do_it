@@ -2,6 +2,7 @@ import { Task } from "../config/types";
 import getDate from "./date";
 import { prisma } from "./db";
 import { notFound } from "next/navigation";
+import { mutate } from "swr";
 const { today, getWeek } = getDate();
 const currentWeek = parseInt(getWeek());
 

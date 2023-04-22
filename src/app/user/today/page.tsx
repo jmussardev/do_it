@@ -24,7 +24,7 @@ export default async function Home() {
 
       {/* //tasks// */}
       <div className=" h-5/6 overflow-auto  ">
-        <Tasks tasks={tasks} payload={payload} />
+        <Tasks payload={payload} />
       </div>
       {/* //tasks// */}
     </div>
