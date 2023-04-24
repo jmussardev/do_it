@@ -109,7 +109,10 @@ export default function TaskCard({
         timer: inputs.timer,
         iscompleted: true,
       });
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      router.refresh();
+    }
   };
 
   const handleDelete = async () => {

@@ -1,8 +1,11 @@
+import { config } from "./../../../../middleware";
 import { NextResponse } from "next/server";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import * as jose from "jose";
 import { prisma } from "../../../../../utilities/db";
+import nodemailer from "nodemailer";
+import { sendConfirmationEmail } from "./../../../../../nodemailer.config.ts";
 
 export async function POST(req: Request) {
   const { firstName, lastName, email, password } = await req.json();
@@ -26,7 +29,8 @@ export async function POST(req: Request) {
 
     {
       valid: validator.isStrongPassword(password),
-      errorMessage: "Password isn't strong enough",
+      errorMessage:
+        "Password isn't strong enough: \n min 8 characters, \n1 uppercase,\n1 number,\n1 special character",
     },
   ];
 
@@ -47,6 +51,14 @@ export async function POST(req: Request) {
   }
 
   try {
+    const alg = "HS256";
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+    const token = await new jose.SignJWT({
+      email: email,
+    })
+      .setProtectedHeader({ alg })
+      .setExpirationTime("24h")
+      .sign(secret);
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
@@ -55,34 +67,26 @@ export async function POST(req: Request) {
         last_name: lastName,
         password: hashedPassword,
         email,
+        confirmationCode: token,
       },
     });
-    const alg = "HS256";
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-    const token = await new jose.SignJWT({
-      email: user.email,
-    })
-      .setProtectedHeader({ alg })
-      .setExpirationTime("24h")
-      .sign(secret);
-    const res = NextResponse.json(
-      {
-        firstName: user.first_name,
-        lastName: user.last_name,
-        email: user.email,
-      },
+
+    sendConfirmationEmail(user.first_name, user.email, user.confirmationCode);
+
+    return NextResponse.json(
+      "User was registered successfully! Please check your email",
       {
         status: 200,
       }
     );
 
-    res.cookies.set({
-      name: "jwt",
-      value: token,
-      maxAge: 60 * 30,
-    });
+    // res.cookies.set({
+    //   name: "jwt",
+    //   value: token,
+    //   maxAge: 60 * 30,
+    // });
 
-    return res;
+    // return res;
   } catch (error) {
     throw new Error("error in user creation");
   }

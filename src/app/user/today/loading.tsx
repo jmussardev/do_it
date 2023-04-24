@@ -1,12 +1,5 @@
+import TasksLoader from "@/app/components/TasksLoader";
+
 export default function Loading() {
-  return (
-    <div className="relative  h-full w-full">
-      <div className=" lds-ellipsis ">
-        <div className="w-10 h-10"></div>
-        <div className="w-10 h-10"></div>
-        <div className="w-10 h-10"></div>
-        <div className="w-10 h-10"></div>
-      </div>
-    </div>
-  );
+  return <TasksLoader />;
 }

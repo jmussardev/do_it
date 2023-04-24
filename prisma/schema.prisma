@@ -11,14 +11,21 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  first_name String
-  last_name  String
-  email      String   @unique
-  password   String
-  tasks      Task[]
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  id               Int      @id @default(autoincrement())
+  first_name       String
+  last_name        String
+  email            String   @unique
+  password         String
+  tasks            Task[]
+  confirmationCode String   @unique
+  status           STATUS   @default(pending)
+  created_at       DateTime @default(now())
+  updated_at       DateTime @default(now())
+}
+
+enum STATUS {
+  pending
+  active
 }
 
 enum PRIORITY {

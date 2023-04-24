@@ -16,6 +16,7 @@ import DotLoading from "./DotLoading";
 import OptionPriority from "./OptionPriority";
 import done from "./../../../public/icons/done.png";
 import delIcon from "./../../../public/icons/delete.png";
+import TasksLoader from "./TasksLoader";
 interface TaskProps {
   tasks?: Task[];
   onWeek?: boolean;
@@ -167,35 +168,138 @@ export default function Tasks({
 
   return (
     <>
-      {/* {isLoading && <DotLoading />} */}
+      {isLoading && <TasksLoader />}
 
-      {tasksList?.length === 0 && !isFormOP ? (
-        isOldTask() || isArchived ? (
-          <div className="font-bold text-center mt-10">
-            <p>Well.. you were not busy that day</p> <p>Lucky you !</p>
-          </div>
-        ) : (
-          <div className="flex justify-center items-center mt-20 pb-4  w-full">
-            <div className="font-bold text-center mr-4">
-              Ok let's get started !{" "}
+      {!isLoading &&
+        (tasksList?.length === 0 && !isFormOP ? (
+          isOldTask() || isArchived ? (
+            <div className="font-bold text-center mt-10">
+              <p>Well.. you were not busy that day</p> <p>Lucky you !</p>
             </div>
-            <motion.div
-              animate={{
-                rotate: [0, 0, 100, 180, 0, 0],
-                boxShadow: "0 0px 20px 0 rgba(0, 0, 0, 0.2)",
-                borderRadius: "50%",
-              }}
-              transition={{
-                duration: 2,
-                ease: "easeInOut",
-                times: [0, 0.2, 0.5, 0.7, 0.8, 1],
-                repeat: Infinity,
-                repeatDelay: 4,
-              }}
-            >
-              <button
+          ) : (
+            <div className="flex justify-center items-center mt-20 pb-4  w-full">
+              <div className="font-bold text-center mr-4">
+                Ok let's get started !{" "}
+              </div>
+              <motion.div
+                animate={{
+                  rotate: [0, 0, 100, 180, 0, 0],
+                  boxShadow: "0 0px 20px 0 rgba(0, 0, 0, 0.2)",
+                  borderRadius: "50%",
+                }}
+                transition={{
+                  duration: 2,
+                  ease: "easeInOut",
+                  times: [0, 0.2, 0.5, 0.7, 0.8, 1],
+                  repeat: Infinity,
+                  repeatDelay: 4,
+                }}
+              >
+                <button
+                  title="add a task"
+                  className="origin-center flex items-center justify-center  ## h-8 w-8 bg-white  active:drop-shadow-md rounded-lg  ##   "
+                  onClick={() => {
+                    setIsFormOp(true);
+                  }}
+                >
+                  <div className="  rotate-45 h-6 w-6">
+                    <Image src={cross_rounded} alt="" />
+                  </div>
+                </button>
+              </motion.div>
+            </div>
+          )
+        ) : (
+          <ul className="relative px-[1rem]  xsm:px-[4rem] py-[3rem] h-full   ">
+            {/* ::vvvFORMvvv:: */}
+            {isFormOP && (
+              <div className="rounded-lg p-[3px] w-full h-[6.25rem]  drop-shadow-[0_5px_3px_rgba(0,0,0,0.3)] ">
+                <div
+                  className={`  overflow-hidden  relative font-bold flex p-2 w-full h-full mb-2   rounded-lg bg-white  `}
+                >
+                  {/* //options// */}
+                  <OptionPriority
+                    inputs={inputs}
+                    setInputs={setInputs}
+                    priorityIcon={priorityIcon}
+                    setPriorityIcon={setPriorityIcon}
+                    isOld={isOldTask()}
+                    isArchived={isArchived}
+                  />
+                  {/* //options// */}
+                  {/* //description// */}
+                  <div className={`flex items-center w-4/5 p-2  `}>
+                    <input
+                      className={`w-full h-full border-transparent bg-transparent placeholder:text-gray-200  focus:outline-none `}
+                      type="text"
+                      value={inputs.description}
+                      placeholder="Describe your task.."
+                      name="description"
+                      onChange={(e) => {
+                        handleChangeInput(e);
+                      }}
+                    />
+                  </div>
+                  {/* //description// */}
+                  {/* //btns// */}
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      handleDelete();
+                    }}
+                    className="absolute top-0 right-0 border-r-lg ml-3 flex flex-col h-full w-14 "
+                  >
+                    <button
+                      type="submit"
+                      onClick={() => {
+                        handleDelete();
+                      }}
+                      title="delete"
+                      className="flex  justify-center items-center border-b-2 w-full h-1/3"
+                    >
+                      <div>
+                        <Image src={delIcon} alt="" />
+                      </div>
+                    </button>
+
+                    <button
+                      disabled={inputs.description === "" ? true : false}
+                      title="confirm"
+                      className="disabled:opacity-20 flex justify-center items-center w-full h-2/3"
+                      onClick={() => {
+                        handleCreate();
+                      }}
+                    >
+                      <div className=" h-4 w-4 ">
+                        <Image src={done} alt="" />
+                      </div>
+                    </button>
+                  </form>
+                  {/* //btns// */}
+                </div>
+              </div>
+            )}
+            {/* ::^^^FORM^^^:: */}
+            {tasksList?.map((task) => (
+              <TaskCard
+                key={task.id}
+                task={task}
+                onWeek={onWeek}
+                date={task.date}
+                isOld={isOldTask()}
+                isArchived={isArchived}
+              />
+            ))}
+
+            {isOldTask() || isArchived ? (
+              ""
+            ) : (
+              <motion.button
+                initial={{ y: 0, x: 150 }}
+                animate={{ y: 0, x: 0 }}
+                transition={{ delay: 0.8, type: "spring" }}
                 title="add a task"
-                className="origin-center flex items-center justify-center  ## h-8 w-8 bg-white  active:drop-shadow-md rounded-lg  ##   "
+                className="absolute top-1 right-3 sm:top-5 sm:right-3 ## flex items-center justify-center ## h-10 w-10 bg-white drop-shadow-lg active:drop-shadow-md rounded-lg  ##   "
                 onClick={() => {
                   setIsFormOp(true);
                 }}
@@ -203,105 +307,10 @@ export default function Tasks({
                 <div className="  rotate-45 h-6 w-6">
                   <Image src={cross_rounded} alt="" />
                 </div>
-              </button>
-            </motion.div>
-          </div>
-        )
-      ) : (
-        <ul className="relative px-[1rem]  xsm:px-[4rem] py-[3rem] h-full   ">
-          {/* ::vvvFORMvvv:: */}
-          {isFormOP && (
-            <div className="rounded-lg p-[3px] w-full h-[6.25rem]  drop-shadow-[0_5px_3px_rgba(0,0,0,0.3)] ">
-              <div
-                className={`  overflow-hidden  relative font-bold flex p-2 w-full h-full mb-2   rounded-lg bg-white  `}
-              >
-                {/* //options// */}
-                <OptionPriority
-                  inputs={inputs}
-                  setInputs={setInputs}
-                  priorityIcon={priorityIcon}
-                  setPriorityIcon={setPriorityIcon}
-                  isOld={isOldTask()}
-                  isArchived={isArchived}
-                />
-                {/* //options// */}
-                {/* //description// */}
-                <div className={`flex items-center w-4/5 p-2  `}>
-                  <input
-                    className={`w-full h-full border-transparent bg-transparent placeholder:text-gray-200  focus:outline-none `}
-                    type="text"
-                    value={inputs.description}
-                    placeholder="Describe your task.."
-                    name="description"
-                    onChange={(e) => {
-                      handleChangeInput(e);
-                    }}
-                  />
-                </div>
-                {/* //description// */}
-                {/* //btns// */}
-                <div className="absolute top-0 right-0 border-r-lg ml-3 flex flex-col h-full w-14 ">
-                  <button
-                    onClick={() => {
-                      handleDelete();
-                    }}
-                    title="delete"
-                    className="flex  justify-center items-center border-b-2 w-full h-1/3"
-                  >
-                    <div>
-                      <Image src={delIcon} alt="" />
-                    </div>
-                  </button>
-
-                  <button
-                    disabled={inputs.description === "" ? true : false}
-                    title="confirm"
-                    className=" disabled:opacity-20 flex justify-center items-center w-full h-2/3"
-                    onClick={() => {
-                      handleCreate();
-                    }}
-                  >
-                    <div className=" h-4 w-4 ">
-                      <Image src={done} alt="" />
-                    </div>
-                  </button>
-                </div>
-                {/* //btns// */}
-              </div>
-            </div>
-          )}
-          {/* ::^^^FORM^^^:: */}
-          {tasksList?.map((task) => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              onWeek={onWeek}
-              date={task.date}
-              isOld={isOldTask()}
-              isArchived={isArchived}
-            />
-          ))}
-
-          {isOldTask() || isArchived ? (
-            ""
-          ) : (
-            <motion.button
-              initial={{ y: 0, x: 150 }}
-              animate={{ y: 0, x: 0 }}
-              transition={{ delay: 0.8, type: "spring" }}
-              title="add a task"
-              className="absolute top-1 right-3 sm:top-5 sm:right-3 ## flex items-center justify-center ## h-10 w-10 bg-white drop-shadow-lg active:drop-shadow-md rounded-lg  ##   "
-              onClick={() => {
-                setIsFormOp(true);
-              }}
-            >
-              <div className="  rotate-45 h-6 w-6">
-                <Image src={cross_rounded} alt="" />
-              </div>
-            </motion.button>
-          )}
-        </ul>
-      )}
+              </motion.button>
+            )}
+          </ul>
+        ))}
     </>
   );
 }

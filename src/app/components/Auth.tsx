@@ -2,7 +2,7 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import { ChangeEvent, useContext, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import { AuthenticationContext } from "../context/AuthContext";
 import DotLoading from "./DotLoading";
@@ -13,6 +13,10 @@ import cross from "./../../../public/icons/cross_rounded.png";
 export default function Auth() {
   const { data, error, loading } = useContext(AuthenticationContext);
 
+  const [errorList, setErrorList] = useState(error ? error : []);
+  const uniqSet = new Set(errorList);
+  const errorListUniq = [...uniqSet];
+
   const [isOpSignUp, setIsOpSignUp] = useState(false);
   const [isOpSignIn, setIsOpSignIn] = useState(false);
   const { signin, signup } = useAuth();
@@ -21,6 +25,7 @@ export default function Auth() {
     lastName: "",
     email: "",
     password: "",
+    confirm: "",
   });
 
   const [disabled, setDisabled] = useState(true);
@@ -41,6 +46,15 @@ export default function Auth() {
 
     signin({ email, password, router });
   };
+  const doesMatch = () => {
+    if (inputs.password !== inputs.confirm) {
+      setErrorList([...errorList, "Password don't match"]);
+    }
+  };
+  const handleRemove = () => {
+    errorRef.current?.remove();
+  };
+  const errorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isOpSignIn) {
@@ -53,12 +67,17 @@ export default function Auth() {
   }, [inputs]);
 
   useEffect(() => {
+    error ? setErrorList(error) : "";
+  }, [error]);
+
+  useEffect(() => {
     if (isOpSignUp) {
       if (
         inputs.firstName &&
         inputs.lastName &&
         inputs.email &&
-        inputs.password
+        inputs.password &&
+        inputs.confirm === inputs.password
       ) {
         setDisabled(false);
       } else {
@@ -75,7 +94,25 @@ export default function Auth() {
   };
 
   return (
-    <div className="h-full w-full relative flex items-center flex-col">
+    <div className=" h-full w-full relative flex items-center flex-col">
+      {errorListUniq
+        ? Array.isArray(errorListUniq)
+          ? errorListUniq.map((e, i) => (
+              <div
+                ref={errorRef}
+                key={i}
+                className={`absolute w-72 -top-52  p-1 mb-4 text-center rounded-md bg-red-200 cursor-pointer `}
+                onClick={() => {
+                  handleRemove();
+                }}
+              >
+                {errorListUniq[i].split("\n").map((str, i) => (
+                  <p key={i}>{str}</p>
+                ))}
+              </div>
+            ))
+          : ""
+        : ""}
       <button
         onClick={() => {
           setIsOpSignIn(!isOpSignIn);
@@ -139,6 +176,7 @@ export default function Auth() {
                     lastName: inputs.lastName,
                     email: e.currentTarget.value,
                     password: inputs.password,
+                    confirm: inputs.confirm,
                   });
                 }}
               />
@@ -154,6 +192,7 @@ export default function Auth() {
                     lastName: inputs.lastName,
                     email: inputs.email,
                     password: e.currentTarget.value,
+                    confirm: inputs.confirm,
                   });
                 }}
               />
@@ -224,6 +263,7 @@ export default function Auth() {
                       lastName: inputs.lastName,
                       email: inputs.email,
                       password: inputs.password,
+                      confirm: inputs.confirm,
                     });
                   }}
                 />
@@ -239,6 +279,7 @@ export default function Auth() {
                       lastName: e.currentTarget.value,
                       email: inputs.email,
                       password: inputs.password,
+                      confirm: inputs.confirm,
                     });
                   }}
                 />
@@ -255,6 +296,7 @@ export default function Auth() {
                     lastName: inputs.lastName,
                     email: e.currentTarget.value,
                     password: inputs.password,
+                    confirm: inputs.confirm,
                   });
                 }}
               />
@@ -270,7 +312,29 @@ export default function Auth() {
                     lastName: inputs.lastName,
                     email: inputs.email,
                     password: e.currentTarget.value,
+                    confirm: inputs.confirm,
                   });
+                }}
+              />
+              <input
+                className={` bg-gray-100 shadow-inner w-full h-9 mb-4 rounded-md pl-2 ${
+                  inputs.password === inputs.confirm
+                    ? "focus:outline-green-200"
+                    : ""
+                } `}
+                value={inputs.confirm}
+                placeholder="Confirm password"
+                type="password"
+                name="confirm"
+                onChange={(e) => {
+                  setInputs({
+                    firstName: inputs.firstName,
+                    lastName: inputs.lastName,
+                    email: inputs.email,
+                    password: inputs.password,
+                    confirm: e.currentTarget.value,
+                  });
+                  doesMatch();
                 }}
               />
               <button
@@ -282,18 +346,6 @@ export default function Auth() {
               >
                 Start your productivy quest !
               </button>
-              {error
-                ? Array.isArray(error)
-                  ? error.map((e, i) => (
-                      <div
-                        key={i}
-                        className="w-full p-1 mb-4 text-center rounded-md bg-red-200 "
-                      >
-                        {error[i]}
-                      </div>
-                    ))
-                  : ""
-                : ""}
             </>
           )}
         </form>

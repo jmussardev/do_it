@@ -37,6 +37,14 @@ export async function POST(req: Request, res: Response) {
       if (user) {
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (isPasswordValid) {
+          if (user.status != "active") {
+            return NextResponse.json(
+              "Pending Account. Please Verify Your Email!",
+              {
+                status: 401,
+              }
+            );
+          }
           const alg = "HS256";
           const secret = new TextEncoder().encode(process.env.JWT_SECRET);
           const token = await new jose.SignJWT({

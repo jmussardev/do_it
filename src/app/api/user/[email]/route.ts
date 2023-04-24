@@ -31,9 +31,6 @@ export async function GET(req: Request, context: { params: any }) {
     });
 
     if (result) {
-      console.log("@#@#@#@#@#@#@");
-      console.log(result);
-      console.log("@#@#@#@#@#@#@");
       return NextResponse.json(result, { status: 200 });
     }
   } catch (error) {

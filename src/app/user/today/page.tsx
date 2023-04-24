@@ -8,6 +8,7 @@ const { getAll } = getTasks();
 
 export default async function Home() {
   const payload: any = getPayload();
+
   if (!payload) {
     notFound();
   }
