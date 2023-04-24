@@ -5,14 +5,17 @@ import { notFound, usePathname, useRouter } from "next/navigation";
 import TaskCard from "./TaskCard";
 import getDate from "../../../utilities/date";
 import { useTask } from "../../../hooks/useTask";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import cross_rounded from "./../../../public/icons/cross_rounded.png";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Task } from "../../../config/types";
 import useSWR, { mutate } from "swr";
 import axios from "axios";
 import DotLoading from "./DotLoading";
+import OptionPriority from "./OptionPriority";
+import done from "./../../../public/icons/done.png";
+import delIcon from "./../../../public/icons/delete.png";
 interface TaskProps {
   tasks?: Task[];
   onWeek?: boolean;
@@ -34,6 +37,31 @@ export default function Tasks({
   const tDayNum = getDay(today());
   const url = usePathname();
   const dayPage = url.split("/")[url.split("/").length - 1];
+  const [isFormOP, setIsFormOp] = useState(false);
+  const [priorityIcon, setPriorityIcon] = useState<StaticImageData>();
+  const [inputs, setInputs] = useState({
+    id: 0,
+    description: "",
+    priority: "ONE",
+    timer: 0,
+    iscompleted: false,
+  });
+  const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputs({
+      ...inputs,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const handleDelete = () => {
+    setIsFormOp(false);
+    setInputs({
+      ...inputs,
+      description: "",
+      priority: "ONE",
+    });
+
+    // router.refresh();
+  };
   const isOldTask = () => {
     if (dayPage) {
       if (dayPage < tDayNum) return true;
@@ -56,10 +84,10 @@ export default function Tasks({
     if (onWeek) {
       const FAKE_TASK = {
         date: dayOfWeekFull(dayPage),
-        description: "",
+        description: inputs.description,
         id,
         iscompleted: false,
-        priority: "ONE",
+        priority: inputs.priority,
         timer: 0,
         user_id: id,
         week: currentWeek,
@@ -75,9 +103,9 @@ export default function Tasks({
 
       await createTask({
         date: dayOfWeekFull(dayPage),
-        description: "",
+        description: inputs.description,
         timer: 0,
-        priority: "ONE",
+        priority: inputs.priority,
         email: email,
       });
 
@@ -85,10 +113,10 @@ export default function Tasks({
     } else {
       const FAKE_TASK = {
         date: today(),
-        description: "",
+        description: inputs.description,
         id,
         iscompleted: false,
-        priority: "ONE",
+        priority: inputs.priority,
         timer: 0,
         user_id: id,
         week: currentWeek,
@@ -104,14 +132,20 @@ export default function Tasks({
 
       const { data }: any = await createTask({
         date: today(),
-        description: "",
+        description: inputs.description,
         timer: 0,
-        priority: "ONE",
+        priority: inputs.priority,
         email: email,
       });
 
       mutate(`/api/task/${payload}`);
     }
+    setIsFormOp(false);
+    setInputs({
+      ...inputs,
+      description: "",
+      priority: "ONE",
+    });
   };
 
   if (!isLoading) {
@@ -126,6 +160,7 @@ export default function Tasks({
   if (!payload) {
     notFound();
   }
+  console.log(inputs);
 
   useEffect(() => {
     router.refresh();
@@ -133,9 +168,9 @@ export default function Tasks({
 
   return (
     <>
-      {isLoading && <DotLoading />}
+      {/* {isLoading && <DotLoading />} */}
 
-      {tasksList?.length === 0 ? (
+      {tasksList?.length === 0 && !isFormOP ? (
         isOldTask() || isArchived ? (
           <div className="font-bold text-center mt-10">
             <p>Well.. you were not busy that day</p> <p>Lucky you !</p>
@@ -163,7 +198,7 @@ export default function Tasks({
                 title="add a task"
                 className="origin-center flex items-center justify-center  ## h-8 w-8 bg-white  active:drop-shadow-md rounded-lg  ##   "
                 onClick={() => {
-                  handleCreate();
+                  setIsFormOp(true);
                 }}
               >
                 <div className="  rotate-45 h-6 w-6">
@@ -175,6 +210,71 @@ export default function Tasks({
         )
       ) : (
         <ul className="relative px-[1rem]  xsm:px-[4rem] py-[3rem] h-full   ">
+          {/* ::vvvFORMvvv:: */}
+          {isFormOP && (
+            <div className="rounded-lg p-[3px] w-full h-[6.25rem]  drop-shadow-[0_5px_3px_rgba(0,0,0,0.3)] ">
+              <div
+                className={`  overflow-hidden  relative font-bold flex p-2 w-full h-full mb-2   rounded-lg bg-white  `}
+              >
+                {/* //options// */}
+                <OptionPriority
+                  inputs={inputs}
+                  setInputs={setInputs}
+                  priorityIcon={priorityIcon}
+                  setPriorityIcon={setPriorityIcon}
+                  isOld={isOldTask()}
+                  isArchived={isArchived}
+                />
+                {/* //options// */}
+                {/* //description// */}
+                <div className={`flex items-center w-4/5 p-2  `}>
+                  <input
+                    className={`w-full h-full border-transparent bg-transparent placeholder:text-gray-200  focus:outline-none `}
+                    type="text"
+                    value={inputs.description}
+                    placeholder="Describe your task.."
+                    name="description"
+                    onChange={(e) => {
+                      handleChangeInput(e);
+                    }}
+                  />
+                </div>
+                {/* //description// */}
+                {/* //btns// */}
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleDelete();
+                  }}
+                  className="absolute top-0 right-0 border-r-lg ml-3 flex flex-col h-full w-14 "
+                >
+                  <button
+                    type="submit"
+                    title="delete"
+                    className="flex  justify-center items-center border-b-2 w-full h-1/3"
+                  >
+                    <div>
+                      <Image src={delIcon} alt="" />
+                    </div>
+                  </button>
+
+                  <button
+                    title="confirm"
+                    className="flex justify-center items-center w-full h-2/3"
+                    onClick={() => {
+                      handleCreate();
+                    }}
+                  >
+                    <div className=" h-4 w-4 ">
+                      <Image src={done} alt="" />
+                    </div>
+                  </button>
+                </form>
+                {/* //btns// */}
+              </div>
+            </div>
+          )}
+          {/* ::^^^FORM^^^:: */}
           {tasksList?.map((task) => (
             <TaskCard
               key={task.id}
@@ -196,7 +296,7 @@ export default function Tasks({
               title="add a task"
               className="absolute top-1 right-3 sm:top-5 sm:right-3 ## flex items-center justify-center ## h-10 w-10 bg-white drop-shadow-lg active:drop-shadow-md rounded-lg  ##   "
               onClick={() => {
-                handleCreate();
+                setIsFormOp(true);
               }}
             >
               <div className="  rotate-45 h-6 w-6">

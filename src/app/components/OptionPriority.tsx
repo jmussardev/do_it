@@ -73,6 +73,8 @@ export default function OptionPriority({
     }
   };
 
+  console.log(isOld, isArchived);
+
   return (
     <div className="w-7 pr-1 flex items-center border-r-2  ">
       <button

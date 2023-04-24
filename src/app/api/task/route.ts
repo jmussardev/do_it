@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   const { description, priority, timer, date, userId } = await req.json();
 
   try {
-    await prisma.task.create({
+    const response = await prisma.task.create({
       data: {
         user_id: userId,
         description: description,
@@ -22,13 +22,14 @@ export async function POST(req: Request) {
     });
     return NextResponse.json(
       {
-        user_id: userId,
-        description: description,
-        priority: priority,
-        timer: timer,
-        date: today,
-        week: week,
-        iscompleted: false,
+        date: response.date,
+        description: response.description,
+        id: response.id,
+        iscompleted: response.iscompleted,
+        priority: response.priority,
+        timer: response.timer,
+        user_id: response.user_id,
+        week: response.week,
       },
       { status: 200 }
     );
