@@ -15,9 +15,6 @@ export default function getDate() {
     return dayjs().format("dddd-YYYY-MM-DD");
   };
   const taskDay = (date: string): string => {
-    console.log("########");
-    console.log(date);
-    console.log("########");
     const dateSplit = date.split("-");
     return `${dateSplit[1]}-${dateSplit[2]}-${dateSplit[3]}`;
   };

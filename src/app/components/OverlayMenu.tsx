@@ -3,7 +3,14 @@ import pencil from "./../../../public/icons/pencil.png";
 import done from "./../../../public/icons/done.png";
 import chrono from "./../../../public/icons/chrono.png";
 import stop from "./../../../public/icons/stop.png";
-import { Dispatch, MutableRefObject, SetStateAction } from "react";
+import {
+  Dispatch,
+  KeyboardEvent,
+  MutableRefObject,
+  RefObject,
+  SetStateAction,
+  useRef,
+} from "react";
 import PlayBtn from "./PlayBtn";
 import { useRouter } from "next/navigation";
 
@@ -35,7 +42,6 @@ export default function OverlayMenu({
   setTaskDone,
   isOverlayOpen,
   setIsOverlayOpen,
-  overlayRef,
 }: {
   setEdit: Dispatch<SetStateAction<boolean>>;
   setIsChronoOpen: Dispatch<SetStateAction<boolean>>;
@@ -49,10 +55,8 @@ export default function OverlayMenu({
   onWeek: boolean;
   isOverlayOpen: boolean;
   setIsOverlayOpen: Dispatch<SetStateAction<boolean>>;
-  overlayRef: number;
   setTaskDone: () => void;
 }) {
-  const router = useRouter();
   return (
     <div
       className={`absolute z-30 bg-gray-100 bg-opacity-90 flex justify-evenly  items-center rounded-lg w-full h-full top-0 left-0 `}
@@ -73,14 +77,13 @@ export default function OverlayMenu({
         ""
       ) : (
         <>
-          {" "}
           <button
             className="z-10 origin-center h-6 w-6 hover:scale-125"
             onClick={() => {
               setEdit(true);
-              setTimeout(() => {
-                setEdit(false);
-              }, 15000);
+              // setTimeout(() => {
+              //   setEdit(false);
+              // }, 15000);
             }}
             disabled={isOverlayOpen ? false : true}
           >

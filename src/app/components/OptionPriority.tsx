@@ -25,7 +25,7 @@ export default function OptionPriority({
   priorityIcon: StaticImageData | undefined;
   setPriorityIcon: Dispatch<SetStateAction<StaticImageData | undefined>>;
   inputs: Inputs;
-  setInputs: Dispatch<SetStateAction<Inputs>>;
+  setInputs: any;
   isOld?: boolean;
   isArchived?: boolean;
 }) {
@@ -72,8 +72,6 @@ export default function OptionPriority({
       return p1;
     }
   };
-
-  console.log(isOld, isArchived);
 
   return (
     <div className="w-7 pr-1 flex items-center border-r-2  ">

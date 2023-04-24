@@ -160,7 +160,6 @@ export default function Tasks({
   if (!payload) {
     notFound();
   }
-  console.log(inputs);
 
   useEffect(() => {
     router.refresh();
@@ -241,15 +240,11 @@ export default function Tasks({
                 </div>
                 {/* //description// */}
                 {/* //btns// */}
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    handleDelete();
-                  }}
-                  className="absolute top-0 right-0 border-r-lg ml-3 flex flex-col h-full w-14 "
-                >
+                <div className="absolute top-0 right-0 border-r-lg ml-3 flex flex-col h-full w-14 ">
                   <button
-                    type="submit"
+                    onClick={() => {
+                      handleDelete();
+                    }}
                     title="delete"
                     className="flex  justify-center items-center border-b-2 w-full h-1/3"
                   >
@@ -259,8 +254,9 @@ export default function Tasks({
                   </button>
 
                   <button
+                    disabled={inputs.description === "" ? true : false}
                     title="confirm"
-                    className="flex justify-center items-center w-full h-2/3"
+                    className=" disabled:opacity-20 flex justify-center items-center w-full h-2/3"
                     onClick={() => {
                       handleCreate();
                     }}
@@ -269,7 +265,7 @@ export default function Tasks({
                       <Image src={done} alt="" />
                     </div>
                   </button>
-                </form>
+                </div>
                 {/* //btns// */}
               </div>
             </div>

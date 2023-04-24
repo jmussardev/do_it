@@ -16,10 +16,8 @@ export const useTask = () => {
     email: string;
   }) => {
     try {
-      console.log(email);
       const result = await axios.get(`/api/user/${email}`);
       const userId = result.data.id;
-      console.log(userId);
 
       try {
         const response = await axios.post("/api/task", {

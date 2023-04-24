@@ -23,6 +23,7 @@ import OptionPriority from "./OptionPriority";
 import bigCheck from "./../../../public/icons/bigCheck.png";
 import done from "./../../../public/icons/done.png";
 import delIcon from "./../../../public/icons/delete.png";
+import useStateCallback from "../../../hooks/useStateCallback";
 
 interface TaskProps {
   task: Task;
@@ -39,7 +40,7 @@ export default function TaskCard({
   isOld,
   isArchived,
 }: TaskProps) {
-  const [inputs, setInputs] = useState({
+  const [inputs, setInputs] = useStateCallback({
     id: 0,
     description: "",
     priority: "",
@@ -57,7 +58,8 @@ export default function TaskCard({
   const [isChanged, setIsChanged] = useState(false);
   const [onDelete, setOnDelete] = useState(false);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
-  const [overlayRef, setOverlayRef] = useState(0);
+  const [overlaySwitch, setOverlaySwitch] = useState(0);
+
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setInputs({
       ...inputs,
@@ -84,6 +86,7 @@ export default function TaskCard({
 
   const handleUpdate = async () => {
     if (isChanged === true) {
+      console.log(inputs.iscompleted);
       try {
         await updateTask({
           taskId: inputs.id,
@@ -92,12 +95,21 @@ export default function TaskCard({
           timer: inputs.timer,
           iscompleted: inputs.iscompleted,
         });
-      } catch (error) {
-      } finally {
-        router.refresh();
-      }
+      } catch (error) {}
       setIsChanged(false);
     }
+  };
+
+  const handleCompleted = async () => {
+    try {
+      await updateTask({
+        taskId: inputs.id,
+        description: inputs.description,
+        priority: inputs.priority,
+        timer: inputs.timer,
+        iscompleted: true,
+      });
+    } catch (error) {}
   };
 
   const handleDelete = async () => {
@@ -115,14 +127,17 @@ export default function TaskCard({
 
   const router = useRouter();
 
-  const setTaskDone = () => {
-    setInputs({
-      id: inputs.id,
-      description: inputs.description,
-      priority: inputs.priority,
-      timer: inputs.timer,
-      iscompleted: !inputs.iscompleted,
-    });
+  const setTaskDone = async () => {
+    setInputs(
+      {
+        id: inputs.id,
+        description: inputs.description,
+        priority: inputs.priority,
+        timer: inputs.timer,
+        iscompleted: !inputs.iscompleted,
+      },
+      handleCompleted
+    );
     if (start || isPaused) {
       setTimerState({
         task_id: null,
@@ -135,8 +150,9 @@ export default function TaskCard({
     setIsOverlayOpen(false);
   };
   const handleOverlay = (overlay: number) => {
+    // setIsOverlayOpen(true);
     overlay === 0 ? setIsOverlayOpen(true) : "";
-    setOverlayRef(1);
+    // setOverlaySwitch(1);
   };
 
   const setTaskNotActivated = () => {
@@ -162,14 +178,26 @@ export default function TaskCard({
   useEffect(() => {
     setCurrentTask();
   }, []);
-  useEffect(() => {
-    setOverlayRef(0);
-  }, [start, isChronoOpen, task_id, edit, inputs]);
+  // useEffect(() => {
+  //   setOverlaySwitch(0);
+  // }, [start, isChronoOpen, task_id, edit, inputs]);
   // let isMobile = window.matchMedia("(pointer:coarse)").matches;
   const controls = useDragControls();
   const ref = useRef<HTMLDivElement>(null);
+
   return (
     <motion.div
+      onClick={() => {
+        handleOverlay(overlaySwitch);
+      }}
+      onKeyDown={(e) => {
+        handleKeyPress(e);
+      }}
+      onBlur={() => {
+        handleUpdate();
+        setIsOverlayOpen(false);
+        setOverlaySwitch(0);
+      }}
       drag="x"
       dragConstraints={{ left: 0, right: 100 }}
       dragSnapToOrigin={true}
@@ -200,6 +228,7 @@ export default function TaskCard({
     >
       <motion.div
         ref={ref}
+        tabIndex={0}
         className={` ${
           inputs.id === task_id && isPaused === false
             ? "isActive"
@@ -217,12 +246,6 @@ export default function TaskCard({
         <span></span>
         <div
           className={`  overflow-hidden  relative font-bold flex p-2 w-full h-full mb-2   rounded-lg bg-white  `}
-          onKeyDown={(e) => {
-            handleKeyPress(e);
-          }}
-          onBlur={() => {
-            handleUpdate();
-          }}
         >
           {/* //overlay// */}
           {inputs.iscompleted ? (
@@ -240,8 +263,8 @@ export default function TaskCard({
           ) : (
             <div hidden={edit ? true : false}>
               <div
-                className={`opacity-0 ${
-                  isOverlayOpen ? "opacity-100" : ""
+                className={` ${
+                  isOverlayOpen ? "opacity-100" : "opacity-0"
                 } transition-all ease-in `}
               >
                 {isChronoOpen ? (
@@ -254,12 +277,11 @@ export default function TaskCard({
                   />
                 ) : (
                   <div
-                    onClick={() => {
-                      handleOverlay(overlayRef);
-                    }}
+                  // onClick={() => {
+                  //   handleOverlay(overlaySwitch);
+                  // }}
                   >
                     <OverlayMenu
-                      overlayRef={overlayRef}
                       isOverlayOpen={isOverlayOpen}
                       setIsOverlayOpen={setIsOverlayOpen}
                       setTaskDone={setTaskDone}

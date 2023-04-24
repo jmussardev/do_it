@@ -4,6 +4,7 @@ import cross_rounded from "./../../../public/icons/cross_rounded.png";
 import dash from "./../../../public/icons/dash.png";
 import { counter, displayCount } from "./../../../utilities/counter";
 import { Dispatch, SetStateAction } from "react";
+import useStateCallback from "../../../hooks/useStateCallback";
 
 interface Inputs {
   id: number;
@@ -21,7 +22,7 @@ export default function Chrono({
   setIsOverlayOpen,
 }: {
   inputs: Inputs;
-  setInputs: Dispatch<SetStateAction<Inputs>>;
+  setInputs: any;
   setIsChronoOpen: Dispatch<SetStateAction<boolean>>;
   setIsOverlayOpen: Dispatch<SetStateAction<boolean>>;
   handleUpdate: () => void;

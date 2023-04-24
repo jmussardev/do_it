@@ -41,10 +41,12 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
   const { description, priority, timer, iscompleted, taskId } =
     await req.json();
-  const userId = 1;
 
   try {
-    const createUser = await prisma.task.update({
+    console.log("@@@@@@@@@");
+    console.log(iscompleted);
+    console.log("@@@@@@@@@");
+    const response = await prisma.task.update({
       where: { id: taskId },
       data: {
         description: description,
@@ -53,16 +55,7 @@ export async function PUT(req: Request) {
         iscompleted: iscompleted,
       },
     });
-    return NextResponse.json(
-      {
-        user_id: userId,
-        description: description,
-        priority: priority,
-        timer: timer,
-        iscompleted: iscompleted,
-      },
-      { status: 200 }
-    );
+    return NextResponse.json(response, { status: 200 });
   } catch (error) {
     console.log(error);
   }
