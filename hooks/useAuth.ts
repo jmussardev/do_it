@@ -1,5 +1,5 @@
 "use client";
-import { useContext } from "react";
+import { Dispatch, SetStateAction, useContext } from "react";
 import { AuthenticationContext } from "./../src/app/context/AuthContext";
 import axios from "axios";
 import { removeCookies } from "cookies-next";
@@ -40,12 +40,14 @@ const useAuth = () => {
     email,
     password,
     router,
+    setIsOpSignUp,
   }: {
     firstName: string;
     lastName: string;
     email: string;
     password: string;
     router: AppRouterInstance;
+    setIsOpSignUp: Dispatch<SetStateAction<boolean>>;
   }) => {
     setAuthState({ data: null, error: null, loading: true });
 
@@ -56,8 +58,13 @@ const useAuth = () => {
         email,
         password,
       });
-      setAuthState({ data: null, error: null, loading: false });
-      router.push("/user/today");
+      setAuthState({
+        data: null,
+        error: ["User was registered successfully! Please check your email"],
+        loading: false,
+      });
+      setIsOpSignUp(false);
+      router.refresh();
     } catch (e: any) {
       setAuthState({
         data: null,

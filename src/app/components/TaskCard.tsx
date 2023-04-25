@@ -21,9 +21,13 @@ import Chrono from "./Chrono";
 import OverlayMenu from "./OverlayMenu";
 import OptionPriority from "./OptionPriority";
 import bigCheck from "./../../../public/icons/bigCheck.png";
+import bigCheck_dark from "./../../../public/icons/bigcheck-dark.png";
 import done from "./../../../public/icons/done.png";
+import done_dark from "./../../../public/icons/done-dark.png";
 import delIcon from "./../../../public/icons/delete.png";
+import delIcon_dark from "./../../../public/icons/bin-dark.png";
 import useStateCallback from "../../../hooks/useStateCallback";
+import { useTheme } from "next-themes";
 
 interface TaskProps {
   task: Task;
@@ -40,6 +44,7 @@ export default function TaskCard({
   isOld,
   isArchived,
 }: TaskProps) {
+  const { theme } = useTheme();
   const [inputs, setInputs] = useStateCallback({
     id: 0,
     description: "",
@@ -117,8 +122,8 @@ export default function TaskCard({
 
   const handleDelete = async () => {
     await deleteTask({ taskId: inputs.id });
-    setOnDelete(true);
     router.refresh();
+    setOnDelete(true);
   };
 
   const handleKeyPress = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -248,13 +253,17 @@ export default function TaskCard({
         <span></span>
         <span></span>
         <div
-          className={`  overflow-hidden  relative font-bold flex p-2 w-full h-full mb-2   rounded-lg bg-white  `}
+          className={`  overflow-hidden  relative font-bold flex p-2 w-full h-full mb-2   rounded-lg bg-white --dark-- dark:border-2 dark:border-[#E18B15] dark:bg-[#3A405F]   `}
         >
           {/* //overlay// */}
           {inputs.iscompleted ? (
-            <div className="absolute flex justify-end items-center rounded-lg w-full h-full top-0 left-0 bg-[#DEFFBC] bg-opacity-60">
+            <div className="absolute flex justify-end items-center rounded-lg w-full h-full top-0 left-0 bg-[#DEFFBC] bg-opacity-60 --dark-- dark:bg-[#2c314e] dark:bg-opacity-60">
               <div className="h-[6rem] w-[6rem] pr-2 opacity-30">
-                <Image src={bigCheck} alt="" />
+                {theme === "dark" ? (
+                  <Image src={bigCheck_dark} priority alt="" />
+                ) : (
+                  <Image src={bigCheck} priority alt="" />
+                )}
               </div>
             </div>
           ) : (
@@ -353,7 +362,11 @@ export default function TaskCard({
                 className="flex  justify-center items-center border-b-2 w-full h-1/3"
               >
                 <div>
-                  <Image src={delIcon} alt="" />
+                  {theme === "dark" ? (
+                    <Image className="h-4 w-3.5" src={delIcon_dark} alt="" />
+                  ) : (
+                    <Image src={delIcon} alt="" />
+                  )}
                 </div>
               </button>
 
@@ -366,7 +379,11 @@ export default function TaskCard({
                 }}
               >
                 <div className=" h-4 w-4 ">
-                  <Image src={done} alt="" />
+                  {theme === "dark" ? (
+                    <Image src={done_dark} alt="" />
+                  ) : (
+                    <Image src={done} alt="" />
+                  )}
                 </div>
               </button>
             </form>

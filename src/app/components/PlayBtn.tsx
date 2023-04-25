@@ -1,7 +1,10 @@
 import { Dispatch, SetStateAction } from "react";
 import pause from "./../../../public/icons/pause.png";
 import play from "./../../../public/icons/play.png";
+import pause_dark from "./../../../public/icons/pause-dark.png";
+import play_dark from "./../../../public/icons/play-dark.png";
 import Image from "next/image";
+import { useTheme } from "next-themes";
 
 interface State {
   task_id: number | null;
@@ -37,6 +40,7 @@ export default function PlayBtn({
   isOverlayOpen: boolean;
   setIsOverlayOpen: Dispatch<SetStateAction<boolean>>;
 }) {
+  const { theme } = useTheme();
   return (
     <>
       {start === false && task_id !== inputs.id && (
@@ -44,7 +48,7 @@ export default function PlayBtn({
           disabled={
             inputs.timer === 0 || isOverlayOpen === false ? true : false
           }
-          className="origin-center h-5 w-5 hover:scale-125"
+          className="disabled:opacity-30 origin-center h-5 w-5 hover:scale-125"
           onClick={() => {
             setTimerState({
               task_id: inputs.id,
@@ -56,7 +60,11 @@ export default function PlayBtn({
             setIsOverlayOpen(false);
           }}
         >
-          <Image src={play} alt="" />
+          {theme === "dark" ? (
+            <Image src={play_dark} alt="" />
+          ) : (
+            <Image src={play} alt="" />
+          )}
         </button>
       )}
 
@@ -65,7 +73,7 @@ export default function PlayBtn({
           disabled={
             inputs.timer === 0 || isOverlayOpen === false ? true : false
           }
-          className="z-10 origin-center h-5 w-5 hover:scale-125"
+          className="disabled:opacity-30 z-10 origin-center h-5 w-5 hover:scale-125"
           onClick={() => {
             setTimerState({
               task_id: inputs.id,
@@ -77,7 +85,11 @@ export default function PlayBtn({
             setIsOverlayOpen(false);
           }}
         >
-          <Image src={play} alt="" />
+          {theme === "dark" ? (
+            <Image src={play_dark} alt="" />
+          ) : (
+            <Image src={play} alt="" />
+          )}
         </button>
       )}
 
@@ -96,7 +108,11 @@ export default function PlayBtn({
           }}
           disabled={isOverlayOpen ? false : true}
         >
-          <Image src={pause} alt="" />
+          {theme === "dark" ? (
+            <Image src={pause_dark} alt="" />
+          ) : (
+            <Image src={pause} alt="" />
+          )}
         </button>
       )}
     </>

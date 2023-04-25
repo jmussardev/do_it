@@ -17,6 +17,7 @@ export async function GET(req: Request, context: { params: any }) {
           where: {
             date: today(),
           },
+
           select: {
             id: true,
             description: true,

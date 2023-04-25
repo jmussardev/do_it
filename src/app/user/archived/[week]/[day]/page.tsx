@@ -3,6 +3,10 @@ import { getPayload } from "../../../../../../utilities/payload";
 import { getTasks } from "../../../../../../utilities/getTasks";
 import { notFound } from "next/navigation";
 
+export const metadata = {
+  title: "Archived",
+};
+
 const { getOld } = getTasks();
 
 export default async function Archived() {

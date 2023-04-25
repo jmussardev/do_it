@@ -43,9 +43,6 @@ export async function PUT(req: Request) {
     await req.json();
 
   try {
-    console.log("@@@@@@@@@");
-    console.log(iscompleted);
-    console.log("@@@@@@@@@");
     const response = await prisma.task.update({
       where: { id: taskId },
       data: {

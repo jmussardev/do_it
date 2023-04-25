@@ -7,5 +7,5 @@ export function defaultMiddleware() {
 
 export default withAuthorization(defaultMiddleware);
 export const config = {
-  matcher: ["/user/:path*"],
+  matcher: ["/user/:path*", "/"],
 };

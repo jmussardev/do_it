@@ -9,13 +9,23 @@ import DotLoading from "./DotLoading";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import cross from "./../../../public/icons/cross_rounded.png";
+import cross_dark from "./../../../public/icons/cross-dark.png";
+import open from "./../../../public/icons/eyeopen.png";
+import open_dark from "./../../../public/icons/open-dark.png";
+import close from "./../../../public/icons/eyeclose.png";
+import close_dark from "./../../../public/icons/close-dark.png";
+import { useTheme } from "next-themes";
 
 export default function Auth() {
-  const { data, error, loading } = useContext(AuthenticationContext);
+  const { data, error, loading, setAuthState } = useContext(
+    AuthenticationContext
+  );
+  const { theme } = useTheme();
 
   const [errorList, setErrorList] = useState(error ? error : []);
   const uniqSet = new Set(errorList);
   const errorListUniq = [...uniqSet];
+  const [showPassword, setShowPassword] = useState(false);
 
   const [isOpSignUp, setIsOpSignUp] = useState(false);
   const [isOpSignIn, setIsOpSignIn] = useState(false);
@@ -30,7 +40,14 @@ export default function Auth() {
 
   const [disabled, setDisabled] = useState(true);
   const router = useRouter();
-
+  const isMessage = () => {
+    if (
+      errorList[0] ===
+      "User was registered successfully! Please check your email"
+    )
+      return true;
+    else false;
+  };
   const handleSignUp = () => {
     const { firstName, lastName, email, password } = inputs;
     signup({
@@ -39,6 +56,7 @@ export default function Auth() {
       email,
       password,
       router,
+      setIsOpSignUp,
     });
   };
   const handleSignIn = () => {
@@ -47,8 +65,10 @@ export default function Auth() {
     signin({ email, password, router });
   };
   const doesMatch = () => {
-    if (inputs.password !== inputs.confirm) {
-      setErrorList([...errorList, "Password don't match"]);
+    if (inputs.confirm !== "") {
+      if (inputs.password !== inputs.confirm) {
+        setErrorList([...errorList, "Password don't match"]);
+      }
     }
   };
   const handleRemove = () => {
@@ -57,6 +77,8 @@ export default function Auth() {
   const errorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    doesMatch();
+    if (inputs.password === inputs.confirm) setErrorList([]);
     if (isOpSignIn) {
       if (inputs.password && inputs.email) {
         setDisabled(false);
@@ -69,6 +91,22 @@ export default function Auth() {
   useEffect(() => {
     error ? setErrorList(error) : "";
   }, [error]);
+
+  useEffect(() => {
+    setErrorList([]);
+    setInputs({
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirm: "",
+    });
+    setAuthState({
+      data: null,
+      error: null,
+      loading: false,
+    });
+  }, [isOpSignIn, isOpSignUp]);
 
   useEffect(() => {
     if (isOpSignUp) {
@@ -95,16 +133,15 @@ export default function Auth() {
 
   return (
     <div className=" h-full w-full relative flex items-center flex-col">
-      {errorListUniq
+      {errorListUniq && !isOpSignIn
         ? Array.isArray(errorListUniq)
           ? errorListUniq.map((e, i) => (
               <div
                 ref={errorRef}
                 key={i}
-                className={`absolute w-72 -top-52  p-1 mb-4 text-center rounded-md bg-red-200 cursor-pointer `}
-                onClick={() => {
-                  handleRemove();
-                }}
+                className={`absolute w-72 -top-52  p-1 mb-4 text-center rounded-md ${
+                  isMessage() ? "bg-green-200" : "bg-red-200"
+                }  cursor-pointer `}
               >
                 {errorListUniq[i].split("\n").map((str, i) => (
                   <p key={i}>{str}</p>
@@ -117,7 +154,7 @@ export default function Auth() {
         onClick={() => {
           setIsOpSignIn(!isOpSignIn);
         }}
-        className="mt-20 mb-4 w-28 h-9 font-bold bg-white rounded-md drop-shadow-[0_5px_3px_rgba(0,0,0,0.3)] hover:drop-shadow-md"
+        className="mt-20 mb-4 w-28 h-9 font-bold bg-white rounded-md drop-shadow-[0_5px_3px_rgba(0,0,0,0.3)] hover:drop-shadow-md --dark-- dark:bg-[#3A405F]"
       >
         SignIn
       </button>
@@ -125,14 +162,14 @@ export default function Auth() {
         onClick={() => {
           setIsOpSignUp(true);
         }}
-        className=" w-28 h-9 font-bold bg-white rounded-md drop-shadow-[0_5px_3px_rgba(0,0,0,0.3)] hover:drop-shadow-md"
+        className=" w-28 h-9 font-bold bg-white rounded-md drop-shadow-[0_5px_3px_rgba(0,0,0,0.3)] hover:drop-shadow-md --dark-- dark:bg-[#3A405F]"
       >
         SignUp
       </button>
       {/* //-MODAL-SIGNIN-// */}
       <div
         hidden={isOpSignIn ? false : true}
-        className="absolute h-[95%] w-[95%] mt-4 rounded-md  drop-shadow-[0_0_3px_rgba(0,0,0,0.3)]  bg-white"
+        className="absolute h-[95%] w-[95%] mt-4 rounded-md  drop-shadow-[0_0_3px_rgba(0,0,0,0.3)]  bg-white --dark-- dark:bg-[#3A405F]  "
       >
         <div className="flex justify-end">
           <button
@@ -142,7 +179,11 @@ export default function Auth() {
             }}
           >
             <div className="h-5 w-5">
-              <Image src={cross} alt="" />
+              {theme === "dark" ? (
+                <Image src={cross_dark} alt="error" className="w-56 mb-8" />
+              ) : (
+                <Image src={cross} alt="error" className="w-56 mb-8" />
+              )}
             </div>
           </button>
         </div>
@@ -154,7 +195,7 @@ export default function Auth() {
           }}
           className=" h-full w-full px-6 pt-4 xsm:px-12 sm:px-28  flex flex-col items-center"
         >
-          <p className="text-xl  uppercase font-bold border-b-2 border-black mb-10">
+          <p className="text-xl  uppercase font-bold border-b-2 border-black mb-10 --dark-- dark:border-[#E18B15]">
             welcome back
           </p>
 
@@ -165,40 +206,54 @@ export default function Auth() {
           ) : (
             <>
               <input
-                className="bg-gray-100 shadow-inner w-full h-9 mb-4 rounded-md pl-2"
+                className="bg-gray-100 shadow-inner w-full h-9 mb-4 rounded-md pl-2 --dark-- dark:placeholder:text-[#E18B15] dark:bg-[#3A405F] "
                 value={inputs.email}
                 placeholder="Email"
                 type="email"
                 name="email"
                 onChange={(e) => {
-                  setInputs({
-                    firstName: inputs.firstName,
-                    lastName: inputs.lastName,
-                    email: e.currentTarget.value,
-                    password: inputs.password,
-                    confirm: inputs.confirm,
-                  });
+                  handleChangeInput(e);
                 }}
               />
-              <input
-                className="bg-gray-100 shadow-inner w-full h-9 mb-4 rounded-md pl-2"
-                value={inputs.password}
-                placeholder="Password"
-                type="password"
-                name="password"
-                onChange={(e) => {
-                  setInputs({
-                    firstName: inputs.firstName,
-                    lastName: inputs.lastName,
-                    email: inputs.email,
-                    password: e.currentTarget.value,
-                    confirm: inputs.confirm,
-                  });
-                }}
-              />
+              <div className=" relative flex w-full h-9 mb-4">
+                <input
+                  className="  bg-gray-100 shadow-inner w-full h-9 rounded-md pl-2 --dark-- dark:placeholder:text-[#E18B15] dark:bg-[#3A405F]"
+                  value={inputs.password}
+                  placeholder="Password"
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  onChange={(e) => {
+                    handleChangeInput(e);
+                  }}
+                />
+                <div
+                  className={`absolute ${
+                    showPassword ? "top-3" : "top-4"
+                  } right-2  w-1/8 flex justify-center items-center`}
+                  onClick={() => {
+                    setShowPassword(!showPassword);
+                  }}
+                >
+                  {theme === "dark" ? (
+                    <Image
+                      className="origin-center w-4"
+                      src={showPassword ? open_dark : close_dark}
+                      alt=""
+                    />
+                  ) : (
+                    <Image
+                      className="origin-center w-4"
+                      src={showPassword ? open : close}
+                      alt=""
+                    />
+                  )}
+                </div>
+              </div>
               <button
                 className={` ${
-                  disabled ? "bg-red-300" : " bg-white"
+                  disabled
+                    ? "bg-red-300 dark:bg-[#3A405F] dark:border-2 dark:border-red-300 dark:text-red-300"
+                    : " bg-white dark:bg-[#3A405F] dark:border-2 dark:border-green-200 dark:text-green-200"
                 } capitalize w-36 h-9 mb-4 font-bold rounded-md drop-shadow-[0_0_3px_rgba(0,0,0,0.3)] hover:drop-shadow-md`}
                 disabled={disabled}
                 type="submit"
@@ -220,7 +275,7 @@ export default function Auth() {
       {/* //-MODAL-SIGNUP-// */}
       <div
         hidden={isOpSignUp ? false : true}
-        className="absolute h-[95%] w-[95%] mt-4 rounded-md  drop-shadow-[0_0_3px_rgba(0,0,0,0.3)] bg-white"
+        className="absolute h-[95%] w-[95%] mt-4 rounded-md  drop-shadow-[0_0_3px_rgba(0,0,0,0.3)] bg-white --dark-- dark:bg-[#3A405F] "
       >
         <div className="flex justify-end">
           <button
@@ -230,7 +285,11 @@ export default function Auth() {
             }}
           >
             <div className="h-5 w-5">
-              <Image src={cross} alt="" />
+              {theme === "dark" ? (
+                <Image src={cross_dark} alt="error" className="w-56 mb-8" />
+              ) : (
+                <Image src={cross} alt="error" className="w-56 mb-8" />
+              )}
             </div>
           </button>
         </div>
@@ -242,7 +301,7 @@ export default function Auth() {
           }}
           className=" px-6 xsm:px-24 sm:px-28 flex flex-col items-center"
         >
-          <p className="text-xl  uppercase font-bold border-b-2 border-black mb-10">
+          <p className="text-xl  uppercase font-bold border-b-2 border-black mb-10 --dark-- dark:border-[#E18B15]">
             Create your account
           </p>
           {loading ? (
@@ -252,94 +311,113 @@ export default function Auth() {
               {" "}
               <div className="flex w-full justify-between">
                 <input
-                  className="  bg-gray-100 shadow-inner w-[49%] h-9 mb-4 rounded-md pl-2"
+                  className="  bg-gray-100 shadow-inner w-[49%] h-9 mb-4 rounded-md pl-2 --dark-- dark:placeholder:text-[#E18B15] dark:bg-[#3A405F]"
                   value={inputs.firstName}
                   placeholder="Firstname"
                   type="text"
                   name="firstName"
                   onChange={(e) => {
-                    setInputs({
-                      firstName: e.currentTarget.value,
-                      lastName: inputs.lastName,
-                      email: inputs.email,
-                      password: inputs.password,
-                      confirm: inputs.confirm,
-                    });
+                    handleChangeInput(e);
                   }}
                 />
                 <input
-                  className="  bg-gray-100 shadow-inner w-[49%] h-9 mb-4 rounded-md pl-2"
+                  className="  bg-gray-100 shadow-inner w-[49%] h-9 mb-4 rounded-md pl-2 --dark-- dark:placeholder:text-[#E18B15] dark:bg-[#3A405F]"
                   value={inputs.lastName}
                   placeholder="Lastname"
                   type="text"
                   name="lastName"
                   onChange={(e) => {
-                    setInputs({
-                      firstName: inputs.firstName,
-                      lastName: e.currentTarget.value,
-                      email: inputs.email,
-                      password: inputs.password,
-                      confirm: inputs.confirm,
-                    });
+                    handleChangeInput(e);
                   }}
                 />
               </div>
               <input
-                className="  bg-gray-100 shadow-inner w-full h-9 mb-4 rounded-md pl-2"
+                className="  bg-gray-100 shadow-inner w-full h-9 mb-4 rounded-md pl-2 --dark-- dark:placeholder:text-[#E18B15] dark:bg-[#3A405F]"
                 value={inputs.email}
                 placeholder="Email"
                 type="email"
                 name="email"
                 onChange={(e) => {
-                  setInputs({
-                    firstName: inputs.firstName,
-                    lastName: inputs.lastName,
-                    email: e.currentTarget.value,
-                    password: inputs.password,
-                    confirm: inputs.confirm,
-                  });
+                  handleChangeInput(e);
                 }}
               />
-              <input
-                className="  bg-gray-100 shadow-inner w-full h-9 mb-4 rounded-md pl-2"
-                value={inputs.password}
-                placeholder="Password"
-                type="password"
-                name="password"
-                onChange={(e) => {
-                  setInputs({
-                    firstName: inputs.firstName,
-                    lastName: inputs.lastName,
-                    email: inputs.email,
-                    password: e.currentTarget.value,
-                    confirm: inputs.confirm,
-                  });
-                }}
-              />
-              <input
-                className={` bg-gray-100 shadow-inner w-full h-9 mb-4 rounded-md pl-2 ${
-                  inputs.password === inputs.confirm
-                    ? "focus:outline-green-200"
-                    : ""
-                } `}
-                value={inputs.confirm}
-                placeholder="Confirm password"
-                type="password"
-                name="confirm"
-                onChange={(e) => {
-                  setInputs({
-                    firstName: inputs.firstName,
-                    lastName: inputs.lastName,
-                    email: inputs.email,
-                    password: inputs.password,
-                    confirm: e.currentTarget.value,
-                  });
-                  doesMatch();
-                }}
-              />
+              <div className=" relative flex w-full h-9 mb-4 --dark-- dark:placeholder:text-[#E18B15] dark:bg-[#3A405F]">
+                <input
+                  className="  bg-gray-100 shadow-inner w-full h-9  rounded-md pl-2 --dark-- dark:placeholder:text-[#E18B15] dark:bg-[#3A405F]"
+                  value={inputs.password}
+                  placeholder="Password"
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  onChange={(e) => {
+                    handleChangeInput(e);
+                  }}
+                />
+                <div
+                  className={`absolute ${
+                    showPassword ? "top-3" : "top-4"
+                  } right-2  w-1/8 flex justify-center items-center`}
+                  onClick={() => {
+                    setShowPassword(!showPassword);
+                  }}
+                >
+                  {theme === "dark" ? (
+                    <Image
+                      className="origin-center w-4"
+                      src={showPassword ? open_dark : close_dark}
+                      alt=""
+                    />
+                  ) : (
+                    <Image
+                      className="origin-center w-4"
+                      src={showPassword ? open : close}
+                      alt=""
+                    />
+                  )}
+                </div>
+              </div>
+              <div className=" relative flex w-full h-9 mb-4">
+                <input
+                  className={` bg-gray-100 shadow-inner w-full h-9 mb-4 rounded-md pl-2 ${
+                    inputs.password === inputs.confirm
+                      ? "focus:outline-green-200"
+                      : ""
+                  } --dark-- dark:placeholder:text-[#E18B15] dark:bg-[#3A405F] `}
+                  value={inputs.confirm}
+                  placeholder="Confirm password"
+                  type={showPassword ? "text" : "password"}
+                  name="confirm"
+                  onChange={(e) => {
+                    handleChangeInput(e);
+                  }}
+                />
+                <div
+                  className={`absolute ${
+                    showPassword ? "top-3" : "top-4"
+                  } right-2  w-1/8 flex justify-center items-center`}
+                  onClick={() => {
+                    setShowPassword(!showPassword);
+                  }}
+                >
+                  {theme === "dark" ? (
+                    <Image
+                      className="origin-center w-4"
+                      src={showPassword ? open_dark : close_dark}
+                      alt=""
+                    />
+                  ) : (
+                    <Image
+                      className="origin-center w-4"
+                      src={showPassword ? open : close}
+                      alt=""
+                    />
+                  )}
+                </div>
+              </div>
               <button
-                className={`${
-                  disabled ? "bg-red-300" : "bg-white "
+                className={` ${
+                  disabled
+                    ? "bg-red-300 dark:bg-[#3A405F] dark:border-2 dark:border-red-300 dark:text-red-300"
+                    : " bg-white dark:bg-[#3A405F] dark:border-2 dark:border-green-200 dark:text-green-200"
                 } capitalize mb-4 w-full h-9 font-bold rounded-md drop-shadow-[0_0_3px_rgba(0,0,0,0.3)] hover:drop-shadow-md`}
                 disabled={disabled}
                 type="submit"

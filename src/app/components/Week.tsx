@@ -33,9 +33,6 @@ export default function Week({
   }
 
   const dayTasks = tasksList?.filter((task) => getDay(task.date) == day);
-  console.log("@#@#@#@#@#@#@#@#@#@#@#");
-  console.log(dayTasks);
-  console.log("@#@#@#@#@#@#@#@#@#@#@#");
 
   return (
     <div className="relative h-full w-full ">

@@ -3,6 +3,9 @@ import { getPayload } from "../../../../../utilities/payload";
 import { getTasks } from "../../../../../utilities/getTasks";
 import { notFound } from "next/navigation";
 const { getByWeek } = getTasks();
+export const metadata = {
+  title: "My week",
+};
 
 export default async function MyWeek({ params }: { params: { day: string } }) {
   const payload = getPayload();

@@ -4,6 +4,10 @@ import { getPayload } from "../../../../utilities/payload";
 import { getTasks } from "../../../../utilities/getTasks";
 import { notFound } from "next/navigation";
 
+export const metadata = {
+  title: "Today",
+};
+
 const { getAll } = getTasks();
 
 export default async function Home() {
@@ -18,7 +22,7 @@ export default async function Home() {
   }
 
   return (
-    <div className=" h-full cardpattern  shadow-inner   ">
+    <div className=" h-full cardpattern-dark  shadow-inner  --dark-- dark:cardpattern-dark  ">
       {/* //header// */}
       <TodayHeader />
       {/* //header// */}

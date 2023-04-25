@@ -1,28 +1,37 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Link from "next/link";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import getDate from "../../../utilities/date";
 import Image from "next/image";
 import check from "./../../../public/icons/checkWhite.png";
+import check_dark from "./../../../public/icons/tag-dark.png";
 import useAuth from "../../../hooks/useAuth";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
+import axios from "axios";
+import useSWR, { mutate } from "swr";
+const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 export default function NavBar({
   setOpen,
-  numTasks,
-  numTasksDone,
+  payLoad,
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>;
-  numTasks: number | undefined;
-  numTasksDone: number | undefined;
+  payLoad?: string;
 }) {
+  const { systemTheme, theme, setTheme } = useTheme();
+  const currentTheme = theme === "system" ? systemTheme : theme;
   const { getDay, today } = getDate();
   const tdayNum = getDay(today());
   const { signout } = useAuth();
   const router = useRouter();
+  const { data, mutate } = useSWR(`/api/task/${payLoad}/count`, fetcher);
+
+  mutate(data);
 
   return (
-    <div className=" w-full font-bold text-lg text-center bg-white border-b-2 border-black sm:border-none  -- sm:static sm:text-left ">
-      <ul className=" sm:border-black border-t-[3px] mb-10 pt-4 text-center sm:text-left">
+    <div className=" w-full font-bold text-lg text-center bg-white border-b-2 border-black sm:border-none  -- sm:static sm:text-left --dark-- dark:bg-[#3A405F]">
+      <ul className=" sm:border-black border-t-[3px] mb-10 pt-4 text-center sm:text-left --dark-- dark:border-[#E18B15] sm:dark:border-[#E18B15]">
         <li>
           <Link href={"/user/today"}>
             <div className="inline-block">
@@ -35,13 +44,17 @@ export default function NavBar({
                   Today
                 </button>
                 <div className="ml-2 flex items-center  w-full">
-                  <div className=" rounded-md flex justify-center items-center h-5 w-5 bg-black text-white text-xs">
-                    {numTasks}
+                  <div className=" rounded-md flex justify-center items-center h-5 w-5 bg-black text-white text-xs --dark-- dark:bg-transparent dark:border-[1px] dark:border-[#E18B15] dark:text-[#E18B15]">
+                    {data?.tasksNum}
                   </div>
-                  <div className="ml-1 pl-1 pr-1  rounded-md flex justify-center items-center h-5  bg-black text-white text-xs">
-                    <div>{numTasksDone}</div>
+                  <div className="ml-1 pl-1 pr-1  rounded-md flex justify-center items-center h-5  bg-black text-white text-xs --dark-- dark:bg-transparent dark:border-[1px] dark:border-[#E18B15] dark:text-[#E18B15]">
+                    <div>{data?.doneNum}</div>
                     <div className="ml-1 h-3 w-3 flex justify-center items-center">
-                      <Image src={check} alt="" />
+                      {theme === "dark" ? (
+                        <Image src={check_dark} alt="" className="w-56 " />
+                      ) : (
+                        <Image src={check} alt="" className="w-56 " />
+                      )}
                     </div>
                   </div>
                 </div>
@@ -73,10 +86,17 @@ export default function NavBar({
           </Link>
         </li>
       </ul>
-      <div className="pt-4 mb-5 border-black border-t-[3px]   ">
+      <div className="pt-4 mb-5 border-black border-t-[3px]  --dark-- dark:border-[#E18B15]   ">
         <ul>
           <li>
-            <button>Dark mode</button>
+            <button
+              onClick={() => {
+                theme === "dark" ? setTheme("light") : setTheme("dark");
+                router.refresh();
+              }}
+            >
+              {theme === "dark" ? "Light mode" : "Dark mode "}
+            </button>
           </li>
           <li>
             <button

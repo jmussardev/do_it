@@ -7,6 +7,10 @@ import ArchivedLink from "../../components/ArchivedLink";
 const { dayOfWeek } = getDate();
 const { getOldWeeks } = getTasks();
 
+export const metadata = {
+  title: "Archived",
+};
+
 export default async function Archived() {
   const payload = getPayload();
   if (!payload) {

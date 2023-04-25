@@ -12,9 +12,10 @@ import { jwtVerify, type JWTPayload } from "jose";
 
 export const withAuthorization: MiddlewareFactory = (next: NextMiddleware) => {
   return async (request: NextRequest, _next: NextFetchEvent) => {
-    const bearerToken = request.headers.get("authorization");
+    const bearerToken = request.cookies.get("jwt");
 
     const res = await next(request, _next);
+
     if (res) {
       if (!bearerToken) {
         NextResponse.json(
@@ -23,7 +24,8 @@ export const withAuthorization: MiddlewareFactory = (next: NextMiddleware) => {
         );
         return res;
       }
-      const token = bearerToken.split(" ")[1];
+
+      const token = bearerToken.value;
       if (!token) {
         return NextResponse.json(
           { errorMessage: "Unauthorized request bb" },
@@ -32,7 +34,10 @@ export const withAuthorization: MiddlewareFactory = (next: NextMiddleware) => {
       }
 
       try {
-        await jwtVerify(token, jwtSecret);
+        const isValid = await jwtVerify(token, jwtSecret);
+        if (isValid) {
+          return res;
+        }
       } catch (error) {
         return NextResponse.json(
           { errorMessage: "Unauthorized request cc" },
@@ -40,7 +45,6 @@ export const withAuthorization: MiddlewareFactory = (next: NextMiddleware) => {
         );
       }
     }
-
-    return res;
+    return NextResponse.redirect(new URL("http://localhost:3000"));
   };
 };

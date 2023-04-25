@@ -7,10 +7,12 @@ export default function WeekNavBar() {
   const url = usePathname();
   const urlSplit = url.split("/");
   const isArchived = urlSplit[2] === "archived" ? true : false;
+  console.log(urlSplit);
+  console.log(isArchived);
   const archivedWeek = `${urlSplit[2]}/${urlSplit[3]}`;
 
   return (
-    <div className="bg-opacity-0 w-full h-[6rem] overflow-y-hidden  border-b-2 border-black">
+    <div className="bg-opacity-0 w-full h-[6rem] overflow-y-hidden  border-b-2 border-black dark:border-[#E18B15]">
       <div className=" justify-evenly -space-x-3 flex  h-full  ## sm:-space-x-1 sm:flex-row sm:w-full sm:justify-evenly">
         <NavLink
           href={`/user/${isArchived ? archivedWeek : "my-week"}/1`}

@@ -6,17 +6,21 @@ import TaskCard from "./TaskCard";
 import getDate from "../../../utilities/date";
 import { useTask } from "../../../hooks/useTask";
 import Image, { StaticImageData } from "next/image";
-import cross_rounded from "./../../../public/icons/cross_rounded.png";
 import { ChangeEvent, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Task } from "../../../config/types";
 import useSWR, { mutate } from "swr";
 import axios from "axios";
-import DotLoading from "./DotLoading";
 import OptionPriority from "./OptionPriority";
+import cross_rounded from "./../../../public/icons/cross_rounded.png";
+import cross_dark from "./../../../public/icons/cross-dark.png";
 import done from "./../../../public/icons/done.png";
+import done_dark from "./../../../public/icons/done-dark.png";
 import delIcon from "./../../../public/icons/delete.png";
+import delIcon_dark from "./../../../public/icons/bin-dark.png";
 import TasksLoader from "./TasksLoader";
+import { useTheme } from "next-themes";
+
 interface TaskProps {
   tasks?: Task[];
   onWeek?: boolean;
@@ -31,6 +35,7 @@ export default function Tasks({
   payload,
   tasks,
 }: TaskProps) {
+  const { theme } = useTheme();
   const { createTask } = useTask();
   const { getDay, today, dayOfWeekFull, getWeek } = getDate();
   const currentWeek = parseInt(getWeek());
@@ -197,13 +202,21 @@ export default function Tasks({
               >
                 <button
                   title="add a task"
-                  className="origin-center flex items-center justify-center  ## h-8 w-8 bg-white  active:drop-shadow-md rounded-lg  ##   "
+                  className="origin-center flex items-center justify-center  ## h-8 w-8 bg-white  active:drop-shadow-md rounded-lg --dark-- dark:bg-[#3A405F]  dark:border-[1px] dark:border-[#E18B15] "
                   onClick={() => {
                     setIsFormOp(true);
                   }}
                 >
-                  <div className="  rotate-45 h-6 w-6">
-                    <Image src={cross_rounded} alt="" />
+                  <div
+                    className={`  rotate-45 ${
+                      theme === "dark" ? "h-3 w-3 " : "h-6 w-6"
+                    }`}
+                  >
+                    {theme === "dark" ? (
+                      <Image src={cross_dark} alt="" />
+                    ) : (
+                      <Image src={cross_rounded} alt="" />
+                    )}
                   </div>
                 </button>
               </motion.div>
@@ -213,9 +226,9 @@ export default function Tasks({
           <ul className="relative px-[1rem]  xsm:px-[4rem] py-[3rem] h-full   ">
             {/* ::vvvFORMvvv:: */}
             {isFormOP && (
-              <div className="rounded-lg p-[3px] w-full h-[6.25rem]  drop-shadow-[0_5px_3px_rgba(0,0,0,0.3)] ">
+              <div className="rounded-lg p-[3px] w-full h-[6.25rem]  drop-shadow-[0_5px_3px_rgba(0,0,0,0.3)] --dark--  ">
                 <div
-                  className={`  overflow-hidden  relative font-bold flex p-2 w-full h-full mb-2   rounded-lg bg-white  `}
+                  className={`  overflow-hidden  relative font-bold flex p-2 w-full h-full mb-2   rounded-lg bg-white --dark-- dark:border-2 dark:border-[#E18B15] dark:bg-[#3A405F]  `}
                 >
                   {/* //options// */}
                   <OptionPriority
@@ -230,7 +243,7 @@ export default function Tasks({
                   {/* //description// */}
                   <div className={`flex items-center w-4/5 p-2  `}>
                     <input
-                      className={`w-full h-full border-transparent bg-transparent placeholder:text-gray-200  focus:outline-none `}
+                      className={`w-full h-full border-transparent bg-transparent placeholder:text-gray-200  focus:outline-none --dark-- dark:bg-[#3A405F] dark:placeholder:text-[#E18B15] `}
                       type="text"
                       value={inputs.description}
                       placeholder="Describe your task.."
@@ -247,7 +260,7 @@ export default function Tasks({
                       e.preventDefault();
                       handleDelete();
                     }}
-                    className="absolute top-0 right-0 border-r-lg ml-3 flex flex-col h-full w-14 "
+                    className="absolute top-0 right-0 border-r-lg ml-3 flex flex-col h-full w-14  "
                   >
                     <button
                       type="submit"
@@ -255,10 +268,18 @@ export default function Tasks({
                         handleDelete();
                       }}
                       title="delete"
-                      className="flex  justify-center items-center border-b-2 w-full h-1/3"
+                      className="flex  justify-center items-center border-b-2 w-full h-1/3 --dark--  dark:border-b-[#E18B15]"
                     >
                       <div>
-                        <Image src={delIcon} alt="" />
+                        {theme === "dark" ? (
+                          <Image
+                            className="h-4 w-3.5"
+                            src={delIcon_dark}
+                            alt=""
+                          />
+                        ) : (
+                          <Image src={delIcon} alt="" />
+                        )}
                       </div>
                     </button>
 
@@ -271,7 +292,11 @@ export default function Tasks({
                       }}
                     >
                       <div className=" h-4 w-4 ">
-                        <Image src={done} alt="" />
+                        {theme === "dark" ? (
+                          <Image src={done_dark} alt="" />
+                        ) : (
+                          <Image src={done} alt="" />
+                        )}
                       </div>
                     </button>
                   </form>
@@ -299,13 +324,23 @@ export default function Tasks({
                 animate={{ y: 0, x: 0 }}
                 transition={{ delay: 0.8, type: "spring" }}
                 title="add a task"
-                className="absolute top-1 right-3 sm:top-5 sm:right-3 ## flex items-center justify-center ## h-10 w-10 bg-white drop-shadow-lg active:drop-shadow-md rounded-lg  ##   "
+                className="absolute top-1 right-3 sm:top-5 sm:right-3 ## flex items-center justify-center ## h-10 w-10 bg-white drop-shadow-lg active:drop-shadow-md rounded-lg --dark-- dark:bg-[#3A405F]  dark:border-[1px] dark:border-[#E18B15]   "
                 onClick={() => {
                   setIsFormOp(true);
                 }}
               >
-                <div className="  rotate-45 h-6 w-6">
-                  <Image src={cross_rounded} alt="" />
+                <div
+                  className={`  rotate-45 ${
+                    theme === "dark" ? "h-3 w-3 " : "h-6 w-6"
+                  }`}
+                >
+                  {theme === "dark" ? (
+                    <div className="h-3 w-3 flex justify-center items-center">
+                      <Image src={cross_dark} alt="" />
+                    </div>
+                  ) : (
+                    <Image src={cross_rounded} alt="" />
+                  )}
                 </div>
               </motion.button>
             )}

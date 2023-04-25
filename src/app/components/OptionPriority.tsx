@@ -2,9 +2,13 @@ import Image, { StaticImageData } from "next/image";
 import p1 from "./../../../public/icons/p1.png";
 import p2 from "./../../..//public/icons/p2.png";
 import p3 from "./../../../public/icons/p3.png";
+import p1_dark from "./../../../public/icons/p1-dark.png";
+import p2_dark from "./../../..//public/icons/p2-dark.png";
+import p3_dark from "./../../../public/icons/p3-dark.png";
 
 import { Dispatch, SetStateAction } from "react";
 import { PRIORITY } from "@prisma/client";
+import { useTheme } from "next-themes";
 
 interface Inputs {
   id: number;
@@ -29,6 +33,8 @@ export default function OptionPriority({
   isOld?: boolean;
   isArchived?: boolean;
 }) {
+  const { theme } = useTheme();
+
   function switchPriorityInput() {
     switch (inputs.priority) {
       case PRIORITY.ONE:
@@ -37,7 +43,7 @@ export default function OptionPriority({
             ...inputs,
             priority: PRIORITY.TWO,
           }),
-          setPriorityIcon(p2)
+          setPriorityIcon(theme === "dark" ? p2_dark : p2)
         );
       case PRIORITY.TWO:
         return (
@@ -45,7 +51,7 @@ export default function OptionPriority({
             ...inputs,
             priority: PRIORITY.THREE,
           }),
-          setPriorityIcon(p3)
+          setPriorityIcon(theme === "dark" ? p3_dark : p3)
         );
       case PRIORITY.THREE:
         return (
@@ -53,7 +59,7 @@ export default function OptionPriority({
             ...inputs,
             priority: PRIORITY.ONE,
           }),
-          setPriorityIcon(p1)
+          setPriorityIcon(theme === "dark" ? p1_dark : p1)
         );
 
       default:
@@ -63,18 +69,22 @@ export default function OptionPriority({
 
   const setInitialIcon = (priority: string) => {
     if (priority === "ONE") {
-      return p1;
+      const p = theme === "dark" ? p1_dark : p1;
+      return p;
     } else if (priority === "TWO") {
-      return p2;
+      const p = theme === "dark" ? p2_dark : p2;
+      return p;
     } else if (priority === "THREE") {
-      return p3;
+      const p = theme === "dark" ? p3_dark : p3;
+      return p;
     } else {
+      const p = theme === "dark" ? p1_dark : p1;
       return p1;
     }
   };
 
   return (
-    <div className="w-7 pr-1 flex items-center border-r-2  ">
+    <div className="w-7 pr-1 flex items-center border-r-2 --dark--  dark:border-r-[#E18B15] ">
       <button
         title="priority"
         disabled={isOld || isArchived ? true : false}

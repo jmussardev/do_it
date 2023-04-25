@@ -3,16 +3,13 @@ import pencil from "./../../../public/icons/pencil.png";
 import done from "./../../../public/icons/done.png";
 import chrono from "./../../../public/icons/chrono.png";
 import stop from "./../../../public/icons/stop.png";
-import {
-  Dispatch,
-  KeyboardEvent,
-  MutableRefObject,
-  RefObject,
-  SetStateAction,
-  useRef,
-} from "react";
+import pencil_dark from "./../../../public/icons/pencil-dark.png";
+import done_dark from "./../../../public/icons/done-dark.png";
+import chrono_dark from "./../../../public/icons/chrono-dark.png";
+import stop_dark from "./../../../public/icons/stop-dark.png";
+import { Dispatch, SetStateAction } from "react";
 import PlayBtn from "./PlayBtn";
-import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 
 interface State {
   task_id: number | null;
@@ -57,9 +54,10 @@ export default function OverlayMenu({
   setIsOverlayOpen: Dispatch<SetStateAction<boolean>>;
   setTaskDone: () => void;
 }) {
+  const { theme } = useTheme();
   return (
     <div
-      className={`absolute z-30 bg-gray-100 bg-opacity-90 flex justify-evenly  items-center rounded-lg w-full h-full top-0 left-0 `}
+      className={`absolute z-30 bg-gray-100 bg-opacity-90 flex justify-evenly  items-center rounded-lg w-full h-full top-0 left-0 --dark--  dark:bg-[#3A405F]  dark:bg-opacity-90`}
     >
       {/* //btns// */}
       <button
@@ -71,7 +69,11 @@ export default function OverlayMenu({
         }}
         disabled={isOverlayOpen ? false : true}
       >
-        <Image src={done} alt="" />
+        {theme === "dark" ? (
+          <Image src={done_dark} alt="" />
+        ) : (
+          <Image src={done} alt="" />
+        )}
       </button>
       {inputs.iscompleted ? (
         ""
@@ -87,7 +89,11 @@ export default function OverlayMenu({
             }}
             disabled={isOverlayOpen ? false : true}
           >
-            <Image src={pencil} alt="" />
+            {theme === "dark" ? (
+              <Image src={pencil_dark} alt="" />
+            ) : (
+              <Image src={pencil} alt="" />
+            )}
           </button>
           {task_id === inputs.id ? (
             <button
@@ -104,7 +110,11 @@ export default function OverlayMenu({
               }}
               disabled={isOverlayOpen ? false : true}
             >
-              <Image src={stop} alt="" />
+              {theme === "dark" ? (
+                <Image src={stop_dark} alt="" />
+              ) : (
+                <Image src={stop} alt="" />
+              )}
             </button>
           ) : (
             <button
@@ -114,7 +124,11 @@ export default function OverlayMenu({
               }}
               disabled={isOverlayOpen ? false : true}
             >
-              <Image src={chrono} alt="" />
+              {theme === "dark" ? (
+                <Image src={chrono_dark} alt="" />
+              ) : (
+                <Image src={chrono} alt="" />
+              )}
             </button>
           )}
           {onWeek ? (
