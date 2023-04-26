@@ -28,7 +28,7 @@ export default function Chrono({
   handleUpdate: () => void;
 }) {
   return (
-    <div className="absolute z-10 flex  items-center rounded-lg w-full h-full top-0 left-0 bg-gray-100 bg-opacity-60">
+    <div className="absolute z-10 flex  items-center rounded-lg w-full h-full top-0 left-0 bg-gray-100 dark:bg-[#3A405F] bg-opacity-60">
       <div className=" w-1/4 h-full p-4 flex flex-col justify-between items-center ">
         <button
           className="w-6 h-6 hover:scale-125 "

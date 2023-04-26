@@ -145,6 +145,7 @@ export default function Tasks({
       });
 
       mutate(`/api/task/${payload}`);
+      router.refresh();
     }
     setIsFormOp(false);
     setInputs({

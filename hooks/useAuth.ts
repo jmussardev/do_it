@@ -63,8 +63,7 @@ const useAuth = () => {
         error: ["User was registered successfully! Please check your email"],
         loading: false,
       });
-      setIsOpSignUp(false);
-      router.refresh();
+      // setIsOpSignUp(false);
     } catch (e: any) {
       setAuthState({
         data: null,

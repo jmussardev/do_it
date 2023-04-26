@@ -1,5 +1,5 @@
 "use client";
-import { ThemeProvider, useTheme } from "next-themes";
+import { ThemeProvider } from "next-themes";
 import React from "react";
 import Background from "../components/Background";
 

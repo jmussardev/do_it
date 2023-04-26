@@ -22,7 +22,7 @@ export default async function Home() {
   }
 
   return (
-    <div className=" h-full cardpattern-dark  shadow-inner  --dark-- dark:cardpattern-dark  ">
+    <div className=" h-full cardpattern shadow-inner  --dark-- dark:bg-[#3A405F]  ">
       {/* //header// */}
       <TodayHeader />
       {/* //header// */}

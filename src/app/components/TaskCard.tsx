@@ -327,7 +327,7 @@ export default function TaskCard({
           />
           {/* //options// */}
           {/* //description// */}
-          <div className={`flex items-center w-4/5 p-2  `}>
+          <div className={`flex items-center w-4/5 p-2`}>
             <input
               className={`w-full h-full border-transparent bg-transparent placeholder:text-gray-200  ${
                 inputs.id === task_id ? "placeholder:text-transparent " : ""
@@ -359,7 +359,7 @@ export default function TaskCard({
               <button
                 type="submit"
                 title="delete"
-                className="flex  justify-center items-center border-b-2 w-full h-1/3"
+                className="flex justify-center items-center border-b-2 dark:border-[#E18B15] w-full h-1/3"
               >
                 <div>
                   {theme === "dark" ? (

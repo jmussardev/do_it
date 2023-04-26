@@ -13,7 +13,15 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import axios from "axios";
 
-export default function Header({ payload }: { payload?: string }) {
+export default function Header({
+  payload,
+  numTasks,
+  numTasksDone,
+}: {
+  payload?: string;
+  numTasksDone?: number;
+  numTasks?: number;
+}) {
   const { theme } = useTheme();
   const [open, setOpen] = useState(false);
   const url = usePathname();
@@ -35,7 +43,7 @@ export default function Header({ payload }: { payload?: string }) {
               </div>
             </Link>
 
-            <div className="h-14 w-14 mr-2 mt-2 rounded-full  hidden sm:block  sm:ml-16 --dark-- dark:bg-[#3A405F] dark:border-2 dark:border-[#E18B15]"></div>
+            <div className="h-14 w-14 mr-2 mt-2 rounded-full  hidden sm:block  sm:ml-16 --dark-- dark:bg-[#3A405F] "></div>
             <button
               onClick={() => {
                 setOpen(!open);
@@ -65,10 +73,20 @@ export default function Header({ payload }: { payload?: string }) {
               open ? "translate-y-[6rem]" : "-translate-y-[10rem]"
             } transition-all ease-in-out sm:hidden`}
           >
-            <NavBar payLoad={payload} setOpen={setOpen} />
+            <NavBar
+              payLoad={payload}
+              setOpen={setOpen}
+              numTasks={numTasks}
+              numTasksDone={numTasksDone}
+            />
           </div>
           <div className="hidden  sm:block">
-            <NavBar payLoad={payload} setOpen={setOpen} />
+            <NavBar
+              payLoad={payload}
+              setOpen={setOpen}
+              numTasks={numTasks}
+              numTasksDone={numTasksDone}
+            />
           </div>
         </motion.div>
       )}

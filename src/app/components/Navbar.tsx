@@ -9,25 +9,29 @@ import useAuth from "../../../hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import axios from "axios";
-import useSWR, { mutate } from "swr";
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+// import useSWR, { mutate } from "swr";
+// const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 export default function NavBar({
   setOpen,
   payLoad,
+  numTasks,
+  numTasksDone,
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>;
   payLoad?: string;
+  numTasksDone?: number;
+  numTasks?: number;
 }) {
   const { systemTheme, theme, setTheme } = useTheme();
-  const currentTheme = theme === "system" ? systemTheme : theme;
+
   const { getDay, today } = getDate();
   const tdayNum = getDay(today());
   const { signout } = useAuth();
   const router = useRouter();
-  const { data, mutate } = useSWR(`/api/task/${payLoad}/count`, fetcher);
+  // const { data, mutate } = useSWR(`/api/task/${payLoad}/count`, fetcher);
 
-  mutate(data);
+  // mutate(data);
 
   return (
     <div className=" w-full font-bold text-lg text-center bg-white border-b-2 border-black sm:border-none  -- sm:static sm:text-left --dark-- dark:bg-[#3A405F]">
@@ -45,10 +49,10 @@ export default function NavBar({
                 </button>
                 <div className="ml-2 flex items-center  w-full">
                   <div className=" rounded-md flex justify-center items-center h-5 w-5 bg-black text-white text-xs --dark-- dark:bg-transparent dark:border-[1px] dark:border-[#E18B15] dark:text-[#E18B15]">
-                    {data?.tasksNum}
+                    {numTasks}
                   </div>
                   <div className="ml-1 pl-1 pr-1  rounded-md flex justify-center items-center h-5  bg-black text-white text-xs --dark-- dark:bg-transparent dark:border-[1px] dark:border-[#E18B15] dark:text-[#E18B15]">
-                    <div>{data?.doneNum}</div>
+                    <div>{numTasksDone}</div>
                     <div className="ml-1 h-3 w-3 flex justify-center items-center">
                       {theme === "dark" ? (
                         <Image src={check_dark} alt="" className="w-56 " />

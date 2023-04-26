@@ -37,7 +37,13 @@ export default async function RootLayout({
           >
             <AuthContext>
               <TimerContext>
-                {payload && <Header payload={payload} />}
+                {payload && (
+                  <Header
+                    payload={payload}
+                    numTasks={numTasks}
+                    numTasksDone={numTasksDone}
+                  />
+                )}
 
                 <main className="flex h-full -- sm:center sm:m-auto sm:w-3/4  sm:py-8 ">
                   <main className="relative m-auto w-full h-full xsm:w-full xsm:h-full  dark:bg-[#3A405F] bg-white shadow-inner -- sm:h-[95%] sm:w-[70%] sm:min-w-[70%] sm:m-auto sm:rounded">

@@ -1,5 +1,3 @@
-"use client";
-import { useTheme } from "next-themes";
 import React from "react";
 
 export default function Background({
@@ -7,12 +5,10 @@ export default function Background({
 }: {
   children: React.ReactNode;
 }) {
-  const { theme } = useTheme();
   return (
     <main
-      className={`${
-        theme === "dark" ? "bgpattern-dark" : "bgpattern"
-      }  h-screen --dark-- dark:text-[#E18B15] `}
+      className={`bgpattern
+      h-screen --dark-- dark:bg-[#3A405F] dark:text-[#E18B15] `}
     >
       {children}
     </main>

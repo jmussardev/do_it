@@ -41,12 +41,16 @@ export default function Auth() {
   const [disabled, setDisabled] = useState(true);
   const router = useRouter();
   const isMessage = () => {
+    if (!error) {
+      return false;
+    }
     if (
-      errorList[0] ===
-      "User was registered successfully! Please check your email"
-    )
+      error[0] === "User was registered successfully! Please check your email"
+    ) {
       return true;
-    else false;
+    } else {
+      false;
+    }
   };
   const handleSignUp = () => {
     const { firstName, lastName, email, password } = inputs;
@@ -71,10 +75,6 @@ export default function Auth() {
       }
     }
   };
-  const handleRemove = () => {
-    errorRef.current?.remove();
-  };
-  const errorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     doesMatch();
@@ -130,18 +130,24 @@ export default function Auth() {
       [e.target.name]: e.target.value,
     });
   };
-
+  console.log(isMessage());
   return (
     <div className=" h-full w-full relative flex items-center flex-col">
-      {errorListUniq && !isOpSignIn
+      {isMessage() ? (
+        <div className="absolute w-72 -top-52  p-1 mb-4 text-center text-black rounded-md bg-green-200">
+          User was registered successfully! Please check your email
+        </div>
+      ) : (
+        ""
+      )}
+      {errorListUniq && isOpSignIn === false
         ? Array.isArray(errorListUniq)
           ? errorListUniq.map((e, i) => (
               <div
-                ref={errorRef}
                 key={i}
-                className={`absolute w-72 -top-52  p-1 mb-4 text-center rounded-md ${
-                  isMessage() ? "bg-green-200" : "bg-red-200"
-                }  cursor-pointer `}
+                className={`absolute w-72 -top-52  p-1 mb-4 text-center text-black rounded-md 
+                 bg-red-200
+                 cursor-pointer `}
               >
                 {errorListUniq[i].split("\n").map((str, i) => (
                   <p key={i}>{str}</p>
@@ -261,7 +267,7 @@ export default function Auth() {
                 Let's get busy !
               </button>
               {error ? (
-                <div className="w-full p-3 text-center rounded-md bg-red-200 ">
+                <div className="w-full p-3 text-center rounded-md text-black bg-red-200 ">
                   {error}
                 </div>
               ) : (
