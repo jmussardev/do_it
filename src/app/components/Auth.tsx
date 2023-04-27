@@ -135,7 +135,8 @@ export default function Auth() {
     <div className=" h-full w-full relative flex items-center flex-col">
       {isMessage() ? (
         <div className="absolute w-72 -top-52  p-1 mb-4 text-center text-black rounded-md bg-green-200">
-          User was registered successfully! Please check your email
+          <p>User was registered successfully!</p>
+          <p>Please check your email</p>
         </div>
       ) : (
         ""
