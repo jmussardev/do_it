@@ -1,10 +1,9 @@
-import { config } from "./../../../../middleware";
 import { NextResponse } from "next/server";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import * as jose from "jose";
 import { prisma } from "../../../../../utilities/db";
-import nodemailer from "nodemailer";
+
 import { sendConfirmationEmail } from "./../../../../../nodemailer.config.ts";
 
 export async function POST(req: Request) {

@@ -130,7 +130,7 @@ export default function Auth() {
       [e.target.name]: e.target.value,
     });
   };
-  console.log(isMessage());
+
   return (
     <div className=" h-full w-full relative flex items-center flex-col">
       {isMessage() ? (
@@ -140,7 +140,7 @@ export default function Auth() {
       ) : (
         ""
       )}
-      {errorListUniq && isOpSignIn === false
+      {errorListUniq && isOpSignIn === false && !isMessage()
         ? Array.isArray(errorListUniq)
           ? errorListUniq.map((e, i) => (
               <div

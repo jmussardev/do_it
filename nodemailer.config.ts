@@ -27,7 +27,7 @@ export const sendConfirmationEmail = (
       html: `<h1>Email Confirmation</h1>
           <h2>Hello ${name}</h2>
           <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
-          <a href=http://localhost:3000/api/auth/verify/${confirmationCode}> Click here</a>
+          <a href=/api/auth/verify/${confirmationCode}> Click here</a>
           </div>`,
     })
     .catch((err: any) => console.log(err));
