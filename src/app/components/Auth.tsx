@@ -208,7 +208,8 @@ export default function Auth() {
 
           {loading ? (
             <div className="h-full w-full ">
-              <DotLoading />
+              {theme === "dark" && <DotLoading />}
+              {theme !== "dark" && <DotLoading />}
             </div>
           ) : (
             <>
