@@ -13,7 +13,7 @@ export default function TutoMyWeek({ payload }: { payload: string }) {
           <p>🗓️Here you can plan your week🖋️</p>
           <p>✨Day by day !✨</p>
         </div>
-        <Image className="mt-2 mb-4" src={tuto} alt="" />
+        <Image className="mt-2 mb-6" src={tuto} alt="" />
         <BtnTuto payload={payload} text="HumHum Ok!" tuto="myweek" />
       </div>
     </div>

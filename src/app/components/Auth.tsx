@@ -20,7 +20,8 @@ export default function Auth() {
   const { data, error, loading, setAuthState } = useContext(
     AuthenticationContext
   );
-  const { theme } = useTheme();
+  const { theme, systemTheme } = useTheme();
+  const currentTheme = systemTheme === theme ? systemTheme : theme;
 
   const [errorList, setErrorList] = useState(error ? error : []);
   const uniqSet = new Set(errorList);
@@ -186,7 +187,7 @@ export default function Auth() {
             }}
           >
             <div className="h-5 w-5">
-              {theme === "dark" ? (
+              {currentTheme === "dark" ? (
                 <Image src={cross_dark} alt="error" className="w-56 mb-8" />
               ) : (
                 <Image src={cross} alt="error" className="w-56 mb-8" />
@@ -208,8 +209,8 @@ export default function Auth() {
 
           {loading ? (
             <div className="h-full w-full ">
-              {theme === "dark" && <DotLoading />}
-              {theme !== "dark" && <DotLoading />}
+              {currentTheme === "dark" && <DotLoading />}
+              {currentTheme !== "dark" && <DotLoading />}
             </div>
           ) : (
             <>
@@ -242,7 +243,7 @@ export default function Auth() {
                     setShowPassword(!showPassword);
                   }}
                 >
-                  {theme === "dark" ? (
+                  {currentTheme === "dark" ? (
                     <Image
                       className="origin-center w-4"
                       src={showPassword ? open_dark : close_dark}
@@ -293,7 +294,7 @@ export default function Auth() {
             }}
           >
             <div className="h-5 w-5">
-              {theme === "dark" ? (
+              {currentTheme === "dark" ? (
                 <Image src={cross_dark} alt="error" className="w-56 mb-8" />
               ) : (
                 <Image src={cross} alt="error" className="w-56 mb-8" />
@@ -368,7 +369,7 @@ export default function Auth() {
                     setShowPassword(!showPassword);
                   }}
                 >
-                  {theme === "dark" ? (
+                  {currentTheme === "dark" ? (
                     <Image
                       className="origin-center w-4"
                       src={showPassword ? open_dark : close_dark}
@@ -406,7 +407,7 @@ export default function Auth() {
                     setShowPassword(!showPassword);
                   }}
                 >
-                  {theme === "dark" ? (
+                  {currentTheme === "dark" ? (
                     <Image
                       className="origin-center w-4"
                       src={showPassword ? open_dark : close_dark}
