@@ -21,7 +21,7 @@ export default function Auth() {
     AuthenticationContext
   );
   const { theme, systemTheme } = useTheme();
-  console.log(theme);
+
   const currentTheme = theme === "system" ? systemTheme : theme;
 
   const [errorList, setErrorList] = useState(error ? error : []);

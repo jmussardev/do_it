@@ -45,7 +45,8 @@ export default function TaskCard({
   isOld,
   isArchived,
 }: TaskProps) {
-  const { theme } = useTheme();
+  const { systemTheme, theme } = useTheme();
+  const currentTheme = theme === "system" ? systemTheme : theme;
   const [inputs, setInputs] = useStateCallback({
     id: 0,
     description: "",
@@ -264,7 +265,7 @@ export default function TaskCard({
           {inputs.iscompleted ? (
             <div className="absolute flex justify-end items-center rounded-lg w-full h-full top-0 left-0 bg-[#DEFFBC] bg-opacity-60 --dark-- dark:bg-[#2c314e] dark:bg-opacity-60">
               <div className="h-[6rem] w-[6rem] pr-2 opacity-30">
-                {theme === "dark" ? (
+                {currentTheme === "dark" ? (
                   <Image src={bigCheck_dark} priority alt="" />
                 ) : (
                   <Image src={bigCheck} priority alt="" />
@@ -377,7 +378,7 @@ export default function TaskCard({
                   className="flex justify-center items-center border-b-2 dark:border-[#E18B15] w-full h-1/3"
                 >
                   <div>
-                    {theme === "dark" ? (
+                    {currentTheme === "dark" ? (
                       <Image className="h-4 w-3.5" src={delIcon_dark} alt="" />
                     ) : (
                       <Image src={delIcon} alt="" />
@@ -393,7 +394,7 @@ export default function TaskCard({
                   }}
                 >
                   <div className=" h-4 w-4 ">
-                    {theme === "dark" ? (
+                    {currentTheme === "dark" ? (
                       <Image src={done_dark} alt="" />
                     ) : (
                       <Image src={done} alt="" />

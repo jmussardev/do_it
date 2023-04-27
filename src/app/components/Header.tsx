@@ -22,8 +22,9 @@ export default function Header({
   numTasks?: number;
 }) {
   const { theme, systemTheme } = useTheme();
-
-  const currentTheme = theme === "system" ? systemTheme : theme;
+  console.log(systemTheme);
+  const currentTheme = theme == "system" ? systemTheme : theme;
+  console.log(currentTheme === "dark");
 
   const [open, setOpen] = useState(false);
   const url = usePathname();

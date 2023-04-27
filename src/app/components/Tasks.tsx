@@ -35,7 +35,9 @@ export default function Tasks({
   payload,
   tasks,
 }: TaskProps) {
-  const { theme } = useTheme();
+  const { systemTheme, theme } = useTheme();
+  const currentTheme = theme === "system" ? systemTheme : theme;
+
   const { createTask } = useTask();
   const { getDay, today, dayOfWeekFull, getWeek } = getDate();
   const currentWeek = parseInt(getWeek());
@@ -210,10 +212,10 @@ export default function Tasks({
                 >
                   <div
                     className={`  rotate-45 ${
-                      theme === "dark" ? "h-3 w-3 " : "h-6 w-6"
+                      currentTheme === "dark" ? "h-3 w-3 " : "h-6 w-6"
                     }`}
                   >
-                    {theme === "dark" ? (
+                    {currentTheme === "dark" ? (
                       <Image src={cross_dark} alt="" />
                     ) : (
                       <Image src={cross_rounded} alt="" />
@@ -272,7 +274,7 @@ export default function Tasks({
                       className="flex  justify-center items-center border-b-2 w-full h-1/3 --dark--  dark:border-b-[#E18B15]"
                     >
                       <div>
-                        {theme === "dark" ? (
+                        {currentTheme === "dark" ? (
                           <Image
                             className="h-4 w-3.5"
                             src={delIcon_dark}
@@ -293,7 +295,7 @@ export default function Tasks({
                       }}
                     >
                       <div className=" h-4 w-4 ">
-                        {theme === "dark" ? (
+                        {currentTheme === "dark" ? (
                           <Image src={done_dark} alt="" />
                         ) : (
                           <Image src={done} alt="" />
@@ -332,10 +334,10 @@ export default function Tasks({
               >
                 <div
                   className={`  rotate-45 ${
-                    theme === "dark" ? "h-3 w-3 " : "h-6 w-6"
+                    currentTheme === "dark" ? "h-3 w-3 " : "h-6 w-6"
                   }`}
                 >
-                  {theme === "dark" ? (
+                  {currentTheme === "dark" ? (
                     <div className="h-3 w-3 flex justify-center items-center">
                       <Image src={cross_dark} alt="" />
                     </div>

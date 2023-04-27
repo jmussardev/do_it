@@ -8,9 +8,6 @@ import check_dark from "./../../../public/icons/tag-dark.png";
 import useAuth from "../../../hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import axios from "axios";
-// import useSWR, { mutate } from "swr";
-// const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 export default function NavBar({
   setOpen,
@@ -24,14 +21,11 @@ export default function NavBar({
   numTasks?: number;
 }) {
   const { systemTheme, theme, setTheme } = useTheme();
-
+  const currentTheme = theme == "system" ? systemTheme : theme;
   const { getDay, today } = getDate();
   const tdayNum = getDay(today());
   const { signout } = useAuth();
   const router = useRouter();
-  // const { data, mutate } = useSWR(`/api/task/${payLoad}/count`, fetcher);
-
-  // mutate(data);
 
   return (
     <div className=" w-full font-bold text-lg text-center bg-white border-b-2 border-black sm:border-none  -- sm:static sm:text-left --dark-- dark:bg-[#3A405F]">
@@ -54,7 +48,7 @@ export default function NavBar({
                   <div className="ml-1 pl-1 pr-1  rounded-md flex justify-center items-center h-5  bg-black text-white text-xs --dark-- dark:bg-transparent dark:border-[1px] dark:border-[#E18B15] dark:text-[#E18B15]">
                     <div>{numTasksDone}</div>
                     <div className="ml-1 h-3 w-3 flex justify-center items-center">
-                      {theme === "dark" ? (
+                      {currentTheme === "dark" ? (
                         <Image src={check_dark} alt="" className="w-56 " />
                       ) : (
                         <Image src={check} alt="" className="w-56 " />
@@ -95,11 +89,11 @@ export default function NavBar({
           <li>
             <button
               onClick={() => {
-                theme === "dark" ? setTheme("light") : setTheme("dark");
+                currentTheme === "dark" ? setTheme("light") : setTheme("dark");
                 router.refresh();
               }}
             >
-              {theme === "dark" ? "Light mode" : "Dark mode "}
+              {currentTheme === "dark" ? "Light mode" : "Dark mode "}
             </button>
           </li>
           <li>

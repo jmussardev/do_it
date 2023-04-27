@@ -40,7 +40,8 @@ export default function PlayBtn({
   isOverlayOpen: boolean;
   setIsOverlayOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  const { theme } = useTheme();
+  const { systemTheme, theme } = useTheme();
+  const currentTheme = theme === "system" ? systemTheme : theme;
   return (
     <>
       {start === false && task_id !== inputs.id && (
@@ -60,7 +61,7 @@ export default function PlayBtn({
             // setIsOverlayOpen(false);
           }}
         >
-          {theme === "dark" ? (
+          {currentTheme === "dark" ? (
             <Image src={play_dark} alt="" />
           ) : (
             <Image src={play} alt="" />
@@ -85,7 +86,7 @@ export default function PlayBtn({
             // setIsOverlayOpen(false);
           }}
         >
-          {theme === "dark" ? (
+          {currentTheme === "dark" ? (
             <Image src={play_dark} alt="" />
           ) : (
             <Image src={play} alt="" />
@@ -108,7 +109,7 @@ export default function PlayBtn({
           }}
           disabled={isOverlayOpen ? false : true}
         >
-          {theme === "dark" ? (
+          {currentTheme === "dark" ? (
             <Image src={pause_dark} alt="" />
           ) : (
             <Image src={pause} alt="" />

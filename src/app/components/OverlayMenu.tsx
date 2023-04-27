@@ -57,7 +57,8 @@ export default function OverlayMenu({
   setIsOverlayOpen: Dispatch<SetStateAction<boolean>>;
   setTaskDone: () => void;
 }) {
-  const { theme } = useTheme();
+  const { systemTheme, theme } = useTheme();
+  const currentTheme = theme === "system" ? systemTheme : theme;
   return (
     <div
       className={`absolute  bg-gray-100 bg-opacity-90 flex justify-evenly  items-center rounded-lg w-full h-full top-0 left-0 --dark--  dark:bg-[#3A405F]  dark:bg-opacity-90`}
@@ -70,7 +71,7 @@ export default function OverlayMenu({
         }}
         disabled={isOverlayOpen ? false : true}
       >
-        {theme === "dark" ? (
+        {currentTheme === "dark" ? (
           <Image src={done_dark} alt="" />
         ) : (
           <Image src={done} alt="" />
@@ -87,7 +88,7 @@ export default function OverlayMenu({
             }}
             disabled={isOverlayOpen ? false : true}
           >
-            {theme === "dark" ? (
+            {currentTheme === "dark" ? (
               <Image src={pencil_dark} alt="" />
             ) : (
               <Image src={pencil} alt="" />
@@ -108,7 +109,7 @@ export default function OverlayMenu({
               }}
               disabled={isOverlayOpen ? false : true}
             >
-              {theme === "dark" ? (
+              {currentTheme === "dark" ? (
                 <Image src={stop_dark} alt="" />
               ) : (
                 <Image src={stop} alt="" />
@@ -122,7 +123,7 @@ export default function OverlayMenu({
               }}
               disabled={isOverlayOpen ? false : true}
             >
-              {theme === "dark" ? (
+              {currentTheme === "dark" ? (
                 <Image src={chrono_dark} alt="" />
               ) : (
                 <Image src={chrono} alt="" />

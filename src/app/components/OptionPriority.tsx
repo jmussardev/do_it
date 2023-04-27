@@ -33,7 +33,8 @@ export default function OptionPriority({
   isOld?: boolean;
   isArchived?: boolean;
 }) {
-  const { theme } = useTheme();
+  const { systemTheme, theme } = useTheme();
+  const currentTheme = theme === "system" ? systemTheme : theme;
 
   function switchPriorityInput() {
     switch (inputs.priority) {
@@ -43,7 +44,7 @@ export default function OptionPriority({
             ...inputs,
             priority: PRIORITY.TWO,
           }),
-          setPriorityIcon(theme === "dark" ? p2_dark : p2)
+          setPriorityIcon(currentTheme === "dark" ? p2_dark : p2)
         );
       case PRIORITY.TWO:
         return (
@@ -51,7 +52,7 @@ export default function OptionPriority({
             ...inputs,
             priority: PRIORITY.THREE,
           }),
-          setPriorityIcon(theme === "dark" ? p3_dark : p3)
+          setPriorityIcon(currentTheme === "dark" ? p3_dark : p3)
         );
       case PRIORITY.THREE:
         return (
@@ -59,7 +60,7 @@ export default function OptionPriority({
             ...inputs,
             priority: PRIORITY.ONE,
           }),
-          setPriorityIcon(theme === "dark" ? p1_dark : p1)
+          setPriorityIcon(currentTheme === "dark" ? p1_dark : p1)
         );
 
       default:
@@ -69,16 +70,16 @@ export default function OptionPriority({
 
   const setInitialIcon = (priority: string) => {
     if (priority === "ONE") {
-      const p = theme === "dark" ? p1_dark : p1;
+      const p = currentTheme === "dark" ? p1_dark : p1;
       return p;
     } else if (priority === "TWO") {
-      const p = theme === "dark" ? p2_dark : p2;
+      const p = currentTheme === "dark" ? p2_dark : p2;
       return p;
     } else if (priority === "THREE") {
-      const p = theme === "dark" ? p3_dark : p3;
+      const p = currentTheme === "dark" ? p3_dark : p3;
       return p;
     } else {
-      const p = theme === "dark" ? p1_dark : p1;
+      const p = currentTheme === "dark" ? p1_dark : p1;
       return p1;
     }
   };
