@@ -5,8 +5,8 @@ const pass = process.env.PASS;
 
 const transport = nodemailer.createTransport({
   host: "gmail",
-  port: 465,
-  secure: true,
+  // port: 465,
+  // secure: true,
   auth: {
     user: mail,
     pass: "ybdjjccvnzfptlui",
