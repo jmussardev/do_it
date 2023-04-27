@@ -21,7 +21,8 @@ export default function Auth() {
     AuthenticationContext
   );
   const { theme, systemTheme } = useTheme();
-  const currentTheme = systemTheme === theme ? systemTheme : theme;
+  console.log(theme);
+  const currentTheme = theme === "system" ? systemTheme : theme;
 
   const [errorList, setErrorList] = useState(error ? error : []);
   const uniqSet = new Set(errorList);
@@ -210,7 +211,6 @@ export default function Auth() {
           {loading ? (
             <div className="h-full w-full ">
               {currentTheme === "dark" && <DotLoading />}
-              {currentTheme !== "dark" && <DotLoading />}
             </div>
           ) : (
             <>

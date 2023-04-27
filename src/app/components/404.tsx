@@ -11,8 +11,8 @@ export default function NotFoundCp() {
   setTimeout(() => {
     router.push("/");
   }, 3000);
-  const { theme, systemTheme } = useTheme();
-  const currentTheme = systemTheme === theme ? systemTheme : theme;
+  const { systemTheme, theme } = useTheme();
+  const currentTheme = theme === "system" ? systemTheme : theme;
   return (
     <>
       <div className="flex flex-col justify-center items-center h-full w-full px-9 py-14 ">

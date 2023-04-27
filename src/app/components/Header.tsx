@@ -9,7 +9,7 @@ import menu from "./../../../public/icons/menu.png";
 import menu_dark from "./../../../public/icons/menu-dark.png";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 
 export default function Header({
@@ -23,7 +23,7 @@ export default function Header({
 }) {
   const { theme, systemTheme } = useTheme();
 
-  const currentTheme = systemTheme === theme ? systemTheme : theme;
+  const currentTheme = theme === "system" ? systemTheme : theme;
 
   const [open, setOpen] = useState(false);
   const url = usePathname();
