@@ -49,7 +49,7 @@ export default function PlayBtn({
             inputs.timer === 0 || isOverlayOpen === false ? true : false
           }
           className="disabled:opacity-30 origin-center h-5 w-5 hover:scale-125"
-          onClick={() => {
+          onMouseDown={() => {
             setTimerState({
               task_id: inputs.id,
               value: inputs.timer,
@@ -57,7 +57,7 @@ export default function PlayBtn({
               end: false,
               isPaused: false,
             });
-            setIsOverlayOpen(false);
+            // setIsOverlayOpen(false);
           }}
         >
           {theme === "dark" ? (
@@ -74,7 +74,7 @@ export default function PlayBtn({
             inputs.timer === 0 || isOverlayOpen === false ? true : false
           }
           className="disabled:opacity-30 z-10 origin-center h-5 w-5 hover:scale-125"
-          onClick={() => {
+          onMouseDown={() => {
             setTimerState({
               task_id: inputs.id,
               value: value,
@@ -82,7 +82,7 @@ export default function PlayBtn({
               end: false,
               isPaused: false,
             });
-            setIsOverlayOpen(false);
+            // setIsOverlayOpen(false);
           }}
         >
           {theme === "dark" ? (
@@ -96,7 +96,7 @@ export default function PlayBtn({
       {start && task_id === inputs.id && (
         <button
           className="z-10 origin-center  h-5 w-5 hover:scale-125"
-          onClick={() => {
+          onMouseDown={() => {
             setTimerState({
               task_id: inputs.id,
               value: value,
@@ -104,7 +104,7 @@ export default function PlayBtn({
               end: false,
               isPaused: true,
             });
-            setIsOverlayOpen(false);
+            // setIsOverlayOpen(false);
           }}
           disabled={isOverlayOpen ? false : true}
         >

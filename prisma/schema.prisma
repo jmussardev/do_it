@@ -18,6 +18,9 @@ model User {
   password         String
   tasks            Task[]
   confirmationCode String   @unique
+  today            Boolean  @default(false)
+  myweek           Boolean  @default(false)
+  archived         Boolean  @default(false)
   status           STATUS   @default(pending)
   created_at       DateTime @default(now())
   updated_at       DateTime @default(now())

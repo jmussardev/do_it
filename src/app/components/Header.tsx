@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import NavBar from "./Navbar";
-import cross from "./../../../public/icons/cross.png";
+import cross from "./../../../public/icons/vcross.png";
 import cross_dark from "./../../../public/icons/sharpcross-dark.png";
 import Image from "next/image";
 import menu from "./../../../public/icons/menu.png";
@@ -11,7 +11,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import axios from "axios";
 
 export default function Header({
   payload,
@@ -52,18 +51,18 @@ export default function Header({
               <div className="h-14 w-14 mr-2 mt-2 rounded-full  sm:hidden">
                 {open ? (
                   theme === "dark" ? (
-                    <div className="  flex justify-center items-center p-2">
-                      <Image src={cross_dark} alt="" className="w-fit  mb-8" />
+                    <div className=" w-full h-full flex justify-center items-center ">
+                      <Image className="h-fit" src={cross_dark} alt="" />
                     </div>
                   ) : (
-                    <div className="">
-                      <Image src={cross} alt="" className=" mb-8" />
+                    <div className=" w-full h-full flex justify-center items-center ">
+                      <Image className="h-fit" src={cross} alt="" />
                     </div>
                   )
                 ) : theme === "dark" ? (
-                  <Image src={menu_dark} alt="" className="w-56 mb-8" />
+                  <Image src={menu_dark} alt="" />
                 ) : (
-                  <Image src={menu} alt="" className="w-56 mb-8" />
+                  <Image src={menu} alt="" />
                 )}
               </div>
             </button>

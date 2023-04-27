@@ -2,7 +2,8 @@ import Week from "../../../components/Week";
 import { getPayload } from "../../../../../utilities/payload";
 import { getTasks } from "../../../../../utilities/getTasks";
 import { notFound } from "next/navigation";
-const { getByWeek } = getTasks();
+import TutoMyWeek from "@/app/components/TutoMyWeek";
+const { getByWeek, areTutosDone } = getTasks();
 export const metadata = {
   title: "My week",
 };
@@ -16,10 +17,13 @@ export default async function MyWeek({ params }: { params: { day: string } }) {
   if (!tasks) {
     notFound();
   }
+  const res = await areTutosDone(payload);
 
   return (
-    <>
+    <div className="relative h-full w-full">
+      {!res?.myweek && <TutoMyWeek payload={payload} />}
+
       <Week tasks={tasks} day={params.day} payload={payload} />
-    </>
+    </div>
   );
 }

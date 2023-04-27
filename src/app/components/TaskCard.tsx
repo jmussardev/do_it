@@ -4,6 +4,7 @@ import {
   KeyboardEvent,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -56,7 +57,7 @@ export default function TaskCard({
   const [isChronoOpen, setIsChronoOpen] = useState(false);
   const { setTimerState, start, end, value, isPaused, task_id } =
     useContext(ChronoContext);
-  const [edit, setEdit] = useState(false);
+  const [edit, setEdit] = useStateCallback(false);
   const { taskDay, compareDate } = getDate();
   const taskDate = taskDay(date);
   const { updateTask, deleteTask } = useTask();
@@ -77,6 +78,11 @@ export default function TaskCard({
     } else {
       return false;
     }
+  };
+
+  const handleOverlayClose = () => {
+    // setIsOverlayOpen(false);
+    setOverlaySwitch(0);
   };
 
   const setCurrentTask = () => {
@@ -157,7 +163,9 @@ export default function TaskCard({
     }
     setIsOverlayOpen(false);
   };
+
   const handleOverlay = (overlay: number) => {
+    // console.log(overlay);
     // setIsOverlayOpen(true);
     overlay === 0 ? setIsOverlayOpen(true) : "";
     // setOverlaySwitch(1);
@@ -195,9 +203,6 @@ export default function TaskCard({
 
   return (
     <motion.div
-      onClick={() => {
-        handleOverlay(overlaySwitch);
-      }}
       onKeyDown={(e) => {
         handleKeyPress(e);
       }}
@@ -273,11 +278,18 @@ export default function TaskCard({
           {isOldTask() ? (
             ""
           ) : (
-            <div hidden={edit ? true : false}>
+            <div
+              className="absolute left-0 top-0 h-full w-full"
+              hidden={edit ? true : false}
+            >
               <div
-                className={` ${
+                className={`h-full w-full  ${
                   isOverlayOpen ? "opacity-100" : "opacity-0"
                 } transition-all ease-in `}
+                onMouseUp={() => {
+                  // handleOverlay(overlaySwitch);
+                  setIsOverlayOpen(true);
+                }}
               >
                 {isChronoOpen ? (
                   <Chrono
@@ -288,11 +300,7 @@ export default function TaskCard({
                     handleUpdate={handleUpdate}
                   />
                 ) : (
-                  <div
-                  // onClick={() => {
-                  //   handleOverlay(overlaySwitch);
-                  // }}
-                  >
+                  <div hidden={isOverlayOpen ? false : true}>
                     <OverlayMenu
                       isOverlayOpen={isOverlayOpen}
                       setIsOverlayOpen={setIsOverlayOpen}
@@ -327,69 +335,76 @@ export default function TaskCard({
           />
           {/* //options// */}
           {/* //description// */}
-          <div className={`flex items-center w-4/5 p-2`}>
-            <input
-              className={`w-full h-full border-transparent bg-transparent placeholder:text-gray-200  ${
-                inputs.id === task_id ? "placeholder:text-transparent " : ""
-              } focus:outline-none `}
-              readOnly={edit ? false : true}
-              type="text"
-              value={inputs.description}
-              placeholder="Describe your task.."
-              name="description"
-              onChange={(e) => {
-                handleChangeInput(e);
-              }}
-              onBlur={() => {
-                setEdit(false);
-                setIsOverlayOpen(false);
-              }}
-            />
-          </div>
-          {/* //description// */}
-
-          {edit ? (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleDelete();
-              }}
-              className="absolute top-0 right-0 border-r-lg ml-3 flex flex-col h-full w-14 "
-            >
-              <button
-                type="submit"
-                title="delete"
-                className="flex justify-center items-center border-b-2 dark:border-[#E18B15] w-full h-1/3"
-              >
-                <div>
-                  {theme === "dark" ? (
-                    <Image className="h-4 w-3.5" src={delIcon_dark} alt="" />
-                  ) : (
-                    <Image src={delIcon} alt="" />
-                  )}
-                </div>
-              </button>
-
-              <button
-                title="confirm"
-                className="flex justify-center items-center w-full h-2/3"
-                onClick={() => {
-                  setEdit(false);
-                  setIsOverlayOpen(false);
+          <div
+            className="flex items-center 
+            w-full h-full"
+            onBlur={() => {
+              setIsOverlayOpen(false);
+            }}
+          >
+            <div className={`flex items-center  w-4/5 p-2`}>
+              <input
+                className={`w-full h-full border-transparent bg-transparent placeholder:text-gray-200  ${
+                  inputs.id === task_id ? "placeholder:text-transparent " : ""
+                } focus:outline-none `}
+                readOnly={edit ? false : true}
+                type="text"
+                value={inputs.description}
+                placeholder="Describe your task.."
+                name="description"
+                onChange={(e) => {
+                  handleChangeInput(e);
                 }}
+                // onBlur={() => {
+                //   setEdit(false);
+                //   setIsOverlayOpen(false);
+                // }}
+              />
+            </div>
+            {/* //description// */}
+
+            {edit ? (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleDelete();
+                }}
+                className="absolute top-0 right-0 border-r-lg ml-3 flex flex-col h-full w-14 "
               >
-                <div className=" h-4 w-4 ">
-                  {theme === "dark" ? (
-                    <Image src={done_dark} alt="" />
-                  ) : (
-                    <Image src={done} alt="" />
-                  )}
-                </div>
-              </button>
-            </form>
-          ) : (
-            ""
-          )}
+                <button
+                  type="submit"
+                  title="delete"
+                  className="flex justify-center items-center border-b-2 dark:border-[#E18B15] w-full h-1/3"
+                >
+                  <div>
+                    {theme === "dark" ? (
+                      <Image className="h-4 w-3.5" src={delIcon_dark} alt="" />
+                    ) : (
+                      <Image src={delIcon} alt="" />
+                    )}
+                  </div>
+                </button>
+
+                <button
+                  title="confirm"
+                  className="flex justify-center items-center w-full h-2/3"
+                  onClick={() => {
+                    setEdit(false, handleOverlayClose);
+                  }}
+                >
+                  <div className=" h-4 w-4 ">
+                    {theme === "dark" ? (
+                      <Image src={done_dark} alt="" />
+                    ) : (
+                      <Image src={done} alt="" />
+                    )}
+                  </div>
+                </button>
+              </form>
+            ) : (
+              ""
+            )}
+          </div>
         </div>
       </motion.div>
     </motion.div>

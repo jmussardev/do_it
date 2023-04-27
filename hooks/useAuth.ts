@@ -25,6 +25,7 @@ const useAuth = () => {
       setAuthState({ data: response.data, error: null, loading: false });
 
       router.push("/user/today");
+      router.refresh();
     } catch (e: any) {
       setAuthState({
         data: null,

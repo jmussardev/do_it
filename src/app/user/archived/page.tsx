@@ -4,8 +4,9 @@ import getDate from "../../../../utilities/date";
 import { getTasks } from "../../../../utilities/getTasks";
 import { getPayload } from "../../../../utilities/payload";
 import ArchivedLink from "../../components/ArchivedLink";
+import TutoArchived from "@/app/components/TutoArchived";
 const { dayOfWeek } = getDate();
-const { getOldWeeks } = getTasks();
+const { getOldWeeks, areTutosDone } = getTasks();
 
 export const metadata = {
   title: "Archived",
@@ -17,6 +18,7 @@ export default async function Archived() {
     notFound();
   }
   const oldTasks = await getOldWeeks(payload);
+  const res = await areTutosDone(payload);
 
   let oldWeeks: number[] = [];
   oldTasks.forEach((task) => {
@@ -26,7 +28,9 @@ export default async function Archived() {
   const uniq = [...uniqSet];
 
   return (
-    <div className="flex flex-col h-full w-full p-10 items-center justify-center overflow-y-auto  ">
+    <div className="relative flex flex-col h-full w-full p-10 items-center justify-center overflow-y-auto  ">
+      {!res?.archived && <TutoArchived payload={payload} />}
+
       <ul className="w-full text-center font-bold text-lg">
         {oldTasks.length !== 0 ? (
           ""

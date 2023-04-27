@@ -40,7 +40,10 @@ export default function OverlayMenu({
   isOverlayOpen,
   setIsOverlayOpen,
 }: {
-  setEdit: Dispatch<SetStateAction<boolean>>;
+  setEdit: (
+    state: boolean,
+    cb?: ((state: boolean) => void) | undefined
+  ) => void;
   setIsChronoOpen: Dispatch<SetStateAction<boolean>>;
   setTimerState: Dispatch<SetStateAction<State>>;
   start: boolean | null;
@@ -57,15 +60,13 @@ export default function OverlayMenu({
   const { theme } = useTheme();
   return (
     <div
-      className={`absolute z-30 bg-gray-100 bg-opacity-90 flex justify-evenly  items-center rounded-lg w-full h-full top-0 left-0 --dark--  dark:bg-[#3A405F]  dark:bg-opacity-90`}
+      className={`absolute  bg-gray-100 bg-opacity-90 flex justify-evenly  items-center rounded-lg w-full h-full top-0 left-0 --dark--  dark:bg-[#3A405F]  dark:bg-opacity-90`}
     >
       {/* //btns// */}
       <button
         className="z-10 origin-center h-6 w-6 hover:scale-125"
-        onClick={() => {
+        onMouseDown={() => {
           setTaskDone();
-          // setIsOverlayOpen(false);
-          // router.refresh();
         }}
         disabled={isOverlayOpen ? false : true}
       >
@@ -81,11 +82,8 @@ export default function OverlayMenu({
         <>
           <button
             className="z-10 origin-center h-6 w-6 hover:scale-125"
-            onClick={() => {
+            onMouseDown={() => {
               setEdit(true);
-              // setTimeout(() => {
-              //   setEdit(false);
-              // }, 15000);
             }}
             disabled={isOverlayOpen ? false : true}
           >
@@ -98,7 +96,7 @@ export default function OverlayMenu({
           {task_id === inputs.id ? (
             <button
               className="z-10  origin-center h-5 w-5 hover:scale-125"
-              onClick={() => {
+              onMouseDown={() => {
                 setTimerState({
                   task_id: null,
                   value: value,
@@ -106,7 +104,7 @@ export default function OverlayMenu({
                   end: false,
                   isPaused: false,
                 });
-                setIsOverlayOpen(false);
+                // setIsOverlayOpen(false);
               }}
               disabled={isOverlayOpen ? false : true}
             >
@@ -119,7 +117,7 @@ export default function OverlayMenu({
           ) : (
             <button
               className="z-10 origin-center   h-5 w-5 hover:scale-125"
-              onClick={() => {
+              onMouseDown={() => {
                 setIsChronoOpen(true);
               }}
               disabled={isOverlayOpen ? false : true}

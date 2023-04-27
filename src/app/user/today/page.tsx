@@ -3,12 +3,13 @@ import TodayHeader from "./../../components/TodayHeader";
 import { getPayload } from "../../../../utilities/payload";
 import { getTasks } from "../../../../utilities/getTasks";
 import { notFound } from "next/navigation";
+import TutoToday from "@/app/components/TutoToday";
 
 export const metadata = {
   title: "Today",
 };
 
-const { getAll } = getTasks();
+const { areTutosDone } = getTasks();
 
 export default async function Home() {
   const payload: any = getPayload();
@@ -16,22 +17,23 @@ export default async function Home() {
   if (!payload) {
     notFound();
   }
-  const tasks = await getAll(payload);
-  if (!tasks) {
+
+  const res = await areTutosDone(payload);
+  if (!res) {
     notFound();
   }
 
   return (
-    <div className=" h-full cardpattern shadow-inner  --dark-- dark:bg-[#3A405F]  ">
-      {/* //header// */}
-      <TodayHeader />
-      {/* //header// */}
+    <>
+      <div className="relative h-full cardpattern shadow-inner  --dark-- dark:bg-[#3A405F]  ">
+        {!res?.today && <TutoToday payload={payload} name={res.first_name} />}
 
-      {/* //tasks// */}
-      <div className=" h-5/6 overflow-auto  ">
-        <Tasks payload={payload} />
+        <TodayHeader />
+
+        <div className=" h-5/6 overflow-auto  ">
+          <Tasks payload={payload} />
+        </div>
       </div>
-      {/* //tasks// */}
-    </div>
+    </>
   );
 }

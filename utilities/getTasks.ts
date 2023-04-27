@@ -2,7 +2,6 @@ import { Task } from "../config/types";
 import getDate from "./date";
 import { prisma } from "./db";
 import { notFound } from "next/navigation";
-import { mutate } from "swr";
 const { today, getWeek } = getDate();
 const currentWeek = parseInt(getWeek());
 
@@ -161,6 +160,65 @@ export const getTasks = () => {
 
     return result.tasks.length;
   };
+  const areTutosDone = async (email: string) => {
+    const result = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+      select: {
+        first_name: true,
+        today: true,
+        myweek: true,
+        archived: true,
+      },
+    });
+    if (!result) {
+      notFound();
+    }
 
-  return { getAll, getByWeek, getOldWeeks, getOld, getTasksDone, getNumTasks };
+    return result;
+  };
+
+  const setTutosDone = async (email: string, tuto: string) => {
+    const result = await prisma.user.update({
+      where: {
+        email: email,
+      },
+      data: {
+        [tuto]: true,
+      },
+    });
+    if (!result) {
+      notFound();
+    }
+
+    return result;
+  };
+  //   const getName = async (email: string)=> {
+  //     const result = await prisma.user.findUnique({
+  //       where: {
+  //         email: email,
+  //       },
+  //       select: {
+  //         first_name: true,
+  //     });
+  //     if (!result) {
+  //       notFound();
+  //     }
+
+  //     return result;
+  //   };
+
+  //   }
+  // };
+  return {
+    getAll,
+    getByWeek,
+    getOldWeeks,
+    getOld,
+    getTasksDone,
+    getNumTasks,
+    areTutosDone,
+    setTutosDone,
+  };
 };

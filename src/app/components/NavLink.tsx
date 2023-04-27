@@ -80,7 +80,7 @@ export function NavLink({
         }  
         ${
           isOldTask() && isActive
-            ? "-translate-y-[5px] text-black dark:bg-[#171b2c] dark:text-[#E18B15] "
+            ? "-translate-y-[5px] bg-black   dark:bg-[#171b2c] dark:text-[#E18B15] "
             : ""
         } 
          border-l-2 border-b-2 border-r-2 drop-shadow-md rounded-b-md  font-bold ## dark:border-[#E18B15] 
