@@ -24,7 +24,7 @@ export default function Header({
   const { theme, systemTheme } = useTheme();
   console.log(theme);
   console.log(systemTheme);
-  const currentTheme = systemTheme !== theme ? systemTheme : theme;
+  const currentTheme = systemTheme === theme ? systemTheme : theme;
   console.log(currentTheme);
 
   const [open, setOpen] = useState(false);

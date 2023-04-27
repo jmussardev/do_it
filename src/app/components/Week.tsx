@@ -5,6 +5,8 @@ import getDate from "../../../utilities/date";
 import Tasks from "./Tasks";
 import WeekNavBar from "./WeekNavBar";
 import useSWR from "swr";
+import { Suspense } from "react";
+import TasksLoader from "./TasksLoader";
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 const { getDay } = getDate();
