@@ -21,7 +21,12 @@ export default function Header({
   numTasksDone?: number;
   numTasks?: number;
 }) {
-  const { theme } = useTheme();
+  const { theme, systemTheme } = useTheme();
+  console.log(theme);
+  console.log(systemTheme);
+  const currentTheme = systemTheme !== theme ? systemTheme : theme;
+  console.log(currentTheme);
+
   const [open, setOpen] = useState(false);
   const url = usePathname();
 
@@ -50,7 +55,7 @@ export default function Header({
             >
               <div className="h-14 w-14 mr-2 mt-2 rounded-full  sm:hidden">
                 {open ? (
-                  theme === "dark" ? (
+                  currentTheme === "dark" ? (
                     <div className=" w-full h-full flex justify-center items-center ">
                       <Image className="h-fit" src={cross_dark} alt="" />
                     </div>
@@ -59,7 +64,7 @@ export default function Header({
                       <Image className="h-fit" src={cross} alt="" />
                     </div>
                   )
-                ) : theme === "dark" ? (
+                ) : currentTheme === "dark" ? (
                   <Image src={menu_dark} alt="" />
                 ) : (
                   <Image src={menu} alt="" />

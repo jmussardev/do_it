@@ -18,7 +18,7 @@ export default function TutoToday({
   name: string;
 }) {
   return (
-    <div className="absolute top-0 px-5 py-5 z-30  h-full w-full bg-gray-300 bg-opacity-60 ">
+    <div className="absolute top-0 px-5 py-5 z-30 text-black  h-full w-full bg-gray-300 bg-opacity-60 ">
       <div className="overflow-y-auto h-full w-full flex flex-col  items-center p-4 text-center font-bold bg-white drop-shadow-[0_0px_3px_rgba(0,0,0,0.3)]  rounded-lg">
         <div className="mb-4">
           <p className="text-2xl">
@@ -28,7 +28,7 @@ export default function TutoToday({
           <p>👉 To get started create your first task</p>
         </div>
         <Image className=" w-80 mb-4" src={tuto01} alt="" />
-        <p>❗You can pririotize your tasks from important to❗</p>
+        <p>❗You can prioritize your tasks from important to❗</p>
         <p> SUPER DUPER URGENT!!! </p>
         <div className="flex mt-2 mb-4 ">
           <Image className="h-8 w-8" src={p1} alt="" />

@@ -22,7 +22,7 @@ export default function ArchivedLink({
       initial={{ y: 500 }}
       animate={{ y: 0 }}
       transition={{ delay: 1, type: "spring" }}
-      className="flex items-center justify-center w-full h-[3rem] text-[1rem] text-gray-700 rounded-lg drop-shadow-[0_3px_3px_rgba(0,0,0,0.3)] isOld active:drop-shadow-md  hover:bg-gray-400  --dark-- dark:bg-[#3A405F] dark:text-[#E18B15] dark:hover:bg-[#29304b]"
+      className="flex items-center justify-center w-full h-[3rem] text-[.8rem] sm:text-[1rem] text-gray-700 rounded-lg drop-shadow-[0_3px_3px_rgba(0,0,0,0.3)] isOld active:drop-shadow-md  hover:bg-gray-400  --dark-- dark:bg-[#3A405F] dark:text-[#E18B15] dark:hover:bg-[#29304b]"
     >
       <div className="block h-fit w-5 mr-3 ">
         {theme === "dark" ? (
