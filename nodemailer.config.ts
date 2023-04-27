@@ -4,12 +4,12 @@ const mail = process.env.MAIL;
 const pass = process.env.PASS;
 
 const transport = nodemailer.createTransport({
-  host: "gmail",
-  // port: 465,
-  // secure: true,
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
   auth: {
     user: mail,
-    pass: "ybdjjccvnzfptlui",
+    pass: pass,
   },
   tls: {
     // do not fail on invalid certs

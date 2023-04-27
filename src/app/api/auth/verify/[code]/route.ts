@@ -28,7 +28,9 @@ export async function GET(req: Request, context: { params: any }) {
     //   .setExpirationTime("24h")
     //   .sign(secret);
 
-    return NextResponse.redirect(new URL("http://localhost:3000"));
+    return NextResponse.redirect(
+      new URL("https://do-it-pearl-one.vercel.app/")
+    );
   } catch (error) {
     return NextResponse.json(error, { status: 404 });
   }
