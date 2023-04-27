@@ -17,13 +17,13 @@ const transport = nodemailer.createTransport({
   },
 });
 
-export const sendConfirmationEmail = (
+export const sendConfirmationEmail = async (
   name: string,
   email: string,
   confirmationCode: string
 ) => {
   console.log("Check");
-  transport
+  await transport
     .sendMail({
       from: mail,
       to: email,

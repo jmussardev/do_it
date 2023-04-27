@@ -69,8 +69,13 @@ export async function POST(req: Request) {
         confirmationCode: token,
       },
     });
-
-    sendConfirmationEmail(user.first_name, user.email, user.confirmationCode);
+    try {
+      await sendConfirmationEmail(
+        user.first_name,
+        user.email,
+        user.confirmationCode
+      );
+    } catch (error) {}
 
     return NextResponse.json(
       "User was registered successfully! Please check your email",
