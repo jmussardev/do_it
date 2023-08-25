@@ -29,7 +29,6 @@ export default function BtnTuto({
     <button
       className="hover:bg-black hover:text-white rounded-lg px-2 p-1 w-fit bg-white drop-shadow-[0_0px_3px_rgba(0,0,0,0.3)] active:drop-shadow-md"
       onClick={async () => {
-        if (payload === "demo@demo.demo") return;
         await setTutosDone({ payload, tuto });
         // const t = tuto === "myweek" ? `my-week/${dayNum()}` : tuto;
         router.refresh();
