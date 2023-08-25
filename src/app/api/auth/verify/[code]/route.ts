@@ -1,7 +1,5 @@
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../../../utilities/db";
-import * as jose from "jose";
 
 export async function GET(req: Request, context: { params: any }) {
   const { code } = context.params;
